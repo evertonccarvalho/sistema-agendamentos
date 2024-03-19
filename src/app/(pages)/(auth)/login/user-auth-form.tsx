@@ -45,7 +45,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       email: data.email,
       password: data.password,
       redirect: true,
-      callbackUrl: '/dashboard'
+      callbackUrl: '/'
     });
     console.log('loginres', res);
   }
