@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { z } from "zod";
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -31,11 +31,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	});
 
 	const handleGoogleClick = async () => {
-		await signIn("google");
+		await signIn("google", {
+			callbackUrl: "/dashboard",
+		});
 	};
 
 	const handleGithubClick = async () => {
-		await signIn("github");
+		await signIn("github", {
+			callbackUrl: "/dashboard",
+		});
 	};
 
 	async function onSubmit(data: z.infer<typeof LoginSchema>) {
