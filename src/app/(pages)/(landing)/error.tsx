@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Empty } from '@/components/empty';
+import { Empty } from "@/components/empty";
 
-const Error = () => {
+const ErrorPage = () => {
 	return <Empty label="Something went wrong." />;
 };
 
-export default Error;
+export default ErrorPage;

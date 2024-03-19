@@ -9,7 +9,22 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"suspicious": {
+				"useAwait": "warn"
+			},
+			"correctness": {
+				"noUnusedImports": "warn"
+			},
+			"style": {
+				"useConsistentArrayType": "warn",
+				"useFilenamingConvention": {
+					"level": "warn",
+					"options": {
+						"filenameCases": ["camelCase", "PascalCase", "kebab-case"]
+					}
+				}
+			}
 		}
 	}
 }
