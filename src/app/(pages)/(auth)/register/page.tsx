@@ -1,10 +1,7 @@
-import Link from 'next/link';
-import { UserAuthForm } from './user-auth-form';
-
-
+import Link from "next/link";
+import { UserAuthForm } from "./user-auth-form";
 
 export default function LoginPage() {
-
 	return (
 		<div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
 			<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -32,7 +29,7 @@ export default function LoginPage() {
 					</div>
 					<UserAuthForm />
 					<p className="px-8 text-center text-sm text-muted-foreground">
-						Já tem uma conta?{' '}
+						Já tem uma conta?{" "}
 						<Link
 							href="/login"
 							className="underline underline-offset-4 hover:text-primary"
