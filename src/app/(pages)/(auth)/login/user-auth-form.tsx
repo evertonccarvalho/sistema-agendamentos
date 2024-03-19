@@ -1,12 +1,13 @@
 "use client"
-
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { GithubIcon, Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react"
+import { signIn } from "next-auth/react"
+import { FcGoogle } from "react-icons/fc"
+import { FaGithub } from "react-icons/fa"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -21,7 +22,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       setIsLoading(false)
     }, 3000)
   }
-
+  const handleLoginCLick = async () => {
+    await signIn('google');
+  };
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
@@ -54,18 +57,37 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+            Ou continue com
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <GithubIcon className="mr-2 h-4 w-4" />
-        )}{" "}
-        Github
-      </Button>
+      <div className="flex gap-2 w-full">
+
+        <Button
+          onClick={handleLoginCLick}
+          className="w-full"
+          variant="outline" type="button" disabled={isLoading}>
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <FcGoogle className="mr-2 h-4 w-4" />
+          )}
+          Google
+        </Button>
+        <Button
+          onClick={handleLoginCLick}
+          className="w-full"
+
+          variant="default" type="button" disabled={isLoading}>
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <FaGithub className="mr-2 h-4 w-4" />
+          )}
+          Github
+        </Button>
+      </div>
+
     </div>
   )
 }
