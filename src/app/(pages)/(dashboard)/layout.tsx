@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }: SettingsLayoutProps) {
 				<div className=" absolute z-50 top-0 left-0">
 					<DashboardSideBar />
 				</div>
-				<div className="flex flex-1 h-full flex-col overflow-hidden">
+				<div className="flex flex-1 h-full flex-col overflow-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary">
 					<div className="sticky z-10 top-0 flex flex-col">
 						<HeaderDashboard />
 					</div>
