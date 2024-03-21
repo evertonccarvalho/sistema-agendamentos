@@ -44,6 +44,7 @@ model User {
   sessions      Session[]
   availability  Availability[]
   schedules     Scheduling[]
+  EventType     EventType[]
 }
 
 model VerificationToken {
@@ -76,10 +77,15 @@ model Scheduling {
 }
 
 model EventType {
-  id          String       @id @default(uuid())
+  id          String @id @default(uuid())
   name        String
   description String
-  schedules   Scheduling[]
+  creatorId   String
+  creator     User   @relation(fields: [creatorId], references: [id])
+
+  schedules Scheduling[]
+
+  @@index([creatorId])
 }
 
 enum SchedulingStatus {
