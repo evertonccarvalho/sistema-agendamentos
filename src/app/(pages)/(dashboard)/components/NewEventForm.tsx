@@ -14,7 +14,7 @@ import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 
 const saveNewEventSchema = z.object({
 	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
@@ -31,7 +31,23 @@ const saveNewEventSchema = z.object({
 
 type SaveNewEvent = z.infer<typeof saveNewEventSchema>;
 
-export function NewEventForm() {
+interface INewEventDataProps {
+	setEventName: Dispatch<SetStateAction<string | undefined>>;
+	setEventDuration: Dispatch<SetStateAction<string | undefined>>;
+	setEventLocation: Dispatch<SetStateAction<string | undefined>>;
+}
+export interface IEventDataProps {
+	eventName: string;
+	eventDuration: string;
+	eventLocation: string;
+	userName: string;
+}
+
+export function NewEventForm({
+	setEventDuration,
+	setEventLocation,
+	setEventName,
+}: INewEventDataProps) {
 	const {
 		register,
 		handleSubmit,
@@ -57,6 +73,7 @@ export function NewEventForm() {
 					<Input
 						type="text"
 						{...register("name")}
+						onChange={(ev) => setEventName(ev.target.value)}
 						placeholder="Ex. Aulas de Violão"
 					/>
 					{errors.name && (
@@ -66,7 +83,9 @@ export function NewEventForm() {
 				<label>
 					<span>Duração.</span>
 					<Select
-						onValueChange={(ev) => setDuration(ev)}
+						onValueChange={(ev) =>
+							ev !== "custom" ? setEventDuration(ev) : setDuration(ev)
+						}
 						{...register("duration")}
 						defaultValue="30"
 					>
@@ -109,6 +128,7 @@ export function NewEventForm() {
 					<span>Local.</span>
 					<Input
 						{...register("location")}
+						onChange={(ev) => setEventLocation(ev.target.value)}
 						type="text"
 						placeholder="Ex. Na minha cama."
 					/>
@@ -117,7 +137,7 @@ export function NewEventForm() {
 					)}
 				</label>
 				<label>
-					<span>Local.</span>
+					<span>Descrição.</span>
 					<Input
 						{...register("description")}
 						type="text"
@@ -127,6 +147,7 @@ export function NewEventForm() {
 						<p className="text-red-500 text-xs">{errors.description.message}</p>
 					)}
 				</label>
+				<Separator orientation="horizontal" className="bg-zinc-700" />
 				<div className="flex gap-3 items-center justify-between">
 					<Button variant={"outline"}>Cancelar</Button>
 					<Button type="submit" className="text-white flex gap-2">

@@ -38,18 +38,20 @@ const DashboardSideBar = () => {
 	};
 
 	return (
-		<div className="py-2 pl-2 z-50   h-dvh ">
+		<div className="py-2 pl-2 z-50 h-dvh">
 			<aside
-				className={` rounded-md bg-card border border-gray-600/40 h-full  ${open ? "w-72" : "w-16 flex flex-col items-center"
-					}
+				className={` rounded-md bg-card border border-gray-600/40 h-full  ${
+					open ? "w-64" : "w-16 flex flex-col items-center"
+				}
         } duration-500 text-primary px-4`}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 			>
 				<div className="flex py-4  justify-between items-center">
 					<div
-						className={`${!open && "w-8 justify-center"
-							} h-8  group flex gap-4 items-center text-sm text-secondary justify-start  font-medium  rounded-full`}
+						className={`${
+							!open && "w-8 justify-center"
+						} h-8  group flex gap-4 items-center text-sm text-secondary justify-start  font-medium  rounded-full`}
 					>
 						<div className="rounded-full">
 							<Image
@@ -61,7 +63,11 @@ const DashboardSideBar = () => {
 							/>
 						</div>
 
-						<div className={`whitespace-pre  duration-500 ${!open && "opacity-0 hidden translate-x-28 overflow-hidden"}`}>
+						<div
+							className={`whitespace-pre  duration-500 ${
+								!open && "opacity-0 hidden translate-x-28 overflow-hidden"
+							}`}
+						>
 							<Image
 								src="/logo.png"
 								alt="iconlogo"
@@ -94,16 +100,18 @@ const DashboardSideBar = () => {
 				<div className={`${!open && "flex  items-center justify-center"}`}>
 					<button
 						type="button"
-						className={`${!open && "w-8"
-							} w-full cursor-pointer group h-8 flex items-center text-sm text-secondary justify-center gap-3.5 font-medium p-2 rounded-full bg-card-foreground hover:text-secondary`}
-						onClick={() => { }}
+						className={`${
+							!open && "w-8"
+						} w-full cursor-pointer group h-8 flex items-center text-sm text-secondary justify-center gap-3.5 font-medium p-2 rounded-full bg-card-foreground hover:text-secondary`}
+						onClick={() => {}}
 					>
 						<div>
 							<Plus size={16} />
 						</div>
 						<h2
-							className={`whitespace-pre duration-500 ${!open && "opacity-0 hidden translate-x-28 overflow-hidden"
-								}`}
+							className={`whitespace-pre duration-500 ${
+								!open && "opacity-0 hidden translate-x-28 overflow-hidden"
+							}`}
 						>
 							Criar
 						</h2>
@@ -111,8 +119,9 @@ const DashboardSideBar = () => {
 				</div>
 
 				<div
-					className={`mt-3 flex flex-col gap-1 relative ${!open && "flex items-center justify-center"
-						}`}
+					className={`mt-3 flex flex-col gap-1 relative ${
+						!open && "flex items-center justify-center"
+					}`}
 				>
 					{menus?.map((menu, i) => (
 						<Link
@@ -123,14 +132,16 @@ const DashboardSideBar = () => {
 						>
 							<div>{React.createElement(menu?.icon, { size: "16" })}</div>
 							<h2
-								className={`whitespace-pre duration-500 ${!open && "opacity-0 hidden translate-x-28 overflow-hidden"
-									}`}
+								className={`whitespace-pre duration-500 ${
+									!open && "opacity-0 hidden translate-x-28 overflow-hidden"
+								}`}
 							>
 								{menu?.name}
 							</h2>
 							<h2
-								className={`${open && "hidden"
-									} absolute left-48 bg-primary font-semibold whitespace-pre text-secondary rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:p-2 group-hover:left-12 group-hover:duration-300 group-hover:w-fit`}
+								className={`${
+									open && "hidden"
+								} absolute left-48 bg-primary font-semibold whitespace-pre text-secondary rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:p-2 group-hover:left-12 group-hover:duration-300 group-hover:w-fit`}
 							>
 								{menu?.name}
 							</h2>

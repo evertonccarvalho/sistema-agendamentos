@@ -87,7 +87,7 @@ const SchedulingItem = ({
 						<div className="flex items-center gap-1">
 							<Timer size={18} />
 							<p className="text-xs text-muted">
-								{eventDuration ? eventDuration : "30Min"}
+								{eventDuration ? `${eventDuration} min` : "30Min"}
 							</p>
 						</div>
 						<div className="flex items-center gap-1">
