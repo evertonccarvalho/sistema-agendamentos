@@ -40,7 +40,7 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
 					</React.Fragment>
 				))}
 			</div>
-			<Separator />
+			<Separator className='bg-zinc-700'/>
 		</>
 	);
 }
