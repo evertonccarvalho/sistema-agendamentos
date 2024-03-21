@@ -1,7 +1,8 @@
 "use client";
 import { useMemo, useState } from "react";
-import SchedulingItem from "./components/schedulingItem";
+import SchedulingItem from "../../../../../components/schedulingItem";
 import { generateDayTimeList } from "./helpers/hours";
+import BreadCrumb from "@/components/breadcrumb";
 
 export default function SchedulingPage() {
 	const [date, setDate] = useState<Date | undefined>(undefined);
@@ -51,10 +52,12 @@ export default function SchedulingPage() {
 			return false;
 		});
 	}, [date, day]);
+	const breadcrumbItems = [{ title: 'Criar Novo Evento', link: '/new' }];
 
 	return (
 		<>
-			<div className="flex">
+			<div className="flex-1 space-y-4 bg-card/80  md:p-8 pt-6">
+				<BreadCrumb items={breadcrumbItems} />
 				<section className=" w-full rounded-md max-w-[1200px] md:min-w-[900px]  border-[1px] border-gray-400  flex flex-col md:flex-row ">
 					<SchedulingItem />
 				</section>

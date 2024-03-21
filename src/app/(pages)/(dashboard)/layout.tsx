@@ -9,15 +9,11 @@ export default function DashboardLayout({ children }: SettingsLayoutProps) {
 	return (
 		<>
 			<div className="flex flex-col h-screen">
-				<div className=" absolute z-50 top-0 left-0">
+				<div className="flex flex-1 h-full overflow-hidden">
 					<DashboardSideBar />
-				</div>
-				<div className="flex flex-1 h-full flex-col overflow-hidden">
-					<div className="sticky z-10 top-0 flex flex-col">
+					<div className="w-full p-2  rounded-sm bg-muted-foreground/5 container  mt-[80px] mb-2 ">
 						<HeaderDashboard />
-					</div>
-					<div className="w-full max-w-screen-xl  m-auto pl-6   ">
-						<main className="py-0 pt-10 pr-0 pl-10">{children}</main>
+						{children}
 					</div>
 				</div>
 			</div>

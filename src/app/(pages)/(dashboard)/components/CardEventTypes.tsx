@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Loader, Pencil, Trash2 } from "lucide-react";
+import { Loader, Pencil, Share2Icon, Trash2 } from "lucide-react";
 
 export function CardEventTypes() {
 	return (
@@ -19,11 +19,12 @@ export function CardEventTypes() {
 				<p className="text-sm font-light">Alguma observação</p>
 			</div>
 			<div className="flex w-full items-center justify-between">
-				<Button variant={"outline"}>
+				<Button variant={"outline"} className="flex items-center gap-1">
 					Editar <Pencil size={16} />
 				</Button>
-				<Button className="text-white">
-					Ver Agenda <ArrowRight size={16} />
+				{/* TODO COPIAR LINK */}
+				<Button className="text-white flex items-center gap-1">
+					Compartilhar <Share2Icon size={16} />
 				</Button>
 			</div>
 		</section>
