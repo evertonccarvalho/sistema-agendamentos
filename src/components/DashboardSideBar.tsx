@@ -13,8 +13,8 @@ import React, { useState } from "react";
 const menus = [
 	{ name: "Inicio", link: "/dashboard", icon: HomeIcon },
 	{ name: "Compromissos", link: "/appointments ", icon: CalendarDays },
-	{ name: "Serviços", link: "/services", icon: CalendarDays, margin: true },
 	{ name: "Disponibilidade", link: "/availability ", icon: CalendarDays },
+	{ name: "Agendas", link: "/event-types ", icon: CalendarDays },
 ];
 
 const DashboardSideBar = () => {
@@ -56,6 +56,7 @@ const DashboardSideBar = () => {
 					<div className="bg-blue-500 p-1.5   rounded-full">
 						<AtSignIcon size={18} />
 					</div>
+
 					<h2
 						className={`whitespace-pre  font-semibold text-lg duration-500 text-blue-500 ${
 							!open && "opacity-0 hidden  translate-x-28 overflow-hidden"
@@ -115,9 +116,7 @@ const DashboardSideBar = () => {
 						href={menu?.link}
 						// biome-ignore lint/suspicious/noArrayIndexKey: this list is static
 						key={i}
-						className={`${
-							menu?.margin && "mt-5"
-						} group flex items-center text-sm gap-3 font-medium p-2 hover:bg-card-foreground hover:text-secondary rounded-md`}
+						className="group flex items-center text-sm gap-3 font-medium p-2 hover:bg-card-foreground hover:text-secondary rounded-md"
 					>
 						<div>{React.createElement(menu?.icon, { size: "16" })}</div>
 						<h2
