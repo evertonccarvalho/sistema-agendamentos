@@ -78,16 +78,29 @@ model Scheduling {
 }
 
 model EventType {
-  id          String  @id @default(uuid())
-  name        String
-  description String
-  creatorId   String
-  creator     User    @relation(fields: [creatorId], references: [id])
-  active      Boolean @default(true)
+  id           String        @id @default(uuid())
+  name         String
+  description  String
+  creatorId    String
+  creator      User          @relation(fields: [creatorId], references: [id])
+  active       Boolean       @default(true)
+  duration     Int           @default(60)
+  locationType LocationType?
+
+  // Informações adicionais para eventos presenciais
+  address     String? // Endereço do evento presencial
+  capacity    Int? // Capacidade máxima de participantes
+  arrivalInfo String? // Instruções de chegada
 
   schedules Scheduling[]
 
   @@index([creatorId])
+}
+
+enum LocationType {
+  ZOOM
+  PHONE_CALL
+  PRESENCIAL
 }
 
 enum SchedulingStatus {
