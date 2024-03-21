@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: SettingsLayoutProps) {
 			<div className="flex flex-col h-screen">
 				<div className="flex flex-1 h-full overflow-hidden">
 					<DashboardSideBar />
-					<div className="w-full p-2  rounded-sm bg-muted-foreground/5 container  mt-[80px] mb-2 ">
+					<div className="w-full p-2 rounded-sm bg-muted-foreground/5 container mt-[80px] mb-2 overflow-y-auto scrollbar-thin scrollbar-track-background scrollbar-thumb-primary">
 						<HeaderDashboard />
 						{children}
 					</div>
