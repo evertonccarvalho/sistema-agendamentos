@@ -1,11 +1,13 @@
-"use client"
+"use client";
 import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { EventType } from "@prisma/client";
-import { Loader, Pencil, Share2Icon, Trash2 } from "lucide-react";
+import { Loader, Pencil, Share2Icon } from "lucide-react";
 import { useState } from "react";
+import { EventSettings } from "./eventSetting";
+import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
 
 interface CardEventProps {
 	eventType: EventType;
@@ -19,12 +21,28 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 		try {
 			setLoading(true);
 			await deleteEvent(eventType.id);
-			console.log('Evento deletado com successo.');
+			console.log("Evento deletado com sucesso.");
 		} catch (error) {
-			console.error('Error deleting event:', error);
+			console.error("Error deleting event:", error);
 		} finally {
 			setLoading(false);
 			setOpenDelete(false);
+		}
+	};
+
+	const handleEdit = () => {
+		// Implementar a lógica de edição do evento
+	};
+
+	const handleToggleActive = async () => {
+		try {
+			setLoading(true);
+			await toggleEventTypeActive(eventType.creatorId, eventType.id, !eventType.active);
+			console.log("Estado do evento alterado com sucesso.");
+		} catch (error) {
+			console.error("Erro ao alternar o estado ativo do evento:", error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -35,11 +53,12 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 					<Loader size={16} />
 					<h1 className="text-base font-normal">{eventType.name}</h1>
 				</div>
-				<Button
-					onClick={() => setOpenDelete(true)}
-					size={"sm"} variant={"destructive"}>
-					<Trash2 size={16} />
-				</Button>
+				<EventSettings
+					onDelete={handleDelete}
+					onEdit={handleEdit}
+					onToggleActive={handleToggleActive}
+					isActive={eventType.active}
+				/>
 			</div>
 			<Separator className="bg-zinc-700" />
 			<div className="flex w-full">
@@ -48,14 +67,16 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			<div className="flex w-full items-center justify-between">
 				<Button
 					onClick={() => { }}
-					variant={"outline"} className="flex items-center gap-1" >
+					variant={"outline"}
+					className="flex items-center gap-1"
+				>
 					Editar <Pencil size={16} />
 				</Button>
 				{/* TODO COPIAR LINK */}
 				<Button
 					onClick={() => { }}
-
-					className="text-white flex items-center gap-1">
+					className="text-white flex items-center gap-1"
+				>
 					Compartilhar <Share2Icon size={16} />
 				</Button>
 			</div>
@@ -68,5 +89,5 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			/>
 		</section>
 	);
-}
-export default CardEventTypes
+};
+export default CardEventTypes;
