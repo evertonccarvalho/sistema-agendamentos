@@ -74,6 +74,7 @@ model Scheduling {
   user      User             @relation(fields: [userId], references: [id])
   eventId   String
   eventType EventType        @relation(fields: [eventId], references: [id])
+  date      DateTime         @default(now())
 }
 
 model EventType {
