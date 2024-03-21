@@ -3,14 +3,14 @@
 import { db } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
-interface SaveBookingParams {
+interface editEventParams {
     id: string;
     name: string;
     description: string;
     creatorId: string;
 }
 
-export const saveBooking = async (params: SaveBookingParams) => {
+export const editEvent = async (params: editEventParams) => {
     // Verifica se o evento já existe no banco de dados
     const existingEvent = await db.eventType.findUnique({
         where: {
@@ -27,6 +27,7 @@ export const saveBooking = async (params: SaveBookingParams) => {
             data: {
                 name: params.name,
                 description: params.description,
+
             },
         });
     } else {

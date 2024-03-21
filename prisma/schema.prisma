@@ -78,11 +78,12 @@ model Scheduling {
 }
 
 model EventType {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String
   creatorId   String
-  creator     User   @relation(fields: [creatorId], references: [id])
+  creator     User    @relation(fields: [creatorId], references: [id])
+  active      Boolean @default(true)
 
   schedules Scheduling[]
 
