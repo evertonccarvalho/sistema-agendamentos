@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale";
 import { MapPin, Timer } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
-import { generateDayTimeList } from "../helpers/hours";
+import { generateDayTimeList } from "../app/(pages)/(dashboard)/(routes)/scheduling/helpers/hours";
 
 const SchedulingItem = () => {
 	const { data } = useSession();
