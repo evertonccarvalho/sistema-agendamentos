@@ -58,7 +58,7 @@ export default function SchedulingPage() {
 		<>
 			<div className="flex-1 space-y-4 bg-card/80  md:p-8 pt-6">
 				<BreadCrumb items={breadcrumbItems} />
-				<section className=" w-full rounded-md max-w-[1200px] md:min-w-[900px]  border-[1px] border-gray-400  flex flex-col md:flex-row ">
+				<section className="w-full rounded-md max-w-[1200px] md:min-w-[900px]  border-[1px] border-gray-400  flex flex-col md:flex-row ">
 					<SchedulingItem />
 				</section>
 			</div>
