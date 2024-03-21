@@ -52,7 +52,7 @@ export default function SchedulingPage() {
 			return false;
 		});
 	}, [date, day]);
-	const breadcrumbItems = [{ title: 'Criar Novo Evento', link: '/new' }];
+	const breadcrumbItems = [{ title: "Criar Novo Evento", link: "/new" }];
 
 	return (
 		<>
