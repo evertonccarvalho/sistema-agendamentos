@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
 	Select,
 	SelectContent,
@@ -138,9 +139,8 @@ export function NewEventForm({
 				</label>
 				<label>
 					<span>Descrição.</span>
-					<Input
+					<Textarea
 						{...register("description")}
-						type="text"
 						placeholder="Ex. Marque reuniões comigo..."
 					/>
 					{errors.description && (
