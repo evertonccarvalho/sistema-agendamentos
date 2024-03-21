@@ -48,7 +48,7 @@ export function NewEventForm() {
 	};
 
 	return (
-		<section className="flex w-96 p-4 rounded-md flex-col gap-3 border-[1px] border-zinc-700">
+		<section className="flex w-96 p-4 rounded-md flex-col gap-3 border-[1px] border-zinc-700 max-[1135px]:w-full">
 			<h1 className="text-2xl font-semibold">Criar Novo Evento</h1>
 			<Separator orientation="horizontal" className="bg-zinc-700" />
 			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
