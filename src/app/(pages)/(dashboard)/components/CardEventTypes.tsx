@@ -34,7 +34,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 
 	const handleEdit = () => {
 		// Implementar a lógica de edição do evento
-		router.push(`/dashboard/${eventType.id}`);
+		router.push(`/dashboard/update/${eventType.id}`);
 
 	};
 

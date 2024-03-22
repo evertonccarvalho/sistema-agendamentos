@@ -25,6 +25,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 
 enum Locations {
@@ -45,7 +46,8 @@ const durationOptions = [
 const newEventSchema = z.object({
 	id: z.string().optional(),
 	creatorId: z.string(), // Assume-se que o ID do criador é uma string
-	name: z.string(),
+	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
+
 	description: z.string(),
 	duration: z.coerce.number().default(60),
 	active: z.boolean().default(true), //,
@@ -58,7 +60,8 @@ const newEventSchema = z.object({
 const updateEventSchema = z.object({
 	id: z.string(),
 	creatorId: z.string(), // Assume-se que o ID do criador é uma string
-	name: z.string(),
+	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
+
 	description: z.string(),
 	duration: z.coerce.number().default(60),
 	active: z.boolean().default(true), //,
@@ -85,7 +88,7 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 	const toastMessage = initialData ? "Evento Atualizado." : "Evento Criado.";
 	const action = initialData ? "Salvar Alterações" : "Criar";
 	const [formData, setFormData] = useState<EventFormValues | null>(null); // Armazena os dados do formulário localmente
-
+	const router = useRouter()
 	const defaultValues = initialData
 		? initialData
 		: {
@@ -118,6 +121,7 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 				console.log("Resposta do servidor:", res);
 			}
 			// toast.success(`${toastMessage}`);
+			router.push('/dashboard')
 			form.reset();
 		} catch (error) {
 			console.error(
