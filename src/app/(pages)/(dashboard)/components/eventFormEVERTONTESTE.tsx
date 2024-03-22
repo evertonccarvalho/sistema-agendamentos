@@ -304,7 +304,6 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 															disabled={loading}
 															type="number"
 															min={1}
-															max={10}
 															placeholder="Participantes"
 															{...field}
 														/>
