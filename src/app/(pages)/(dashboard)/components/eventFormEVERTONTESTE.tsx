@@ -27,7 +27,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 
-
 enum Locations {
 	ZOOM = "ZOOM",
 	PHONE_CALL = "PHONE_CALL",
@@ -71,7 +70,6 @@ const updateEventSchema = z.object({
 	arrivalInfo: z.string().optional(), // Instruções de chegada
 });
 
-
 export type EventInitalData = z.infer<typeof updateEventSchema>;
 export type EventFormValues = z.infer<typeof newEventSchema>;
 
@@ -88,18 +86,18 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 	const toastMessage = initialData ? "Evento Atualizado." : "Evento Criado.";
 	const action = initialData ? "Salvar Alterações" : "Criar";
 	const [formData, setFormData] = useState<EventFormValues | null>(null); // Armazena os dados do formulário localmente
-	const router = useRouter()
+	const router = useRouter();
 	const defaultValues = initialData
 		? initialData
 		: {
-			name: "",
-			description: "",
-			creatorId: "cltzqc41t0000myakgbk3r8r7",
-			address: "",
-			arrivalInfo: "",
-			capacity: 1,
-			duration: 60,
-		};
+				name: "",
+				description: "",
+				creatorId: "cltzqc41t0000myakgbk3r8r7",
+				address: "",
+				arrivalInfo: "",
+				capacity: 1,
+				duration: 60,
+		  };
 
 	const form = useForm<EventFormValues>({
 		resolver: zodResolver(newEventSchema),
@@ -113,7 +111,7 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 			setLoading(true);
 			if (initialData) {
 				const updateData = updateEventSchema.parse(data);
-				console.log('veio data', initialData);
+				console.log("veio data", initialData);
 				const res = await editEvent(initialData.id, updateData);
 				console.log("resupdate", res);
 			} else {
@@ -121,11 +119,11 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 				console.log("Resposta do servidor:", res);
 			}
 			// toast.success(`${toastMessage}`);
-			router.push('/dashboard')
+			router.push("/dashboard");
 			form.reset();
 		} catch (error) {
 			console.error(
-				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
+				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
 			);
 		} finally {
 			setLoading(false);
@@ -305,6 +303,8 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 														<Input
 															disabled={loading}
 															type="number"
+															min={1}
+															max={10}
 															placeholder="Participantes"
 															{...field}
 														/>
