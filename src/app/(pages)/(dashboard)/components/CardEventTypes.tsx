@@ -35,13 +35,16 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const handleEdit = () => {
 		// Implementar a lógica de edição do evento
 		router.push(`/dashboard/update/${eventType.id}`);
-
 	};
 
 	const handleToggleActive = async () => {
 		try {
 			setLoading(true);
-			await toggleEventTypeActive(eventType.creatorId, eventType.id, !eventType.active);
+			await toggleEventTypeActive(
+				eventType.creatorId,
+				eventType.id,
+				!eventType.active
+			);
 			console.log("Estado do evento alterado com sucesso.");
 		} catch (error) {
 			console.error("Erro ao alternar o estado ativo do evento:", error);
@@ -51,7 +54,10 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	};
 
 	return (
-		<section className="flex flex-col gap-5 bg-secondary w-96 min-h-40 rounded-md p-6 border-[1px] border-zinc-700">
+		<section
+			className="flex flex-col gap-5 bg-secondary w-96 min-h-40 rounded-md p-6 border-[1px] border-zinc-700 "
+			style={{ backgroundColor: eventType.active ? "green" : "red" }}
+		>
 			<div className="flex w-full items-center justify-between">
 				<div className="flex items-center gap-1">
 					<Loader size={16} />
@@ -70,7 +76,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			</div>
 			<div className="flex w-full items-center justify-between">
 				<Button
-					onClick={() => { }}
+					onClick={() => {}}
 					variant={"outline"}
 					className="flex items-center gap-1"
 				>
@@ -78,7 +84,9 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 				</Button>
 				{/* TODO COPIAR LINK */}
 				<Button
-					onClick={() => { handleEdit }}
+					onClick={() => {
+						handleEdit;
+					}}
 					className="text-white flex items-center gap-1"
 				>
 					Compartilhar <Share2Icon size={16} />
