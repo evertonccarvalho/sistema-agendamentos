@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 
 enum Locations {
@@ -81,6 +82,8 @@ interface EventFormProps {
 
 export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 	const [loading, setLoading] = useState(false);
+	const { data } = useSession()
+	const loguedUserId = data?.user?.id
 	const title = initialData ? "Editar Evento" : "Criar Evento";
 	const description = initialData
 		? "Editar o evento."
@@ -94,7 +97,7 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 		: {
 			name: "",
 			description: "",
-			creatorId: "cltzqc41t0000myakgbk3r8r7",
+			creatorId: loguedUserId,
 			address: "",
 			arrivalInfo: "",
 			capacity: 1,
