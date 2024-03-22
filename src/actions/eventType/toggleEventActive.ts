@@ -1,5 +1,6 @@
 "use server"
 import { db } from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 export const toggleEventTypeActive = async (userId: string, eventId: string, setActive: boolean) => {
   if (setActive) {
@@ -25,4 +26,6 @@ export const toggleEventTypeActive = async (userId: string, eventId: string, set
       active: setActive,
     },
   });
+  revalidatePath('/dashboard');
+
 }
