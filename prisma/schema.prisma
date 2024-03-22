@@ -66,6 +66,7 @@ model Availability {
 
 model Scheduling {
   id        String           @id @default(uuid())
+  name      String
   email     String
   phone     String
   message   String           @db.Text
