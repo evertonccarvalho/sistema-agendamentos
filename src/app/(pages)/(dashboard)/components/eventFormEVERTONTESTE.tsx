@@ -80,8 +80,8 @@ interface EventFormProps {
 
 export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 	const [loading, setLoading] = useState(false);
-	const { data } = useSession()
-	const loguedUserId = data?.user?.id
+	const { data } = useSession();
+	const loguedUserId = data?.user?.id;
 	const title = initialData ? "Editar Evento" : "Criar Evento";
 	const description = initialData
 		? "Editar o evento."
@@ -93,14 +93,14 @@ export const EventForm: React.FC<EventFormProps> = ({ initialData }) => {
 	const defaultValues = initialData
 		? initialData
 		: {
-			name: "",
-			description: "",
-			creatorId: loguedUserId,
-			address: "",
-			arrivalInfo: "",
-			capacity: 1,
-			duration: 60,
-		};
+				name: "",
+				description: "",
+				creatorId: loguedUserId,
+				address: "",
+				arrivalInfo: "",
+				capacity: 1,
+				duration: 60,
+		  };
 
 	const form = useForm<EventFormValues>({
 		resolver: zodResolver(newEventSchema),

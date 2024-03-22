@@ -15,7 +15,7 @@ import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState, use, useEffect } from "react";
 
 const saveNewEventSchema = z.object({
 	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
@@ -28,6 +28,9 @@ const saveNewEventSchema = z.object({
 	description: z.string().optional(),
 	time: z.number().min(1, "Tempo deve ser maior que 0."),
 	typeTime: z.string().min(1, "Escolha um tipo de tempo."),
+	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres."),
+	referencePoint: z.string().optional(),
+	capacity: z.number().min(1, "Capacidade deve ser maior que 0."),
 });
 
 type SaveNewEvent = z.infer<typeof saveNewEventSchema>;
@@ -57,7 +60,8 @@ export function NewEventForm({
 	} = useForm<SaveNewEvent>({
 		resolver: zodResolver(saveNewEventSchema),
 	});
-	const [duration, setDuration] = useState<string | null>(null);
+	
+	const [isActive, setIsActive] = useState<boolean>(false);
 
 	const onSubmit = (data: SaveNewEvent) => {
 		console.log(data);
@@ -84,10 +88,10 @@ export function NewEventForm({
 				<label>
 					<span>Duração.</span>
 					<Select
-						onValueChange={(ev) =>
-							ev !== "custom" ? setEventDuration(ev) : setDuration(ev)
-						}
 						{...register("duration")}
+						onValueChange={(ev) => {
+							setEventDuration(ev);
+						}}
 						defaultValue="30"
 					>
 						<SelectTrigger className="w-full">
@@ -97,46 +101,72 @@ export function NewEventForm({
 							<SelectItem value="15">15 min</SelectItem>
 							<SelectItem value="30">30 min</SelectItem>
 							<SelectItem value="45">45 min</SelectItem>
-							<SelectItem value="60">60 min</SelectItem>
-							<SelectItem value="custom">Personalizado</SelectItem>
+							<SelectItem value="60">1 hora</SelectItem>
+							<SelectItem value="180">1 hora e 30 minutos</SelectItem>
+							<SelectItem value="240">2 horas</SelectItem>
 						</SelectContent>
 					</Select>
 					{errors.duration && (
 						<p className="text-red-500 text-xs">{errors.duration.message}</p>
 					)}
 				</label>
-				{duration === "custom" && (
-					<div className="flex gap-3">
-						<Input type="number" {...register("time")} placeholder="Ex. 2" />
-						{errors.time && (
-							<p className="text-red-500 text-xs">{errors.time.message}</p>
-						)}
-						<Select {...register("typeTime")} defaultValue="m">
-							<SelectTrigger className="w-full">
-								<SelectValue placeholder="min" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectItem value="m">min</SelectItem>
-								<SelectItem value="h">h</SelectItem>
-							</SelectContent>
-						</Select>
-						{errors.typeTime && (
-							<p className="text-red-500 text-xs">{errors.typeTime.message}</p>
-						)}
-					</div>
-				)}
 				<label>
 					<span>Local.</span>
-					<Input
+					<Select
+						onValueChange={(ev) =>
+							ev !== "PRESENCIAL" ? setEventLocation(ev) : setIsActive(true)
+						}
 						{...register("location")}
-						onChange={(ev) => setEventLocation(ev.target.value)}
-						type="text"
-						placeholder="Ex. Na minha cama."
-					/>
-					{errors.location && (
-						<p className="text-red-500 text-xs">{errors.location.message}</p>
-					)}
+						defaultValue="ZOOM"
+					>
+						<SelectTrigger className="w-full">
+							<SelectValue placeholder="30 min" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="ZOOM">ZOOM</SelectItem>
+							<SelectItem value="PHONE_CALL">Chamada por Telefone</SelectItem>
+							<SelectItem value="PRESENCIAL">Presencial</SelectItem>
+						</SelectContent>
+					</Select>
 				</label>
+				{isActive && (
+					<>
+						<label>
+							<span>Endereço.</span>
+							<Input
+								{...register("andress")}
+								onChange={(ev) => setEventLocation(ev.target.value)}
+								type="text"
+								placeholder="Ex. Rua dos Bobos, 0"
+							/>
+							{errors.andress && (
+								<p className="text-red-500 text-xs">{errors.andress.message}</p>
+							)}
+						</label>
+						<label>
+							<span>Ponto de referência</span>
+							<Input
+								{...register("referencePoint")}
+								type="text"
+								placeholder="Ex. Próximo a padaria."
+							/>
+						</label>
+						<label>
+							<span>Capacidade.</span>
+							<Input
+								{...register("capacity")}
+								type="number"
+								min={1}
+								placeholder="Ex. 10"
+							/>
+							{errors.capacity && (
+								<p className="text-red-500 text-xs">
+									{errors.capacity.message}
+								</p>
+							)}
+						</label>
+					</>
+				)}
 				<label>
 					<span>Descrição.</span>
 					<Textarea
@@ -149,9 +179,8 @@ export function NewEventForm({
 				</label>
 				<Separator orientation="horizontal" className="bg-zinc-700" />
 				<div className="flex gap-3 items-center justify-between">
-					<Button variant={"outline"}>Cancelar</Button>
-					<Button type="submit" className="text-white flex gap-2">
-						Continuar <ArrowRight width={20} />
+					<Button type="submit" size={"lg"} className="text-white flex gap-2">
+						Criar <ArrowRight width={20} />
 					</Button>
 				</div>
 			</form>
