@@ -12,9 +12,8 @@ import React, { useState } from "react";
 
 const menus = [
 	{ name: "Inicio", link: "/dashboard", icon: HomeIcon },
-	{ name: "Compromissos", link: "/appointments ", icon: CalendarDays },
-	{ name: "Disponibilidade", link: "/availability ", icon: CalendarDays },
-	{ name: "Agendas", link: "/event-types ", icon: CalendarDays },
+	{ name: "Eventos Agendados", link: "/scheduledevents ", icon: CalendarDays },
+	{ name: "Disponibilidade", link: "/availability ", icon: CalendarDays, margin: true },
 ];
 
 const DashboardSideBar = () => {
