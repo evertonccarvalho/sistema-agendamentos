@@ -8,6 +8,7 @@ import { Loader, Pencil, Share2Icon } from "lucide-react";
 import { useState } from "react";
 import { EventSettings } from "./eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
+import { useRouter } from "next/navigation";
 
 interface CardEventProps {
 	eventType: EventType;
@@ -16,6 +17,7 @@ interface CardEventProps {
 const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
+	const router = useRouter();
 
 	const handleDelete = async () => {
 		try {
@@ -32,6 +34,8 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 
 	const handleEdit = () => {
 		// Implementar a lógica de edição do evento
+		router.push(`/dashboard/${eventType.id}`);
+
 	};
 
 	const handleToggleActive = async () => {
@@ -74,7 +78,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 				</Button>
 				{/* TODO COPIAR LINK */}
 				<Button
-					onClick={() => { }}
+					onClick={() => { handleEdit }}
 					className="text-white flex items-center gap-1"
 				>
 					Compartilhar <Share2Icon size={16} />
