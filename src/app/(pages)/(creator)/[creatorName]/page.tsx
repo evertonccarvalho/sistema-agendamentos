@@ -1,4 +1,6 @@
 import { getEventsByCreatorName } from "@/actions/eventType/getEventsByCreatorName";
+import CardEvent from "../_components/CardEvent";
+import ContainerView from "@/components/ContainerView";
 
 interface CreatorsPageProps {
   params: {
@@ -11,9 +13,21 @@ const CreatorsPage = async ({ params }: CreatorsPageProps) => {
 
   return (
     <>
-      <div className="flex items-center justify-center">
-        <h1>CREATORS PAGE</h1>
-      </div>
+      <ContainerView
+        title="Everton Carvalho"
+        subtitle=" 
+         Bem-vindo à minha página de agendamento. Siga as instruções para adicionar um evento à minha agenda."
+      >
+        <div className="flex w-full  flex-wrap items-center justify-center gap-4  mx-4">
+          {events?.map((event) => (
+            <CardEvent
+              creator={params.creatorName}
+              key={event.id}
+              eventType={event}
+            />
+          ))}
+        </div>
+      </ContainerView>
     </>
   );
 };

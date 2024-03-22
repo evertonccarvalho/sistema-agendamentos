@@ -10,7 +10,8 @@ export const getEventsByCreatorName = async (creatorName: string) => {
           email: {
             startsWith: `${creatorName}@`
           }
-        }
+        },
+        active: true,
       },
       include: {
         schedules: true,
