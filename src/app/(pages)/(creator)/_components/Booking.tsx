@@ -14,6 +14,7 @@ import TimeSelector from "./TimerSelector";
 import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface BookingItemProps {
   data: IEventType;
@@ -24,6 +25,9 @@ const BookingItem = ({ data }: BookingItemProps) => {
   const [day, setDay] = useState<IScheduling[]>([]);
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -92,7 +96,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
         toast.error('Ocorreu um erro ao enviar o formulário.');
       }
 
-
       setHour(undefined);
       setDate(undefined);
       toast("Reserva realizada com sucesso!", {
@@ -104,6 +107,16 @@ const BookingItem = ({ data }: BookingItemProps) => {
           onClick: () => alert("OK"),
         },
       });
+
+      const queryParams = new URLSearchParams({
+        name: formData.name,
+        email: formData.email,
+        creatorName: data.creator.name || '',
+        eventType: data.name,
+        date: newDate.toISOString(),
+      });
+
+      router.push(`${'/creatorname/success'}?${queryParams}`);
     } catch (error) {
       console.error(error);
     } finally {

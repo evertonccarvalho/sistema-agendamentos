@@ -38,14 +38,14 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 	});
 
 	const handleFormSubmit = async (data: GuestFormValues) => {
-		setLoading(true); // Define o estado de carregamento como verdadeiro ao enviar o formulário
+		setLoading(true);
 		try {
-			await onSubmit(data); // Chama a função onSubmit e passa os dados do formulário
-			onClose(); // Fecha o modal após o envio do formulário
+			await onSubmit(data);
+			onClose();
 		} catch (error) {
-			console.error(error); // Lida com erros de envio do formulário, se houver
+			console.error(error);
 		} finally {
-			setLoading(false); // Define o estado de carregamento como falso após o envio do formulário (ou em caso de erro)
+			setLoading(false);
 		}
 	};
 
