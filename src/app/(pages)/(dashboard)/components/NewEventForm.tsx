@@ -15,30 +15,41 @@ import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Dispatch, type SetStateAction, useState, use, useEffect } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import { createEvent } from "@/actions/eventType/saveEvent";
+import { useRouter } from "next/navigation";
+import { editEvent } from "@/actions/eventType/editEvent";
+import { useSession } from "next-auth/react";
+
+const durationOptions = [
+	{ value: 15, label: "15 minutos" },
+	{ value: 30, label: "30 minutos" },
+	{ value: 45, label: "45 minutos" },
+	{ value: 60, label: "1 hora" },
+	{ value: 90, label: "1 hora e 30 minutos" },
+	{ value: 120, label: "2 horas" },
+];
 
 const saveNewEventSchema = z.object({
+	id: z.string().optional(),
+	creatorId: z.string(),
 	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
-	duration: z
-		.string()
-		.min(2, "Escolha uma duração minima ou customize o tempo."),
-	location: z
-		.string()
-		.min(5, "Local do evento deve ter no mínimo 5 caracteres."),
-	description: z.string().optional(),
-	time: z.number().min(1, "Tempo deve ser maior que 0."),
-	typeTime: z.string().min(1, "Escolha um tipo de tempo."),
+	description: z.string(),
+	duration: z.coerce.number(),
+	active: z.boolean().default(true),
+	locationType: z.any(),
 	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres."),
-	referencePoint: z.string().optional(),
 	capacity: z.number().min(1, "Capacidade deve ser maior que 0."),
+	arrivalInfo: z.string().optional(),
 });
 
-type SaveNewEvent = z.infer<typeof saveNewEventSchema>;
+export type SaveNewEvent = z.infer<typeof saveNewEventSchema>;
 
 interface INewEventDataProps {
 	setEventName: Dispatch<SetStateAction<string | undefined>>;
 	setEventDuration: Dispatch<SetStateAction<string | undefined>>;
 	setEventLocation: Dispatch<SetStateAction<string | undefined>>;
+	initialData?: SaveNewEvent;
 }
 export interface IEventDataProps {
 	eventName: string;
@@ -51,7 +62,22 @@ export function NewEventForm({
 	setEventDuration,
 	setEventLocation,
 	setEventName,
+	initialData,
 }: INewEventDataProps) {
+	const { data } = useSession();
+	const loguedUserId = data?.user?.id;
+	const defaultValues = initialData
+		? initialData
+		: {
+				name: "",
+				description: "",
+				creatorId: loguedUserId,
+				address: "",
+				arrivalInfo: "",
+				capacity: 1,
+				duration: 60,
+		  };
+
 	const {
 		register,
 		handleSubmit,
@@ -59,13 +85,33 @@ export function NewEventForm({
 		reset,
 	} = useForm<SaveNewEvent>({
 		resolver: zodResolver(saveNewEventSchema),
+		defaultValues,
 	});
-	
-	const [isActive, setIsActive] = useState<boolean>(false);
 
-	const onSubmit = (data: SaveNewEvent) => {
-		console.log(data);
-		reset();
+	const [isActive, setIsActive] = useState<boolean>(false);
+	const router = useRouter();
+
+	const onSubmit = async (data: SaveNewEvent) => {
+		const createData = saveNewEventSchema.parse(data);
+		console.log("botao clicado", createData);
+		try {
+			if (initialData) {
+				const updateData = saveNewEventSchema.parse(data);
+				const id = initialData.id as string;
+				console.log("veio data", initialData);
+				const res = await editEvent(id, updateData);
+				console.log("resupdate", res);
+			} else {
+				const res = await createEvent(createData);
+				console.log("Resposta do servidor:", res);
+			}
+			router.push("/dashboard");
+			reset();
+		} catch (error) {
+			console.error(
+				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
+			);
+		}
 	};
 
 	return (
@@ -98,12 +144,11 @@ export function NewEventForm({
 							<SelectValue placeholder="30 min" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="15">15 min</SelectItem>
-							<SelectItem value="30">30 min</SelectItem>
-							<SelectItem value="45">45 min</SelectItem>
-							<SelectItem value="60">1 hora</SelectItem>
-							<SelectItem value="180">1 hora e 30 minutos</SelectItem>
-							<SelectItem value="240">2 horas</SelectItem>
+							{durationOptions.map((option) => (
+								<SelectItem key={option.value} value={option.value.toString()}>
+									{option.label}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 					{errors.duration && (
@@ -113,10 +158,15 @@ export function NewEventForm({
 				<label>
 					<span>Local.</span>
 					<Select
-						onValueChange={(ev) =>
-							ev !== "PRESENCIAL" ? setEventLocation(ev) : setIsActive(true)
-						}
-						{...register("location")}
+						onValueChange={(ev) => {
+							if (ev !== "PRESENCIAL") {
+								setEventLocation(ev);
+								setIsActive(false);
+							} else {
+								setIsActive(true);
+							}
+						}}
+						{...register("locationType")}
 						defaultValue="ZOOM"
 					>
 						<SelectTrigger className="w-full">
@@ -146,7 +196,7 @@ export function NewEventForm({
 						<label>
 							<span>Ponto de referência</span>
 							<Input
-								{...register("referencePoint")}
+								{...register("arrivalInfo")}
 								type="text"
 								placeholder="Ex. Próximo a padaria."
 							/>

@@ -81,7 +81,7 @@ const SchedulingItem = ({
 						{userName ? userName : "Nome do Cara"}
 					</h2>
 					<h1 className="font-semibold text-xl break-words">
-						{eventName ? eventName : "Serviço X"}
+						{eventName ? eventName : "Event Name"}
 					</h1>
 					<div className="flex gap-2  md:flex-col">
 						<div className="flex items-center gap-1">
@@ -93,7 +93,7 @@ const SchedulingItem = ({
 						<div className="flex items-center gap-1">
 							<MapPin size={18} />
 							<p className=" font-semibold  text-muted">
-								{eventLocation ? eventLocation : "Local X"}
+								{eventLocation ? eventLocation : "Location"}
 							</p>
 						</div>
 					</div>

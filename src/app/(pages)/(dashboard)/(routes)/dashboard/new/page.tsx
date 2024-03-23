@@ -17,10 +17,12 @@ const NewEvent = () => {
 		undefined
 	);
 
-	useEffect(() => {
+	const getLogedUserName = () => {
 		data?.user?.name && setUserName(data.user.name);
-	}, [data]);
-	console.log(userName);
+	};
+	useEffect(() => {
+		getLogedUserName();
+	});
 
 	// const [data, setData] = useState<EventFormValues | undefined>(undefined);
 	// console.log(data);
