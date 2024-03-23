@@ -30,16 +30,22 @@ const durationOptions = [
 	{ value: 120, label: "2 horas" },
 ];
 
+enum Locations {
+	ZOOM = "ZOOM",
+	PHONE_CALL = "PHONE_CALL",
+	PRESENCIAL = "PRESENCIAL",
+}
+
 const saveNewEventSchema = z.object({
 	id: z.string().optional(),
 	creatorId: z.string(),
 	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
-	description: z.string(),
-	duration: z.coerce.number(),
+	description: z.string().min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
+	duration: z.coerce.number().default(60),
 	active: z.boolean().default(true),
 	locationType: z.any(),
-	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres."),
-	capacity: z.number().min(1, "Capacidade deve ser maior que 0."),
+	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres.").optional(),
+	capacity: z.number().min(1, "Capacidade deve ser maior que 0.").optional(),
 	arrivalInfo: z.string().optional(),
 });
 
@@ -94,6 +100,17 @@ export function NewEventForm({
 	const onSubmit = async (data: SaveNewEvent) => {
 		const createData = saveNewEventSchema.parse(data);
 		console.log("botao clicado", createData);
+		console.log("botao clicado", data);
+		const create = {
+			creatorId: loguedUserId as string,
+			name: data.name,
+			description: data.description,
+			duration: Number(data.duration),
+			locationType: data.locationType,
+			address: data.andress,
+			capacity: data.capacity,
+			arrivalInfo: data.arrivalInfo,
+		}
 		try {
 			if (initialData) {
 				const updateData = saveNewEventSchema.parse(data);
@@ -102,7 +119,7 @@ export function NewEventForm({
 				const res = await editEvent(id, updateData);
 				console.log("resupdate", res);
 			} else {
-				const res = await createEvent(createData);
+				const res = await createEvent(create);
 				console.log("Resposta do servidor:", res);
 			}
 			router.push("/dashboard");
@@ -173,9 +190,11 @@ export function NewEventForm({
 							<SelectValue placeholder="30 min" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="ZOOM">ZOOM</SelectItem>
-							<SelectItem value="PHONE_CALL">Chamada por Telefone</SelectItem>
-							<SelectItem value="PRESENCIAL">Presencial</SelectItem>
+							{Object.values(Locations).map((location) => (
+								<SelectItem key={location} value={location}>
+									{location}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 				</label>
