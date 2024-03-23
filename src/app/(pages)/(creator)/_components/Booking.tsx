@@ -25,7 +25,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  console.log("data que chegou no bookings", data);
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
     setHour(undefined);
@@ -59,6 +58,40 @@ const BookingItem = ({ data }: BookingItemProps) => {
         userId: data.creatorId,
         date: newDate,
       });
+
+      // Preparar dados para envio por e-mail
+      const dataForEmail = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+        creatorName: data.creator.name,
+        eventType: data.name,
+        date: newDate,
+      };
+
+      // Enviar dados por e-mail
+      try {
+        const response = await fetch('/api/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataForEmail),
+        });
+
+        const responseData = await response.json(); // Convertendo a resposta para JSON
+        console.log(responseData);
+        if (responseData.status === 'OK') {
+          toast.success(`${dataForEmail.name} seu formulário enviado com sucesso!`);
+        } else {
+          toast.error(
+            'Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.'
+          );
+        }
+      } catch (error) {
+        console.error('Erro durante a requisição:', error);
+        toast.error('Ocorreu um erro ao enviar o formulário.');
+      }
+
 
       setHour(undefined);
       setDate(undefined);
