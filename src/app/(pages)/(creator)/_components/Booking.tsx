@@ -12,8 +12,8 @@ import { toast } from "sonner";
 import DateSelector from "./DataSelector";
 import TimeSelector from "./TimerSelector";
 import EventInfor from "./EventInfor";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { FormModal } from "./formModal";
+import { GuestForm, type GuestFormValues } from "./guestForm";
 
 interface BookingItemProps {
   data: IEventType;
@@ -23,6 +23,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
   const [hour, setHour] = useState<string | undefined>();
   const [day, setDay] = useState<IScheduling[]>([]);
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   console.log("data que chegou no bookings", data);
   const handleDateClick = (date: Date | undefined) => {
@@ -32,9 +33,10 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
   const handleHourClick = (time: string) => {
     setHour(time);
+    setOpen(true);
   };
 
-  const handleBookingSubmit = async () => {
+  const handleBookingSubmit = async (formData: GuestFormValues) => {
     setSubmitIsLoading(true);
 
     try {
@@ -48,10 +50,10 @@ const BookingItem = ({ data }: BookingItemProps) => {
       const newDate = setMinutes(setHours(date, dateHour), dateMinutes);
 
       await createScheduling({
-        name: "Everton",
-        email: "evertonsna@gmail.com",
-        message: "OLA GRAVANDO AGENDAMENTO",
-        phone: "88888888",
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
 
         eventId: data.id,
         userId: data.creatorId,
@@ -107,6 +109,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
         <Separator orientation="vertical" className="bg-zinc-700" />
         <div className="w-full flex flex-col gap-2 p-2 items-center justify-center">
           <h1 className="font-semibold  text-xl">Selectione a Data e Hora</h1>
+
           <div className=" w-full h-full flex flex-col md:flex-row gap-2 ">
             <DateSelector date={date} handleDateClick={handleDateClick} />
             {date && (
@@ -118,13 +121,18 @@ const BookingItem = ({ data }: BookingItemProps) => {
               />
             )}
           </div>
-          <Button
-            onClick={handleBookingSubmit}
-            disabled={!hour || !date || submitIsLoading}>
-            {submitIsLoading && (<Loader2 className="mr-2 h-4 w-4 animate-spin" />)}
-            Confirmar
-          </Button>
         </div>
+        <FormModal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          onConfirm={() => handleBookingSubmit}
+          loading={submitIsLoading}
+        >
+          <GuestForm
+            onClose={() => setOpen(false)}
+            onSubmit={handleBookingSubmit}
+          />
+        </FormModal>
       </div>
     </>
   );
