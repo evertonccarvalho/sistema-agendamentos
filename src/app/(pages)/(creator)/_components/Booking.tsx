@@ -104,12 +104,9 @@ const BookingItem = ({ data }: BookingItemProps) => {
       <div className=" w-full h-full p-4 flex flex-col md:flex-row ">
         <EventInfor data={data} />
         <Separator orientation="horizontal" className="bg-zinc-700 md:hidden" />
-
         <Separator orientation="vertical" className="bg-zinc-700" />
-
         <div className="w-full flex flex-col gap-2 p-2 items-center justify-center">
           <h1 className="font-semibold  text-xl">Selectione a Data e Hora</h1>
-
           <div className=" w-full h-full flex flex-col md:flex-row gap-2 ">
             <DateSelector date={date} handleDateClick={handleDateClick} />
             {date && (
@@ -123,12 +120,9 @@ const BookingItem = ({ data }: BookingItemProps) => {
           </div>
           <Button
             onClick={handleBookingSubmit}
-            disabled={!hour || !date || submitIsLoading}
-          >
-            {submitIsLoading && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Confirmar reserva
+            disabled={!hour || !date || submitIsLoading}>
+            {submitIsLoading && (<Loader2 className="mr-2 h-4 w-4 animate-spin" />)}
+            Confirmar
           </Button>
         </div>
       </div>
