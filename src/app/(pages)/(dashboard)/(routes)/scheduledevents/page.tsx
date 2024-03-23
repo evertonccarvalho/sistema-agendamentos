@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import type { IScheduling } from "./interface/interface";
-import { getScheduledItems } from "@/actions/scheduling/getScheduledItens";
+import { getBookings } from "@/actions/scheduling/getBookings";
 import ScheduledEventItem from "./components/ScheduledEventItem";
 
 const ScheduledEvents = async () => {
@@ -14,7 +14,7 @@ const ScheduledEvents = async () => {
 		return redirect("/");
 	}
 
-	const scheduledEvents = await getScheduledItems(session.user.id);
+	const scheduledEvents = await getBookings(session.user.id);
 	console.log(scheduledEvents);
 	return (
 		<main className="flex-1 space-y-4 p-4 md:p-8 pt-6">

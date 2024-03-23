@@ -11,24 +11,99 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowUpRight, Trash2Icon } from "lucide-react";
+import { cancelBooking } from "@/actions/scheduling/cancelBooking";
+import { useState } from "react";
+import { AlertModal } from "@/components/alert-modal";
+import { toggleBookingStatus } from "@/actions/scheduling/togleBookingStatus";
 
 interface ScheduledEvent {
   scheduling: IScheduling;
 }
 
 const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
   const endDate = addMinutes(
     new Date(scheduling.date ?? ""),
     scheduling.eventType.duration,
   );
 
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      setOpenDelete(true);
+      await cancelBooking(scheduling.id, scheduling.userId);
+      console.log("deletado com sucesso.");
+    } catch (error) {
+      console.error("Error ao deletar:", error);
+    } finally {
+      setLoading(false);
+      setOpenDelete(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    try {
+      setLoading(true);
+      setOpenDelete(true);
+      await toggleBookingStatus(scheduling.id, scheduling.userId, "REJECTED");
+      console.log(
+        `O Agendamento para ${scheduling.eventType.name} às ${format(
+          new Date(scheduling.date ?? ""),
+          "dd/MM/yyyy às HH:mm",
+        )}foi Rejeitado`,
+      );
+    } catch (error) {
+      console.error("Error ao deletar:", error);
+    } finally {
+      setLoading(false);
+      setOpenDelete(false);
+    }
+  };
+
+  const handleAccept = async () => {
+    try {
+      setLoading(true);
+      await toggleBookingStatus(scheduling.id, scheduling.userId, "ACCEPTED");
+      console.log(
+        `O Agendamento para ${scheduling.eventType.name} às ${format(
+          new Date(scheduling.date ?? ""),
+          "dd/MM/yyyy às HH:mm",
+        )}foi Rejeitado`,
+      );
+    } catch (error) {
+      console.error("Error ao deletar:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
+      <AlertModal
+        isOpen={openDelete}
+        onClose={() => setOpenDelete(false)}
+        onConfirm={handleCancel}
+        loading={loading}
+      />
+
       <Accordion type="single" collapsible>
         <AccordionItem className="bg-card my-1" value="item-1">
           <div className="flex gap-1.5 p-4 bg-muted/10 border-y-[1px] border-gray-700 flex-col justify-start">
             <h1 className=" font-semibold">
               {format(new Date(scheduling.date ?? ""), "dd/MM/yyyy")}
+            </h1>
+            <h1
+              className={`${scheduling.status === "PENDING"
+                ? "bg-yellow-600"
+                : scheduling.status === "ACCEPTED"
+                  ? "bg-green-600"
+                  : scheduling.status === "REJECTED"
+                    ? "bg-red-600"
+                    : ""
+                }`}
+            >
+              {scheduling.status}
             </h1>
           </div>
           <div className="flex text-sm  items-center  justify-between gap-1.5 p-4   border-b-[1px] border-gray-700  ">
@@ -53,21 +128,29 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
           <AccordionContent>
             <div className="gap-2  flex grid-cols-2  w-full   p-4">
               <div className="w-fit flex-col gap-4 px-5 pt-5 flex">
-
                 <div className="flex gap-2 ">
-                  <Button className="rounded-full gap-1" variant='outline'>
+                  <Button
+                    onClick={handleAccept}
+                    className="rounded-full gap-1"
+                    variant="outline"
+                  >
                     <ArrowUpRight size={20} />
-                    Remarcar
+                    Aceitar
                   </Button>
-                  <Button className="rounded-full gap-1" variant='outline'>
+                  <Button
+                    onClick={() => setOpenDelete(true)}
+                    className="rounded-full gap-1"
+                    variant="outline"
+                  >
                     <Trash2Icon size={20} />
-                    Remarcar
+                    Cancelar
                   </Button>
                 </div>
 
                 <Link
                   className="flex gap-1 items-center text-base font-light text-blue-500 hover:underline"
-                  href={`/dashboard/update/${scheduling.eventType.id}`}>
+                  href={`/dashboard/update/${scheduling.eventType.id}`}
+                >
                   <ArrowUpRight size={20} />
                   Edita Tipo do Evento
                 </Link>
@@ -90,7 +173,10 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
                         </span>
                       </p>
                       <p className="font-medium">
-                        Capacidade:                        <span className="font-normal">                          {scheduling?.eventType.capacity}
+                        Capacidade:{" "}
+                        <span className="font-normal">
+                          {" "}
+                          {scheduling?.eventType.capacity}
                         </span>
                       </p>
                       <p className="font-medium">

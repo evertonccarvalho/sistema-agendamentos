@@ -3,18 +3,19 @@ import { Separator } from "@/components/ui/separator";
 import { format, setHours, setMinutes } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { generateDayTimeList } from "../../(dashboard)/(routes)/scheduling/helpers/hours";
-import { createScheduling } from "@/actions/scheduling/createScheduling";
+import { createBooking } from "@/actions/scheduling/createBooking";
 import type { IEventType } from "@/actions/eventType/interface";
-import type { IScheduling } from "../../(dashboard)/(routes)/scheduledevents/interface/interface";
 import { toast } from "sonner";
 import DateSelector from "./DataSelector";
 import TimeSelector from "./TimerSelector";
 import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { getDayBookings } from "@/actions/scheduling/getDayBookings";
+import type { Scheduling } from "@prisma/client";
 
 interface BookingItemProps {
   data: IEventType;
@@ -22,12 +23,23 @@ interface BookingItemProps {
 const BookingItem = ({ data }: BookingItemProps) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
-  const [day, setDay] = useState<IScheduling[]>([]);
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
   const router = useRouter();
+  const [dayBookings, setDayBookings] = useState<Scheduling[]>([]);
+
+  useEffect(() => {
+    if (!date) {
+      return;
+    }
+
+    const refreshAvailableHours = async () => {
+      const _dayBookings = await getDayBookings(data.creatorId, date);
+      setDayBookings(_dayBookings);
+    };
+
+    refreshAvailableHours();
+  }, [date, data.creatorId]);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -52,7 +64,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
       const newDate = setMinutes(setHours(date, dateHour), dateMinutes);
 
-      await createScheduling({
+      await createBooking({
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
@@ -76,24 +88,26 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
       // Enviar dados por e-mail
       try {
-        const response = await fetch('/api/email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataForEmail),
         });
 
         const responseData = await response.json(); // Convertendo a resposta para JSON
         console.log(responseData);
-        if (responseData.status === 'OK') {
-          toast.success(`${dataForEmail.name} seu formulário enviado com sucesso!`);
+        if (responseData.status === "OK") {
+          toast.success(
+            `${dataForEmail.name} seu formulário enviado com sucesso!`,
+          );
         } else {
           toast.error(
-            'Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.'
+            "Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
           );
         }
       } catch (error) {
-        console.error('Erro durante a requisição:', error);
-        toast.error('Ocorreu um erro ao enviar o formulário.');
+        console.error("Erro durante a requisição:", error);
+        toast.error("Ocorreu um erro ao enviar o formulário.");
       }
 
       setHour(undefined);
@@ -111,18 +125,41 @@ const BookingItem = ({ data }: BookingItemProps) => {
       const queryParams = new URLSearchParams({
         name: formData.name,
         email: formData.email,
-        creatorName: data.creator.name || '',
+        creatorName: data.creator.name || "",
         eventType: data.name,
         date: newDate.toISOString(),
       });
 
-      router.push(`${'/creatorname/success'}?${queryParams}`);
+      router.push(`${"/creatorname/success"}?${queryParams}`);
     } catch (error) {
       console.error(error);
     } finally {
       setSubmitIsLoading(false);
     }
   };
+
+  // const timeList = useMemo(() => {
+  //   if (!date) {
+  //     return [];
+  //   }
+
+  //   return generateDayTimeList(date).filter((time) => {
+  //     const timeHour = Number(time.split(":")[0]);
+  //     const timeMinutes = Number(time.split(":")[1]);
+
+  //     const scheduling = day.find((scheduling) => {
+  //       const schedulingHour = scheduling.date.getHours();
+  //       const schedulingMinutes = scheduling.date.getMinutes();
+
+  //       return schedulingHour === timeHour && schedulingMinutes === timeMinutes;
+  //     });
+
+  //     if (!scheduling) {
+  //       return true;
+  //     }
+  //     return false;
+  //   });
+  // }, [date, day]);
 
   const timeList = useMemo(() => {
     if (!date) {
@@ -133,19 +170,20 @@ const BookingItem = ({ data }: BookingItemProps) => {
       const timeHour = Number(time.split(":")[0]);
       const timeMinutes = Number(time.split(":")[1]);
 
-      const scheduling = day.find((scheduling) => {
-        const schedulingHour = scheduling.date.getHours();
-        const schedulingMinutes = scheduling.date.getMinutes();
+      const booking = dayBookings.find((booking) => {
+        const bookingHour = booking.date.getHours();
+        const bookingMinutes = booking.date.getMinutes();
 
-        return schedulingHour === timeHour && schedulingMinutes === timeMinutes;
+        return bookingHour === timeHour && bookingMinutes === timeMinutes;
       });
 
-      if (!scheduling) {
+      if (!booking) {
         return true;
       }
+
       return false;
     });
-  }, [date, day]);
+  }, [date, dayBookings]);
 
   return (
     <>
