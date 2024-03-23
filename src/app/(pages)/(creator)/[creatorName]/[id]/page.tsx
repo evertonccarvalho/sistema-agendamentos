@@ -1,4 +1,4 @@
-import ContainerView from "@/components/ContainerView";
+import ContainerWrapper from "@/components/containerWrapper";
 import BookingItem from "../../_components/Booking";
 import { getEventActiveById } from "@/actions/eventType/getEventActiveById";
 
@@ -12,9 +12,9 @@ const BookingPage = async ({ params }: BookingPageProps) => {
   console.log("O EVENTO", event);
   return (
     <>
-      <ContainerView>
+      <ContainerWrapper>
         {event && <BookingItem data={event} />}
-      </ContainerView>
+      </ContainerWrapper>
     </>
   );
 };

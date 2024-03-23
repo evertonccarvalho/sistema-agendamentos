@@ -1,5 +1,5 @@
 "use client"
-import ContainerView from "@/components/ContainerView";
+import ContainerWrapper from "@/components/containerWrapper";
 import { Calendar, User } from "lucide-react";
 import { format } from "date-fns";
 
@@ -16,7 +16,7 @@ const SuccessPage = ({
   searchParams
 }: SuccesPageProps) => {
   return (<>
-    <ContainerView
+    <ContainerWrapper
       title="Você está agendado"
       subtitle=" Um convite de calendário foi enviado para seu endereço de e-mail."
     >
@@ -33,7 +33,7 @@ const SuccessPage = ({
           </div>
         </div>
       </div>
-    </ContainerView>
+    </ContainerWrapper>
 
   </>);
 }

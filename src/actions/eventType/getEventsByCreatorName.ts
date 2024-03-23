@@ -13,9 +13,13 @@ export const getEventsByCreatorName = async (creatorName: string) => {
         },
         active: true,
       },
-      // include: {
-      //   schedules: true,
-      // },
+      include: {
+        creator: {
+          select: {
+            name: true
+          }
+        }
+      },
     });
 
     return events;

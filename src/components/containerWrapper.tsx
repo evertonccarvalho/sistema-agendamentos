@@ -1,16 +1,16 @@
 import type { ReactNode } from "react";
 import { Card, CardHeader } from "./ui/card";
 
-interface ContainerViewProps {
+interface ContainerWrapperProps {
   title?: string;
   subtitle?: string;
   children: ReactNode;
 }
 
-const ContainerView = ({ title, subtitle, children }: ContainerViewProps) => {
+const ContainerWrapper = ({ title, subtitle, children }: ContainerWrapperProps) => {
   return (
     <div className="drop-shadow-lg h-full min-h-dvh flex items-center justify-center space-y-4  md:p-8 pt-6">
-      <Card className="min-h-[700px] max-h-[700px] bg-card h-full">
+      <Card className="md:min-h-[600px] flex max-h-[700px] bg-card h-[300px]">
         <div className="flex flex-col items-center justify-center rounded-md max-w-[1200px] md:min-w-[900px]">
           {(title || subtitle) && (
             <CardHeader>
@@ -27,4 +27,4 @@ const ContainerView = ({ title, subtitle, children }: ContainerViewProps) => {
   );
 };
 
-export default ContainerView;
+export default ContainerWrapper;
