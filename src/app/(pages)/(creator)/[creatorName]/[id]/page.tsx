@@ -13,12 +13,7 @@ const BookingPage = async ({ params }: BookingPageProps) => {
   return (
     <>
       <ContainerView>
-        {/* <div className="flex w-full h-full items-center justify-center"> */}
-        {/* <BookingItem
-
-        /> */}
         {event && <BookingItem data={event} />}
-        {/* </div> */}
       </ContainerView>
     </>
   );
