@@ -70,7 +70,7 @@ model Scheduling {
   email     String
   phone     String
   message   String           @db.Text
-  status    SchedulingStatus
+  status    SchedulingStatus @default(PENDING)
   userId    String
   user      User             @relation(fields: [userId], references: [id])
   eventId   String

@@ -1,6 +1,6 @@
-import { getEventsByCreatorName } from "@/actions/eventType/getEventsByCreatorName";
 import ContainerView from "@/components/ContainerView";
 import BookingItem from "../../_components/Booking";
+import { getEventActiveById } from "@/actions/eventType/getEventActiveById";
 
 interface BookingPageProps {
   params: {
@@ -8,14 +8,16 @@ interface BookingPageProps {
   };
 }
 const BookingPage = async ({ params }: BookingPageProps) => {
-  const events = await getEventsByCreatorName(params.id);
-  console.log(events);
-
+  const event = await getEventActiveById(params.id);
+  console.log("O EVENTO", event);
   return (
     <>
-      <ContainerView      >
+      <ContainerView>
         {/* <div className="flex w-full h-full items-center justify-center"> */}
-        <BookingItem />
+        {/* <BookingItem
+
+        /> */}
+        {event && <BookingItem data={event} />}
         {/* </div> */}
       </ContainerView>
     </>
