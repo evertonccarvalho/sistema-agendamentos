@@ -108,7 +108,7 @@ export function NewEventForm({
 			duration: Number(data.duration),
 			locationType: data.locationType,
 			address: data.andress,
-			capacity: data.capacity,
+			capacity: Number(data.capacity),
 			arrivalInfo: data.arrivalInfo,
 		}
 		try {

@@ -10,15 +10,24 @@ import {
 	FormControl,
 	FormField,
 	FormItem,
-	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+
+const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+const phoneRegex = /^\(?([0-9]{2})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{4})$/;
 
 const guestStoreSchema = z.object({
 	name: z.string().min(2, { message: "O nome deve ter no mínimo 2 caracteres" }),
-	email: z.string().email({ message: "Insira um endereço de e-mail válido" }),
-	phone: z.string().min(8, { message: "O telefone deve ter no mínimo 8 dígitos" }),
+	email: z.string().email({ message: "Insira um endereço de e-mail válido" })
+	.refine(value => emailRegex.test(value), {
+		message: "Insira um endereço de e-mail válido",
+	}),
+	phone: z.string().min(8, { message: "O telefone deve ter no mínimo 8 dígitos" })
+	.refine(value => phoneRegex.test(value), {
+		message: "Insira um número de telefone válido",
+	}),
 	message: z.string().min(10, { message: "A mensagem deve ter no mínimo 10 caracteres" }),
 });
 
@@ -61,7 +70,7 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 						name="name"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Nome</FormLabel>
+								<label>Nome</label>
 								<FormControl>
 									<Input placeholder="Nome" {...field} />
 								</FormControl>
@@ -74,7 +83,7 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Email</FormLabel>
+								<label>Email</label>
 								<FormControl>
 									<Input placeholder="E-mail" {...field} />
 								</FormControl>
@@ -87,7 +96,7 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 						name="phone"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Telefone</FormLabel>
+								<label>Telefone</label>
 								<FormControl>
 									<Input placeholder="Telefone" {...field} />
 								</FormControl>
@@ -100,9 +109,9 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 						name="message"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Mensagem</FormLabel>
+								<label>Mensagem</label>
 								<FormControl>
-									<Input placeholder="Mensagem" {...field} />
+									<Textarea placeholder="Mensagem" {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -110,14 +119,13 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 					/>
 				</div>
 
-				<div className="flex gap-2">
-					<Button type="button" variant="outline" onClick={() => onClose()} disabled={loading}>
-						{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-						Cancelar
-					</Button>
-					<Button type="submit" disabled={loading}>
-						{loading && (<Loader2 className="mr-2 h-4 w-4 animate-spin" />)}
+				<div className="flex gap-5">
+					<Button type="submit" className="text-white" disabled={loading}>
+						{loading && (<Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />)}
 						Confirmar
+					</Button>
+					<Button type="button" variant="outline" onClick={() => onClose()} disabled={loading}>
+						Cancelar
 					</Button>
 				</div>
 			</form>
