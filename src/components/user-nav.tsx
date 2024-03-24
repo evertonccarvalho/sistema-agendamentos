@@ -1,6 +1,5 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -11,6 +10,7 @@ import {
 	DropdownMenuShortcut,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ChevronDownIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -23,8 +23,9 @@ export function UserNav() {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="relative h-8 w-8 rounded-full">
+
+			<DropdownMenuTrigger asChild className="flex w-full">
+				<div className=" flex  h-8 w-8 cursor-pointer rounded-full">
 					<Avatar className="h-8 w-8">
 						<AvatarImage
 							src={data.user.image ?? ""}
@@ -34,8 +35,16 @@ export function UserNav() {
 							{data.user?.name ? data.user.name[0] : ""}
 						</AvatarFallback>
 					</Avatar>
-				</Button>
+					<ChevronDownIcon size={18} />
+
+				</div>
 			</DropdownMenuTrigger>
+			<div>
+				<div className=" hidden md:flex text-start flex-col">
+					<h3 className="text-xs font-semibold">{data.user.name}</h3>
+					<p className="text-xs text-muted">{data.user.email}</p>
+				</div>
+			</div>
 			<DropdownMenuContent className="w-56" align="end" forceMount>
 				<DropdownMenuLabel className="font-normal">
 					<div className="flex flex-col space-y-1">
