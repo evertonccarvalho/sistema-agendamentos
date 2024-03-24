@@ -2,12 +2,12 @@
 
 import { db } from "@/lib/prisma";
 
-export const getBookings = async (userId: string,) => {
+export const getFinishedBookings = async (userId: string,) => {
 	const schedulings = await db.scheduling.findMany({
 		where: {
 			userId: userId,
 			date: {
-				lt: new Date(),
+				lt: new Date()
 			}
 		},
 		include: {
@@ -17,7 +17,7 @@ export const getBookings = async (userId: string,) => {
 					name: true,
 					email: true,
 					image: true,
-				},
+				}
 			}
 		}
 	});

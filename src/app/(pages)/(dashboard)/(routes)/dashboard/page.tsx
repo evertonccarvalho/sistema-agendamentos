@@ -5,6 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import CardEventTypes from "../../components/CardEventTypes";
 import { getEventsByCreatorId } from "@/actions/eventType/getEvent";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const Dashboard = async () => {
 	const breadcrumbItems = [{ title: "Tipos de Evento", link: "/dashboard" }];
@@ -17,15 +19,18 @@ const Dashboard = async () => {
 	const events = await getEventsByCreatorId(session.user.id);
 
 	return (
-		<main className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
-			<EventPageHeader />
+			<Card className="drop-shadow-lg bg-transparent border-zinc-700  rounded-md md:p-6 rou p-2">
+				<EventPageHeader />
+				<Separator className='bg-zinc-700 my-4' />
+				<section className="flex flex-wrap w-full gap-5 items-center justify-start">
+					{events?.map((event) => (
+						<CardEventTypes key={event.id} eventType={event} />
+					))}
+				</section>
+			</Card>
 
-			<section className="flex flex-wrap w-full gap-5 items-center justify-start">
-				{events?.map((event) => (
-					<CardEventTypes key={event.id} eventType={event} />
-				))}
-			</section>
 		</main>
 	);
 };

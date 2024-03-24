@@ -1,8 +1,7 @@
-import { cn } from '@/lib/utils';
-import { ChevronRightIcon } from 'lucide-react';
-import Link from 'next/link';
-import React from 'react';
-import { Separator } from './ui/separator';
+import { cn } from "@/lib/utils";
+import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 
 type BreadCrumbType = {
 	title: string;
@@ -18,7 +17,7 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
 		<>
 			<div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
 				<Link
-					href={'/dashboard'}
+					href={"/dashboard"}
 					className="overflow-hidden text-muted font-semibold text-lg text-ellipsis whitespace-nowrap"
 				>
 					Inicio
@@ -29,10 +28,10 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
 						<Link
 							href={item.link}
 							className={cn(
-								'font-semibold text-lg',
+								"font-semibold text-lg",
 								index === items.length - 1
-									? 'text-foreground pointer-events-none'
-									: 'text-muted-foreground'
+									? "text-foreground pointer-events-none"
+									: "text-muted-foreground",
 							)}
 						>
 							{item.title}
@@ -40,7 +39,6 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
 					</React.Fragment>
 				))}
 			</div>
-			<Separator className='bg-zinc-700'/>
 		</>
 	);
 }

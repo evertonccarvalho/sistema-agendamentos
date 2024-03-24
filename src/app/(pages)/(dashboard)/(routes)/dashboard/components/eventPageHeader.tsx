@@ -36,11 +36,11 @@ const EventPageHeader = () => {
         </div>
 
         <Link href={"/dashboard/new"}>
-          <Button className="text-white flex items-center gap-1">
-            <Plus size={18} /> Adicionar
+          <Button variant='outline' className="bg-transparent rounded-full flex items-center gap-1">
+            <Plus size={18} />  <p className="md:flex hidden"> Adicionar</p>
           </Button>
         </Link>
-      </section>
+      </section >
     </>
   );
 }

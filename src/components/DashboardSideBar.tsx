@@ -38,12 +38,12 @@ const DashboardSideBar = () => {
 
 	return (
 		<div
-			className={` py-2 pl-2 z-50   min-h-dvh rounded-md bg-card border border-zinc-700 h-full  text-primary px-4 ${open ? "w-72" : "w-16 flex flex-col items-center"} `}
+			className={` py-2 pl-2 z-50   min-h-dvh rounded-md bg-card border border-zinc-700 h-full   text-primary px-4 ${open ? "w-72" : "w-16 flex flex-col items-center"} `}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
 			<div className="flex py-4  justify-between items-center">
-				<div className={`${!open && "w-8 justify-center"} h-8  group flex gap-4 items-center text-sm text-secondary justify-start  font-medium  rounded-full`}					>
+				<Link href={'/dashboard'} className={`${!open && "w-8 justify-center"} h-8  group flex gap-4 items-center text-sm text-secondary justify-start  font-medium  rounded-full`}					>
 					<div className="rounded-full">
 						<Image
 							src="/ico.png"
@@ -63,7 +63,7 @@ const DashboardSideBar = () => {
 							className="w-full h-8"
 						/>
 					</div>
-				</div>
+				</Link>
 
 				{open && (
 					<div className="flex justify-end">
@@ -85,22 +85,24 @@ const DashboardSideBar = () => {
 			</div>
 
 			<div className={`${!open && "flex  items-center justify-center"}`}>
-				<button
-					type="button"
-					className={`${!open && "w-8"
-						} w-full cursor-pointer group h-8 flex items-center text-sm text-secondary justify-center gap-3.5 font-medium p-2 rounded-full bg-card-foreground hover:text-secondary`}
-					onClick={() => { }}
-				>
-					<div>
-						<Plus size={16} />
-					</div>
-					<h2
-						className={`whitespace-pre duration-500 ${!open && "opacity-0 hidden translate-x-28 overflow-hidden"
-							}`}
+				<Link href={"/dashboard/new"}>
+					<button
+						type="button"
+						className={`${!open && "w-8"
+							} w-full cursor-pointer group h-8 flex items-center text-sm text-secondary justify-center gap-3.5 font-medium p-2 rounded-full bg-card-foreground hover:text-secondary`}
+						onClick={() => { }}
 					>
-						Criar
-					</h2>
-				</button>
+						<div>
+							<Plus size={16} />
+						</div>
+						<h2
+							className={`whitespace-pre duration-500 ${!open && "opacity-0 hidden translate-x-28 overflow-hidden"
+								}`}
+						>
+							Criar
+						</h2>
+					</button>
+				</Link>
 			</div>
 
 			<div
@@ -110,7 +112,6 @@ const DashboardSideBar = () => {
 				{menus?.map((menu, i) => (
 					<Link
 						href={menu?.link}
-						// biome-ignore lint/suspicious/noArrayIndexKey: this list is static
 						key={i}
 						className="group flex items-center text-sm gap-3 font-medium p-2 hover:bg-card-foreground hover:text-secondary rounded-md"
 					>
