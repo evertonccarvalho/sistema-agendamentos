@@ -21,7 +21,7 @@ const Dashboard = async () => {
 			<BreadCrumb items={breadcrumbItems} />
 			<EventPageHeader />
 
-			<section className="flex flex-wrap w-full gap-5 items-center justify-start">
+			<section className="flex flex-wrap w-full gap-5 items-center justify-center">
 				{events?.map((event) => (
 					<CardEventTypes key={event.id} eventType={event} />
 				))}
