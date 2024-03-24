@@ -21,7 +21,7 @@ export default function SideBarLinks({ sidebarOpen }: props) {
         <Link
           href={menu.link}
           key={menu.link}
-          className={`group flex items-center text-sm gap-3 font-medium p-1.5 hover:bg-card-foreground hover:text-secondary rounded-md ${menu.link.trim() === pathname.trim() ? "text-primary" : ""
+          className={`group py-2 flex items-center text-sm gap-3 font-medium px-1.5 hover:bg-card-foreground hover:text-secondary rounded-md ${menu.link.trim() === pathname.trim() ? "text-primary" : ""
             }`}
         >
           <div>{React.createElement(menu.icon, { size: "18" })}</div>
