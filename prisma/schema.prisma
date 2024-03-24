@@ -65,17 +65,18 @@ model Availability {
 }
 
 model Scheduling {
-  id        String           @id @default(uuid())
-  name      String
-  email     String
-  phone     String
-  message   String           @db.Text
-  status    SchedulingStatus @default(PENDING)
-  userId    String
-  user      User             @relation(fields: [userId], references: [id])
-  eventId   String
-  eventType EventType        @relation(fields: [eventId], references: [id])
-  date      DateTime         @default(now())
+  id         String           @id @default(uuid())
+  name       String
+  email      String
+  phone      String
+  message    String           @db.Text
+  status     SchedulingStatus @default(PENDING)
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+  eventId    String
+  eventType  EventType        @relation(fields: [eventId], references: [id])
+  date       DateTime
+  created_at DateTime?        @default(now()) @db.Timestamptz(6)
 }
 
 model EventType {

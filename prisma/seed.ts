@@ -1,71 +1,43 @@
-// const { PrismaClient } = require('@prisma/client');
+import { db } from "@/lib/prisma";
 
-// const prisma = new PrismaClient();
+const { PrismaClient } = require('@prisma/client');
 
-// async function main() {
-//   // Criando alguns exemplos de eventos
-//   await prisma.eventType.createMany({
-//     data: [
-//       {
-//         name: 'Evento 1',
-//         description: 'Descrição do Evento 1',
-//         creatorId: 'cltzqc41t0000myakgbk3r8r7',
-//       },
-//       {
-//         name: 'Evento 2',
-//         description: 'Descrição do Evento 2',
-//         creatorId: 'cltzqc41t0000myakgbk3r8r7',
-//       },
-//     ],
-//   });
 
-//   // Criando alguns exemplos de disponibilidade
-//   await prisma.availability.createMany({
-//     data: [
-//       {
-//         weekDay: 1,
-//         startTime: 9,
-//         endTime: 17,
-//         userId: 'cltzqc41t0000myakgbk3r8r7',
-//       },
-//       {
-//         weekDay: 2,
-//         startTime: 10,
-//         endTime: 18,
-//         userId: 'cltzqc41t0000myakgbk3r8r7',
-//       },
-//     ],
-//   });
+async function main() {
+  // Criando alguns exemplos de eventos
 
-//   // Criando alguns exemplos de agendamentos
-//   await prisma.scheduling.createMany({
-//     data: [
-//       {
-//         email: 'email1@example.com',
-//         phone: '123456789',
-//         message: 'Mensagem do Agendamento 1',
-//         status: 'PENDING',
-//         userId: 'cltzqc41t0000myakgbk3r8r7',
-//         eventId: '1fc2c1c4-45f0-4469-9b7e-665255eeb1eb',
-//       },
-//       {
-//         email: 'email2@example.com',
-//         phone: '987654321',
-//         message: 'Mensagem do Agendamento 2',
-//         status: 'PENDING',
-//         userId: 'cltzqc41t0000myakgbk3r8r7',
-//         eventId: '1fc2c1c4-45f0-4469-9b7e-665255eeb1eb',
-//       },
-//     ],
-//   });
-// }
 
-// // Chamando a função principal e tratando erros
-// main()
-//   .catch((e) => {
-//     throw e;
-//   })
-//   // Finalizando a conexão com o banco de dados após a execução
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });
+  const workingHours = [
+    { weekDay: 'Segunda-feira', startTime: '9:00', endTime: '21:00', userId: 'user1_id' },
+    { weekDay: 'Terça-feira', startTime: '9:00', endTime: '21:00', userId: 'user2_id' },
+    { weekDay: 'Quarta-feira', startTime: '9:00', endTime: '21:00', userId: 'user3_id' },
+    { weekDay: 'Quinta-feira', startTime: '9:00', endTime: '21:00', userId: 'user4_id' },
+    { weekDay: 'Sexta-feira', startTime: '8:00', endTime: '17:00', userId: 'user5_id' },
+    { weekDay: 'Sábado', startTime: 'Fechado', endTime: 'Fechado', userId: 'user6_id' },
+    { weekDay: 'Domingo', startTime: 'Fechado', endTime: 'Fechado', userId: 'user7_id' },
+  ];
+
+
+
+  for (const hours of workingHours) {
+    await db.availability.create({
+      data: {
+        weekDay: hours.weekDay,
+        startTime: hours.startTime,
+        endTime: hours.endTime,
+        userId: hours.userId,
+      },
+    });
+  }
+
+}
+
+// Chamando a função principal e tratando erros
+main()
+  .catch((e) => {
+    throw e;
+  })
+  // Finalizando a conexão com o banco de dados após a execução
+  .finally(async () => {
+    await db.$disconnect();
+  });

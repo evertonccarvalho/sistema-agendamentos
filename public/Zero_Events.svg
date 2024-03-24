@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150px" height="150px" viewBox="0 0 150 150" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53 (72520) - https://sketchapp.com -->
+    <title>Zero_Events_@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="150" height="150"/>
+        <polygon id="path-3" points="0.00048 0 48 0 48 47.99988 0.00048 47.99988"/>
+    </defs>
+    <g id="Zero_Events_@2x" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-42">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"/>
+            </mask>
+            <g id="Mask"/>
+            <g mask="url(#mask-2)">
+                <g transform="translate(1.000000, 13.000000)">
+                    <path d="M115.20048,123.99988 L4.80048,123.99988 C2.14968,123.99988 0.00048,121.85068 0.00048,119.19988 L0.00048,32.79988 C0.00048,30.14908 2.14968,27.99988 4.80048,27.99988 L115.20048,27.99988 C117.85128,27.99988 120.00048,30.14908 120.00048,32.79988 L120.00048,119.19988 C120.00048,121.85068 117.85128,123.99988 115.20048,123.99988" id="Fill-1" stroke="none" fill="#ECECEE" fill-rule="evenodd"/>
+                    <path d="M122.80048,116.39988 L12.40048,116.39988 C9.74968,116.39988 7.60048,114.25068 7.60048,111.59988 L7.60048,25.19988 C7.60048,22.54908 9.74968,20.39988 12.40048,20.39988 L122.80048,20.39988 C125.45128,20.39988 127.60048,22.54908 127.60048,25.19988 L127.60048,111.59988 C127.60048,114.25068 125.45128,116.39988 122.80048,116.39988" id="Fill-3" stroke="none" fill="#FFFFFF" fill-rule="evenodd"/>
+                    <g id="Group-8" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(30.400000, 44.400000)">
+                        <path d="M1.19988,-0.00012 L1.19988,71.99988" id="Fill-5" fill="#FFFFFF"/>
+                        <path d="M1.19988,-0.00012 L1.19988,71.99988" id="Stroke-7" stroke="#DADADA" stroke-width="2"/>
+                    </g>
+                    <g id="Group-12" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(54.400000, 44.400000)">
+                        <path d="M1.20048,-0.00012 L1.20048,71.99988" id="Fill-9" fill="#FFFFFF"/>
+                        <path d="M1.20048,-0.00012 L1.20048,71.99988" id="Stroke-11" stroke="#DADADA" stroke-width="2"/>
+                    </g>
+                    <g id="Group-16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(78.400000, 44.400000)">
+                        <path d="M1.20048,-0.00012 L1.20048,71.99988" id="Fill-13" fill="#FFFFFF"/>
+                        <path d="M1.20048,-0.00012 L1.20048,71.99988" id="Stroke-15" stroke="#DADADA" stroke-width="2"/>
+                    </g>
+                    <g id="Group-20" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(102.400000, 44.400000)">
+                        <path d="M1.20048,-0.00012 L1.20048,71.99988" id="Fill-17" fill="#FFFFFF"/>
+                        <path d="M1.20048,-0.00012 L1.20048,71.99988" id="Stroke-19" stroke="#DADADA" stroke-width="2"/>
+                    </g>
+                    <g id="Group-24" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(7.600000, 67.200000)">
+                        <path d="M-0.00012,1.19988 L119.99988,1.19988" id="Fill-21" fill="#FFFFFF"/>
+                        <path d="M-0.00012,1.19988 L119.99988,1.19988" id="Stroke-23" stroke="#DADADA" stroke-width="2"/>
+                    </g>
+                    <g id="Group-28" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(7.600000, 91.200000)">
+                        <path d="M-0.00012,1.19988 L119.99988,1.19988" id="Fill-25" fill="#FFFFFF"/>
+                        <path d="M-0.00012,1.19988 L119.99988,1.19988" id="Stroke-27" stroke="#DADADA" stroke-width="2"/>
+                    </g>
+                    <path d="M127.60048,44.39988 L7.60048,44.39988 L7.60048,25.19988 C7.60048,22.54908 9.74968,20.39988 12.40048,20.39988 L122.80048,20.39988 C125.45128,20.39988 127.60048,22.54908 127.60048,25.19988 L127.60048,44.39988 Z" id="Fill-29" stroke="none" fill="#DADADA" fill-rule="evenodd"/>
+                    <path d="M127.60048,44.39988 L7.60048,44.39988 L7.60048,25.19988 C7.60048,22.54908 9.74968,20.39988 12.40048,20.39988 L122.80048,20.39988 C125.45128,20.39988 127.60048,22.54908 127.60048,25.19988 L127.60048,44.39988 Z" id="Stroke-31" stroke="#939393" stroke-width="3" fill="none"/>
+                    <path d="M96.71104,20.39928 C95.73424,23.01408 95.20024,25.84488 95.20024,28.79928 C95.20024,42.05448 105.94504,52.79928 119.20024,52.79928 C122.11384,52.79928 124.90744,52.28088 127.49104,51.32928 L127.49104,20.39928 L96.71104,20.39928 Z" id="Fill-33" stroke="none" fill="#ECECEE" fill-rule="evenodd" style="mix-blend-mode: multiply;"/>
+                    <path d="M122.80048,116.39988 L12.40048,116.39988 C9.74968,116.39988 7.60048,114.25068 7.60048,111.59988 L7.60048,25.19988 C7.60048,22.54908 9.74968,20.39988 12.40048,20.39988 L122.80048,20.39988 C125.45128,20.39988 127.60048,22.54908 127.60048,25.19988 L127.60048,111.59988 C127.60048,114.25068 125.45128,116.39988 122.80048,116.39988 Z" id="Stroke-35" stroke="#939393" stroke-width="3" fill="none"/>
+                    <g id="Group-39" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(100.000000, 0.000000)">
+                        <mask id="mask-4" fill="white">
+                            <use xlink:href="#path-3"/>
+                        </mask>
+                        <g id="Clip-38"/>
+                        <path d="M48.00048,23.99988 C48.00048,37.25508 37.25448,47.99988 24.00048,47.99988 C10.74528,47.99988 0.00048,37.25508 0.00048,23.99988 C0.00048,10.74588 10.74528,-0.00012 24.00048,-0.00012 C37.25448,-0.00012 48.00048,10.74588 48.00048,23.99988" id="Fill-37" fill="#939393" mask="url(#mask-4)"/>
+                    </g>
+                    <path d="M123.9994,17.91144 C121.3246,17.91144 120.3226,20.55864 120.3226,23.98584 C120.3226,27.41304 121.3246,30.08904 123.9994,30.08904 C126.6466,30.08904 127.6498,27.41304 127.6498,23.98584 C127.6498,20.55864 126.6466,17.91144 123.9994,17.91144 M123.9994,14.40024 C129.2938,14.40024 131.6914,19.19304 131.6914,23.98584 C131.6914,28.77984 129.2938,33.60024 123.9994,33.60024 C118.6774,33.60024 116.3098,28.77984 116.3098,23.98584 C116.3098,19.19304 118.6774,14.40024 123.9994,14.40024" id="Fill-40" stroke="none" fill="#FFFFFF" fill-rule="evenodd"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

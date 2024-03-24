@@ -4,7 +4,7 @@ import { db } from '@/lib/prisma';
 import { endOfDay, startOfDay } from 'date-fns';
 
 export const getDayBookings = async (userId: string, date: Date) => {
-	const schedulings = await db.scheduling.findMany({
+	const bookings = await db.scheduling.findMany({
 		where: {
 			userId: userId,
 			date: {
@@ -14,5 +14,5 @@ export const getDayBookings = async (userId: string, date: Date) => {
 		},
 	});
 
-	return schedulings;
+	return bookings;
 };

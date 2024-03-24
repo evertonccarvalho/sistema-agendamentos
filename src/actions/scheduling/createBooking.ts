@@ -4,7 +4,7 @@ import { db } from "@/lib/prisma";
 import type { SchedulingStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-interface CreateSchedulingParams {
+interface CreateBookingParams {
 	name: string;
 	email: string;
 	phone: string;
@@ -15,7 +15,7 @@ interface CreateSchedulingParams {
 	date: Date;
 }
 
-export const createScheduling = async (params: CreateSchedulingParams) => {
+export const createBooking = async (params: CreateBookingParams) => {
 
 	await db.scheduling.create({
 		data: {

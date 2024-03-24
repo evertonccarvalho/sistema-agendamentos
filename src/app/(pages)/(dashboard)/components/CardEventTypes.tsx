@@ -22,6 +22,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const handleDelete = async () => {
 		try {
 			setLoading(true);
+			setOpenDelete(true);
 			await deleteEvent(eventType.id);
 			console.log("Evento deletado com sucesso.");
 		} catch (error) {
@@ -75,7 +76,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 					<h1 className="text-base font-normal">{eventType.name}</h1>
 				</div>
 				<EventSettings
-					onDelete={handleDelete}
+					onDelete={() => setOpenDelete(true)}
 					onEdit={handleEdit}
 					onToggleActive={handleToggleActive}
 					isActive={eventType.active}
