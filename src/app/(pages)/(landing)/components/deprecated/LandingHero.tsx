@@ -24,7 +24,7 @@ export const LandingHero = () => {
 					Compartilhe sua agenda com seus amigos e permita que vejam seus tempos
 					livres para possiveis compromissos.
 				</h1>
-				<div className="flex items-center gap-5 md:w-2/3 gap-2 justify-center md:justify-between ">
+				<div className="flex items-center md:w-2/3 gap-2 justify-center md:justify-between ">
 					<Link href={"/register"}>
 						<Button size={"lg"} className="text-white" variant="default">
 							Criar Conta
