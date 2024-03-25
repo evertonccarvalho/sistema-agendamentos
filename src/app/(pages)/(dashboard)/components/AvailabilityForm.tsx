@@ -21,6 +21,15 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const ONE_HOUR_IN_MINUTES = 60;
+interface FormSubmitData {
+	availability: {
+		id: string;
+		weekDay: number;
+		startTime: string;
+		endTime: string;
+		enabled: boolean;
+	}[];
+}
 
 const availabilitySchema = z.object({
 	availability: z
@@ -109,7 +118,8 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		name: "availability",
 	});
 
-	const onSubmit = async (data: WeekdayAvailability) => {
+
+	const onSubmit = async (data: FormSubmitData) => {
 		try {
 			for (const day of data.availability) {
 				const availabilityData: CreateAvailabilityParams = {
