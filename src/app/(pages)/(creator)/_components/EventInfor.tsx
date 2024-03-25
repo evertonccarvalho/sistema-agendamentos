@@ -14,7 +14,7 @@ const EventInfor = ({ data }: EventInforProps) => {
 				<Button size={"icon"} className="rounded-full bg-card-foreground" onClick={handleBack} type="button"><ArrowLeft size={22} /></Button>
 				<div className="p-3 flex gap-2 flex-col w-full items-center justify-center md:items-start">
 					<h2 className="font-semibold text-sm text-muted-foreground">
-						{data.name ? data.name : "Nome do Cara"}
+						{data.creator ? (typeof data.creator === 'string' ? data.creator : data.creator.name) : "Nome do Cara"}
 					</h2>
 					<h1 className="font-semibold text-xl break-words">
 						{data.name ? data.name : "Serviço X"}
