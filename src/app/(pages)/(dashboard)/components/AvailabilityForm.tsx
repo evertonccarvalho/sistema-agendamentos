@@ -60,6 +60,15 @@ const availabilitySchema = z.object({
 		),
 });
 
+const defaultAvailability = [
+	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 1, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 2, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 3, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 4, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 5, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: true },
+];
 
 export type WeekdayAvailability = z.infer<typeof availabilitySchema>;
 
@@ -75,13 +84,18 @@ interface AvailabilityFormProps {
 const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 	const weekDays = getWeekDays();
 
-	const formattedAvailability = availability.map((day) => ({
-		id: day.id,
-		weekDay: day.weekDay,
-		startTime: convertMinutesToTimeString(day.startTime),
-		endTime: convertMinutesToTimeString(day.endTime),
-		enabled: day.enabled,
-	}));
+	const formattedAvailability = defaultAvailability.map(defaultDay => {
+		const existingDay = availability.find(day => day.weekDay === defaultDay.weekDay);
+		return existingDay
+			? {
+				id: existingDay.id,
+				weekDay: existingDay.weekDay,
+				startTime: convertMinutesToTimeString(existingDay.startTime),
+				endTime: convertMinutesToTimeString(existingDay.endTime),
+				enabled: existingDay.enabled,
+			}
+			: defaultDay;
+	});
 
 	const form = useForm({
 		resolver: zodResolver(availabilitySchema),
