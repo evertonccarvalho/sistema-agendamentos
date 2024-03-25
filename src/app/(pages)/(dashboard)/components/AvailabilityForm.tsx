@@ -26,7 +26,7 @@ const availabilitySchema = z.object({
 	availability: z
 		.array(
 			z.object({
-				id: z.string(uuid()),
+				id: z.string(),
 				weekDay: z.coerce.number(),
 				enabled: z.boolean(), // Adicionando a propriedade 'enabled' como opcional
 				startTime: z.string(),
@@ -116,18 +116,6 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 							res.message,
 						);
 					}
-				} else {
-					// Se a disponibilidade não estiver habilitada, remova-a do banco de dados
-					// Você precisa implementar a lógica para remover a disponibilidade do banco aqui
-					console.log(`Removendo disponibilidade para o dia ${day.weekDay} do banco de dados...`);
-					// Implemente a lógica para remover a disponibilidade no banco de dados
-					// Utilize a função updateAvailability com enabled = false ou remova a disponibilidade diretamente do banco
-					const updateParams: UpdateAvailabilityParams = {
-						id: day.id,
-						enabled: false, // Defina enabled como false para remover a disponibilidade
-					};
-					const updateRes = await updateAvailability(updateParams);
-					console.log(`Resposta do servidor ao remover a disponibilidade para o dia ${day.weekDay}:`, updateRes);
 				}
 			}
 			console.log("Todas as disponibilidades foram processadas com sucesso!");
