@@ -46,7 +46,7 @@ const saveNewEventSchema = z.object({
 	active: z.boolean().default(true),
 	locationType: z.any(),
 	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres.").optional(),
-	capacity: z.number().min(1, "Capacidade deve ser maior que 0.").optional(),
+	capacity: z.coerce.number().default(1),
 	arrivalInfo: z.string().optional(),
 });
 
