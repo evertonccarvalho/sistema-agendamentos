@@ -27,6 +27,7 @@ export const createAvailability = async (params: CreateAvailabilityParams) => {
 				data: {
 					startTime: params.startTime,
 					endTime: params.endTime,
+					enabled: params.enabled
 				},
 			});
 			return {
