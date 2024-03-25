@@ -1,4 +1,10 @@
-import { Separator } from "@/components/ui/separator";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import type { EventType } from "@prisma/client";
 import { ArrowUpRightIcon, Timer } from "lucide-react";
 import Link from "next/link";
@@ -7,29 +13,27 @@ interface CardEventProps {
 	creator: string;
 	eventType: EventType;
 }
-
 const CardEvent = ({ eventType, creator }: CardEventProps) => {
 	return (
-		<Link
-			href={`/${creator}/${eventType.id}`}
-			className={
-				"flex flex-col gap-2 bg-secondary max-w-96 w-full min-h-32 rounded-md p-6 border-[1px] border-zinc-700 drop-shadow-md hover:drop-shadow-xl 	hover:bg-muted/10	"
-			}
-		>
-			<div className="flex w-full items-center justify-between">
-				<div className="flex items-center gap-1">
-					<h1 className="text-base font-normal">{eventType.name}</h1>
-				</div>
-				<ArrowUpRightIcon size={22} className="text-primary" />
-			</div>
-			<Separator className="bg-zinc-700" />
-			<p className="text-sm text-center font-light">{eventType.description}</p>
-			<div className="flex gap-1 items-center justify-center">
-				<Timer className="w-5" />
-				<p className="text-sm text-center font-light">
-					{`${eventType.duration} min`}
-				</p>
-			</div>
+		<Link href={`/${creator}/${eventType.id}`} className={"max-w-96 w-full"}>
+			<Card
+				// key={eventType.name}
+				className="relative max-w-md md:break-inside-avoid overflow-hidden"
+			>
+				<CardHeader className="flex flex-row items-center gap-4 pb-2">
+					<div className="flex flex-col">
+						<CardTitle className="text-lg flex items-center justify-between">
+							{eventType.name}
+						</CardTitle>
+						<CardDescription>{eventType.description}</CardDescription>
+					</div>
+				</CardHeader>
+				<CardContent className="flex gap-2 items-center justify-center">
+					<Timer size={22} />
+					{eventType.duration} Min
+				</CardContent>
+				<ArrowUpRightIcon size={22} className="text-primary absolute right-0 m-4 top-0" />
+			</Card>
 		</Link>
 	);
 };

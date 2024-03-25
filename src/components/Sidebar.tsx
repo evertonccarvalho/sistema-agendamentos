@@ -31,8 +31,7 @@ const MainSideBar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <>
       <aside
-        className={`z-50 border-r-[1px] border-zinc-700 relative min-h-dvh gap-5 text-foreground px-4 ${sidebarOpen ? "w-72" : "md:w-16"
-          } grid-cols-1 bg-card px-4 text-foreground duration-500 `}
+        className={`relative z-40 min-h-dvh gap-5 grid-cols-1 px-4  border-r-[1px]  duration-500  bg-background dark:border-r-slate-700  ${sidebarOpen ? "w-72" : "md:w-16"}`}
       >
         <Logos isOpen={sidebarOpen} />
         <div className="hidden md:block">

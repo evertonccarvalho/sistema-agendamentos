@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: SettingsLayoutProps) {
 						setSidebarOpen={setSidebarOpen}
 					/>
 
-					<div className="w-full p-2 rounded-sm bg-muted-foreground/5 container mt-[80px] mb-2 overflow-y-auto scrollbar-thin scrollbar-track-background scrollbar-thumb-primary">
+					<div className="w-full p-2 rounded-sm  container mt-[80px] mb-2 overflow-y-auto scrollbar-thin scrollbar-track-background scrollbar-thumb-primary">
 						<HeaderDashboard
 
 						/>

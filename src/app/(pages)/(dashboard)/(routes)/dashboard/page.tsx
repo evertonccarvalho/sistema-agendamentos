@@ -20,9 +20,9 @@ const Dashboard = async () => {
 	return (
 		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
-			<Card className="drop-shadow-lg bg-transparent border-zinc-700  rounded-md md:p-6 rou p-2">
+			<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
 				<EventPageHeader />
-				<Separator className='bg-zinc-700 my-4' />
+				<Separator className='my-4' />
 				<section className="flex flex-wrap w-full gap-5 items-center justify-center">
 					{events?.map((event) => (
 						<CardEventTypes key={event.id} eventType={event} />

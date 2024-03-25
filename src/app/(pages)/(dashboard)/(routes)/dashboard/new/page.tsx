@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import SchedulingItem from "@/components/schedulingItem";
 import { useSession } from "next-auth/react";
 import { NewEventForm } from "../../../components/NewEventForm";
+import { Card } from "@/components/ui/card";
 
 const NewEvent = () => {
 	const breadcrumbItems = [{ title: "Criar Novo Evento", link: "/new" }];
@@ -27,23 +28,20 @@ const NewEvent = () => {
 	// const [data, setData] = useState<EventFormValues | undefined>(undefined);
 	// console.log(data);
 	return (
-		<main className="flex-1 gap-5 space-y-4 bg-card/80 p-4 md:p-8 pt-6">
+		<main className="flex-1 gap-5 space-y-4 bg-card/80 p-4 md:p-8">
 			<BreadCrumb items={breadcrumbItems} />
-			<section className="flex w-full items-start justify-between gap-3 flex-wrap">
+			<Card className="drop-shadow-lg bg-muted/50 border  md:p-6 rou p-2 flex-col md:flex-row  flex w-full  items-center md:items-start justify-center gap-3 ">
 				<NewEventForm
 					setEventName={setEventName}
 					setEventDuration={setEventDuration}
 					setEventLocation={setEventLocation}
 				/>
-				<section className="w-[37rem] h-[26rem] rounded-md max-w-[1200px] border-[1px] border-zinc-700 flex flex-col max-[1135px]:w-full md:flex-row">
-					<SchedulingItem
-						userName={userName}
-						eventName={eventName}
-						eventDuration={eventDuration}
-						eventLocation={eventLocation}
-					/>
-				</section>
-			</section>
+				{/* <section className="w-[37rem] h-[26rem] rounded-md max-w-[1200px] border-[1px] flex flex-col max-[1135px]:w-full md:flex-row"> */}
+				<SchedulingItem
+					eventData={{ userName, eventName, eventDuration, eventLocation }}
+				/>
+				{/* </section> */}
+			</Card>
 		</main>
 	);
 };

@@ -1,24 +1,38 @@
 "use client";
 import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import type { EventType } from "@prisma/client";
-import { Loader, Share2Icon } from "lucide-react";
+// import type { EventType } from "@prisma/client";
+import { Copy, Share2Icon, Timer } from "lucide-react";
 import { useState } from "react";
 import { EventSettings } from "./eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
 import { useRouter } from "next/navigation";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import type { IEventType } from "@/actions/eventType/interface";
 
 interface CardEventProps {
-	eventType: EventType;
+	eventType: IEventType;
 }
 
 const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
-
+	const username = eventType.creator.email?.substring(
+		0,
+		eventType.creator.email.indexOf("@"),
+	);
+	const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
+	const eventUrl = `${baseUrl}/${username}/${eventType.id}`;
 	const handleDelete = async () => {
 		try {
 			setLoading(true);
@@ -39,12 +53,20 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	};
 
 	const handleShare = () => {
-		const eventUrl = `${eventType.id}`;
-		navigator.clipboard.writeText(eventUrl).then(() => {
-			console.log("Link do evento copiado para a área de transferência:", eventUrl);
-		}).catch((error) => {
-			console.error("Erro ao copiar link do evento para a área de transferência:", error);
-		});
+		navigator.clipboard
+			.writeText(eventUrl)
+			.then(() => {
+				console.log(
+					"Link do evento copiado para a área de transferência:",
+					eventUrl,
+				);
+			})
+			.catch((error) => {
+				console.error(
+					"Erro ao copiar link do evento para a área de transferência:",
+					error,
+				);
+			});
 	};
 
 	const handleToggleActive = async () => {
@@ -64,38 +86,60 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	};
 
 	return (
-		<section
-			className={`flex flex-col gap-5 bg-secondary w-96 min-h-40 rounded-md p-6 border-[1px] border-zinc-700 drop-shadow-md hover:drop-shadow-xl  ${eventType.active
-				? "border-t-4  border-t-green-800"
-				: "border-t-4  border-t-zinc-700 opacity-80"
+		<Card
+			className={`
+			relative max-w-xs w-full md:break-inside-avoid overflow-hidden
+		border drop-shadow-md hover:drop-shadow-xl  
+		${eventType.active
+					? "border-t-4  border-t-green-800"
+					: "border-t-4  border-t-zinc-700 opacity-80"
 				}`}
 		>
-			<div className="flex w-full items-center justify-between">
-				<div className="flex items-center gap-1">
-					<Loader size={16} />
-					<h1 className="text-base font-normal">{eventType.name}</h1>
+			<CardHeader className="flex flex-row items-center gap-4 ">
+				<div className="flex gap-1 flex-col">
+					<CardTitle className="text-lg">{eventType.name}</CardTitle>
+					<CardDescription className="flex items-center">
+						<Timer size={16} />
+						{eventType.duration} Min
+					</CardDescription>
+					<CardDescription>{eventType.description}</CardDescription>
+					<Link href={eventUrl} className="text-sm pt-1 text-blue-600">
+						Ver página de reserva
+					</Link>
 				</div>
-				<EventSettings
-					onDelete={() => setOpenDelete(true)}
-					onEdit={handleEdit}
-					onToggleActive={handleToggleActive}
-					isActive={eventType.active}
-				/>
-			</div>
-			<Separator className="bg-zinc-700" />
-			<div className="flex w-full">
-				<p className="text-sm font-light">{eventType.description}</p>
-			</div>
-			<div className="flex w-full items-center justify-end">
+				<div className="text-primary absolute right-0 m-4 top-0">
+					<EventSettings
+						onDelete={() => setOpenDelete(true)}
+						onEdit={handleEdit}
+						onToggleActive={handleToggleActive}
+						isActive={eventType.active}
+					/>
+				</div>
+			</CardHeader>
 
-				<Button
-					onClick={handleShare}
-					className="text-white flex items-center j gap-1"
-				>
-					Compartilhar
-					<Share2Icon size={16} />
-				</Button>
-			</div>
+			<Separator />
+			<CardContent className="flex gap-2 p-2 items-center justify-center">
+				<div className="w-full flex justify-between">
+					<Button
+						onClick={handleShare}
+						variant="link"
+						size="sm"
+						className="flex items-center gap-1"
+					>
+						<Copy size={16} />
+						Copiar
+					</Button>
+					<Button
+						onClick={handleShare}
+						variant="outline"
+						size="sm"
+						className="bg-transparent text-primary flex items-center gap-1"
+					>
+						Compartilhar
+						<Share2Icon size={16} />
+					</Button>
+				</div>
+			</CardContent>
 
 			<AlertModal
 				isOpen={openDelete}
@@ -103,7 +147,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 				onConfirm={handleDelete}
 				loading={loading}
 			/>
-		</section>
+		</Card>
 	);
 };
 export default CardEventTypes;

@@ -24,7 +24,7 @@ const ScheduledEvents = async () => {
 	return (
 		<main className="flex-1 space-y-4 md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
-			<Card className="drop-shadow-lg bg-transparent border-zinc-700  rounded-md md:p-6 rou p-2">
+			<Card className="drop-shadow-lg bg-muted/50 border rounded-md md:p-6 rou p-2">
 				<TabsComponent
 					confirmedBookings={confirmedBookings}
 					finishedBookings={finishedBookings}

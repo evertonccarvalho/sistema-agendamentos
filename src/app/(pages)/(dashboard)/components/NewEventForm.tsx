@@ -20,6 +20,7 @@ import { createEvent } from "@/actions/eventType/saveEvent";
 import { useRouter } from "next/navigation";
 import { editEvent } from "@/actions/eventType/editEvent";
 import { useSession } from "next-auth/react";
+import { Card } from "@/components/ui/card";
 
 const durationOptions = [
 	{ value: 15, label: "15 minutos" },
@@ -75,14 +76,14 @@ export function NewEventForm({
 	const defaultValues = initialData
 		? initialData
 		: {
-				name: "",
-				description: "",
-				creatorId: loguedUserId,
-				address: "",
-				arrivalInfo: "",
-				capacity: 1,
-				duration: 60,
-		  };
+			name: "",
+			description: "",
+			creatorId: loguedUserId,
+			address: "",
+			arrivalInfo: "",
+			capacity: 1,
+			duration: 60,
+		};
 
 	const {
 		register,
@@ -132,9 +133,9 @@ export function NewEventForm({
 	};
 
 	return (
-		<section className="flex w-96 p-4 rounded-md flex-col gap-3 border-[1px] border-zinc-700 max-[1135px]:w-full">
+		<Card className="flex max-w-96 w-full p-4 flex-col gap-3 border-[1px]">
 			<h1 className="text-2xl font-semibold">Criar Novo Evento</h1>
-			<Separator orientation="horizontal" className="bg-zinc-700" />
+			<Separator orientation="horizontal" />
 			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
 				<label>
 					<span>Nome do Evento.</span>
@@ -246,13 +247,13 @@ export function NewEventForm({
 						<p className="text-red-500 text-xs">{errors.description.message}</p>
 					)}
 				</label>
-				<Separator orientation="horizontal" className="bg-zinc-700" />
-				<div className="flex gap-3 items-center justify-between">
-					<Button type="submit" size={"lg"} className="text-white flex gap-2">
-						Criar <ArrowRight width={20} />
-					</Button>
-				</div>
+				<Separator orientation="horizontal" />
+				{/* <div className="flex gap-3 items-center justify-between"> */}
+				<Button type="submit" size={"lg"} className="text-white flex gap-2">
+					Criar <ArrowRight width={20} />
+				</Button>
+				{/* </div> */}
 			</form>
-		</section>
+		</Card>
 	);
 }
