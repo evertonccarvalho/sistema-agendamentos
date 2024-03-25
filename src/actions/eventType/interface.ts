@@ -7,7 +7,7 @@ export interface IEventType {
   creatorId: string;
   active: boolean;
   duration: number;
-  locationType: string
+  locationType: string | null
   address: string | null;
   capacity: number | null;
   arrivalInfo: string | null;

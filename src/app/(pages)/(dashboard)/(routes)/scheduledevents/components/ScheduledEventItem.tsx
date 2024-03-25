@@ -130,7 +130,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
               Detalhes
             </AccordionTrigger>
           </div>
-          <AccordionContent className="border-t-[1px] border-gray-700">
+          <AccordionContent className="border-t-[1px] ">
             <div className="gap-2  flex grid-cols-2  w-full   p-4">
               <div className="w-fit flex-col items-center gap-4 px-5 pt-5 flex">
                 <div className="flex gap-2 ">

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Settings } from "lucide-react";
+import { ChevronDown, SettingsIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface EventSettingsProps {
@@ -43,8 +43,9 @@ export function EventSettings({
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost">
-					<Settings />
+				<Button size="icon" className="text-foreground" variant="link">
+					<SettingsIcon size={18} />
+					<ChevronDown size={10} />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56">

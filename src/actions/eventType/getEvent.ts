@@ -10,6 +10,14 @@ export const getEventsByCreatorId = async (creatorId: string) => {
       },
       include: {
         schedules: true,
+        creator: {
+          select: {
+            email: true,
+            name: true,
+            image: true,
+
+          }
+        }
       },
     });
 

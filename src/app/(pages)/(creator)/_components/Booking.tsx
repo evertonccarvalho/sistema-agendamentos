@@ -18,7 +18,7 @@ import { getDayBookings } from "@/actions/scheduling/getDayBookings";
 import type { Scheduling } from "@prisma/client";
 
 interface BookingItemProps {
-	data: IEventType;
+  data: IEventType;
 }
 const BookingItem = ({ data }: BookingItemProps) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -131,7 +131,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
       });
 
       const username = data.creator.email?.substring(0, data.creator.email.indexOf("@"));
-			router.push(`${`/${username}/success`}?${queryParams}`);
+      router.push(`${`/${username}/success`}?${queryParams}`);
     } catch (error) {
       console.error(error);
     } finally {
@@ -190,8 +190,8 @@ const BookingItem = ({ data }: BookingItemProps) => {
     <>
       <div className=" w-full h-full p-4 flex flex-col md:flex-row ">
         <EventInfor data={data} />
-        <Separator orientation="horizontal" className="bg-zinc-700 md:hidden" />
-        <Separator orientation="vertical" className="bg-zinc-700 max-md:hidden" />
+        <Separator orientation="horizontal" className="md:hidden" />
+        <Separator orientation="vertical" className="max-md:hidden" />
         <div className="w-full flex flex-col gap-2 p-2 items-center justify-center">
           <h1 className="font-semibold  text-xl">Selectione a Data e Hora</h1>
 

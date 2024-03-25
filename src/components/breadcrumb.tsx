@@ -18,7 +18,7 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
 			<div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
 				<Link
 					href={"/dashboard"}
-					className="overflow-hidden text-muted font-semibold text-lg text-ellipsis whitespace-nowrap"
+					className="overflow-hidden  font-semibold text-lg text-ellipsis whitespace-nowrap"
 				>
 					Inicio
 				</Link>
