@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { MapPin, Timer } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
-import { generateDayTimeList } from "../app/(pages)/(dashboard)/(routes)/scheduling/helpers/hours";
+import { generateDayTimeList } from "../helpers/hours";
 import DateSelector from "@/app/(pages)/(creator)/_components/DataSelector";
 import TimeSelector from "@/app/(pages)/(creator)/_components/TimerSelector";
 import { Card } from "./ui/card";

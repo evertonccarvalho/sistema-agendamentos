@@ -216,7 +216,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
                     </AvatarFallback>
                   </Avatar>
                 </div>
-                <p className="text-muted ">
+                <p className="text-muted-foreground ">
                   Criado em{" "}
                   {format(new Date(scheduling.created_at ?? ""), "dd/MM/yyyy HH:mm")}{" "}por:{" "}
                   <span className="font-semibold">

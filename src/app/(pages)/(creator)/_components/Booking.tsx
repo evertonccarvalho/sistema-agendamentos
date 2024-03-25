@@ -4,7 +4,7 @@ import { format, setHours, setMinutes } from "date-fns";
 
 import { ptBR } from "date-fns/locale";
 import { useEffect, useMemo, useState } from "react";
-import { generateDayTimeList } from "../../(dashboard)/(routes)/scheduling/helpers/hours";
+import { generateDayTimeList } from "../../../../helpers/hours";
 import { createBooking } from "@/actions/scheduling/createBooking";
 import type { IEventType } from "@/actions/eventType/interface";
 import { toast } from "sonner";

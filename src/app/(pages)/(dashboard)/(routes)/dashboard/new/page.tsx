@@ -28,7 +28,7 @@ const NewEvent = () => {
 	// const [data, setData] = useState<EventFormValues | undefined>(undefined);
 	// console.log(data);
 	return (
-		<main className="flex-1 gap-5 space-y-4 bg-card/80 p-4 md:p-8">
+		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
 			<Card className="drop-shadow-lg bg-muted/50 border  md:p-6 rou p-2 flex-col md:flex-row  flex w-full  items-center md:items-start justify-center gap-3 ">
 				<NewEventForm
