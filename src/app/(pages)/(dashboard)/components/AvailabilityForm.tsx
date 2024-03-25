@@ -26,8 +26,9 @@ const availabilitySchema = z.object({
 	availability: z
 		.array(
 			z.object({
+				id: z.string(uuid()),
 				weekDay: z.coerce.number(),
-				enabled: z.boolean(),
+				enabled: z.boolean(), // Adicionando a propriedade 'enabled' como opcional
 				startTime: z.string(),
 				endTime: z.string(),
 			}),
@@ -43,6 +44,7 @@ const availabilitySchema = z.object({
 				weekDay: interval.weekDay,
 				startTime: convertTimeStringToNumber(interval.startTime),
 				endTime: convertTimeStringToNumber(interval.endTime),
+				enabled: interval.enabled || false, // Definindo 'enabled' como false se não estiver presente
 			})),
 		)
 		.refine(
@@ -58,6 +60,7 @@ const availabilitySchema = z.object({
 		),
 });
 
+
 export type WeekdayAvailability = z.infer<typeof availabilitySchema>;
 
 function convertMinutesToTimeString(minutes: number) {
@@ -72,25 +75,13 @@ interface AvailabilityFormProps {
 const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 	const weekDays = getWeekDays();
 
-	const formattedAvailability = Array.from({ length: 7 }, (_, index) => {
-		const existingDay = availability.find(day => day.weekDay === index);
-		if (existingDay) {
-			return {
-				id: existingDay.id,
-				weekDay: existingDay.weekDay,
-				startTime: convertMinutesToTimeString(existingDay.startTime),
-				endTime: convertMinutesToTimeString(existingDay.endTime),
-				enabled: true, // Definir "enabled" como true, já que todos os dias estão disponíveis
-			};
-		}
-		// Se o dia não existe na lista de disponibilidade, preenche com valores padrão
-		return {
-			weekDay: index,
-			startTime: "08:00", // Hora padrão de início
-			endTime: "17:00", // Hora padrão de término
-			enabled: false, // Define como desabilitado
-		};
-	});
+	const formattedAvailability = availability.map((day) => ({
+		id: day.id,
+		weekDay: day.weekDay,
+		startTime: convertMinutesToTimeString(day.startTime),
+		endTime: convertMinutesToTimeString(day.endTime),
+		enabled: day.enabled,
+	}));
 
 	const form = useForm({
 		resolver: zodResolver(availabilitySchema),
@@ -111,20 +102,35 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 					weekDay: day.weekDay,
 					startTime: +day.startTime,
 					endTime: +day.endTime,
+					enabled: day.enabled,
 					userId: "clu4iswxk0000k6j18161c2cs",
 				};
 
-				const res = await createAvailability(availabilityData);
-				console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
+				if (day.enabled) {
+					const res = await createAvailability(availabilityData);
+					console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
 
-				if (!res.success) {
-					console.error(
-						`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
-						res.message,
-					);
+					if (!res.success) {
+						console.error(
+							`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
+							res.message,
+						);
+					}
+				} else {
+					// Se a disponibilidade não estiver habilitada, remova-a do banco de dados
+					// Você precisa implementar a lógica para remover a disponibilidade do banco aqui
+					console.log(`Removendo disponibilidade para o dia ${day.weekDay} do banco de dados...`);
+					// Implemente a lógica para remover a disponibilidade no banco de dados
+					// Utilize a função updateAvailability com enabled = false ou remova a disponibilidade diretamente do banco
+					const updateParams: UpdateAvailabilityParams = {
+						id: day.id,
+						enabled: false, // Defina enabled como false para remover a disponibilidade
+					};
+					const updateRes = await updateAvailability(updateParams);
+					console.log(`Resposta do servidor ao remover a disponibilidade para o dia ${day.weekDay}:`, updateRes);
 				}
 			}
-			console.log("Todas as disponibilidades foram criadas com sucesso!");
+			console.log("Todas as disponibilidades foram processadas com sucesso!");
 		} catch (error) {
 			console.error("Ocorreu um erro ao enviar o formulário:", error);
 			console.log(
@@ -137,6 +143,7 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)}>
 				{fields.map((field, index) => (
+					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 					<div key={index} className="grid grid-cols-3 gap-2 bg-slate-500 m-2">
 						<FormField
 							control={form.control}
@@ -147,7 +154,7 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 										<Checkbox
 											checked={field.value}
 											onCheckedChange={(checked) =>
-												form.setValue(`availability.${index}.enabled`, checked)
+												field.onChange(checked === true)
 											}
 										/>
 									</FormControl>
@@ -160,11 +167,13 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 
 						<Input
 							className="w-32"
+							disabled={!field.enabled}
 							{...form.register(`availability.${index}.startTime`)}
 							type="time"
 						/>
 						<Input
 							className="w-32"
+							disabled={!field.enabled}
 							{...form.register(`availability.${index}.endTime`)}
 							type="time"
 						/>

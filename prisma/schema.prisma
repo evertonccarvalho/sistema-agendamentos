@@ -56,12 +56,13 @@ model VerificationToken {
 }
 
 model Availability {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   weekDay   Int
   startTime Int
   endTime   Int
   userId    String
-  user      User   @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  enabled   Boolean @default(true) // Adicionando o novo campo 'enabled'
 }
 
 model Scheduling {
