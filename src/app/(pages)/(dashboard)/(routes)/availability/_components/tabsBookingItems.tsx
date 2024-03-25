@@ -1,15 +1,15 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { IScheduling } from "../../scheduledevents/interface/interface";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { AvailabilityForm } from "../../../components/AvailabilityForm";
+import AvailabilityForm from "../../../components/AvailabilityForm";
+import type { Availability } from "@prisma/client";
 
 interface TabsAvailabilityComponentProps {
-  confirmedBookings: IScheduling[];
+  availability: Availability[];
 }
 const TabsAvailabilityComponent = ({
-  confirmedBookings,
+  availability,
 }: TabsAvailabilityComponentProps) => {
   return (
     <Tabs defaultValue="listView" className="w-full space-y-2">
@@ -23,7 +23,7 @@ const TabsAvailabilityComponent = ({
         <Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
           <Separator className="my-4" />
           <div className="grid grid-cols-1 md:grid-cols-2 w-full">
-            <AvailabilityForm />
+            <AvailabilityForm availability={availability} />
           </div>
         </Card>
       </TabsContent>
