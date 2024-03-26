@@ -1,22 +1,29 @@
 // No seu arquivo de actions.js ou onde desejar organizar suas ações:
 "use server";
+import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/prisma";
-
+import { getServerSession } from "next-auth";
 export interface CreateAvailabilityParams {
 	weekDay: number;
 	startTime: number;
 	endTime: number;
-	userId: string;
 	enabled: boolean;
 }
 
 export const createAvailability = async (params: CreateAvailabilityParams) => {
+	const session = await getServerSession(authOptions);
+
+	if (!session) {
+		return null;
+	}
+
 	try {
 		// Tente encontrar uma disponibilidade existente para o mesmo dia da semana e usuário
+
 		const existingAvailability = await db.availability.findFirst({
 			where: {
 				weekDay: params.weekDay,
-				userId: params.userId,
+				userId: session.user?.id || '',
 			},
 		});
 
@@ -27,7 +34,7 @@ export const createAvailability = async (params: CreateAvailabilityParams) => {
 				data: {
 					startTime: params.startTime,
 					endTime: params.endTime,
-					enabled: params.enabled
+					enabled: params.enabled,
 				},
 			});
 			return {
@@ -41,9 +48,10 @@ export const createAvailability = async (params: CreateAvailabilityParams) => {
 				weekDay: params.weekDay,
 				startTime: params.startTime,
 				endTime: params.endTime,
-				userId: params.userId,
+				userId: session.user?.id || '',
 			},
 		});
+
 		return { success: true, message: "Disponibilidade criada com sucesso." };
 	} catch (error) {
 		console.error("Erro ao criar ou atualizar disponibilidade:", error);
