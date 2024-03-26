@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import type { IEventType } from "@/actions/eventType/interface";
+import { toast } from "sonner";
 
 interface CardEventProps {
 	eventType: IEventType;
@@ -38,10 +39,10 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			setLoading(true);
 			setOpenDelete(true);
 			await deleteEvent(eventType.id);
-			console.log("Evento deletado com sucesso.");
 		} catch (error) {
 			console.error("Error deleting event:", error);
 		} finally {
+			toast.success("Evento deletado com sucesso.");
 			setLoading(false);
 			setOpenDelete(false);
 		}

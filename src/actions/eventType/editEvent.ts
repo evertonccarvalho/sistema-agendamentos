@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/lib/prisma";
-import type { LocationType } from "@prisma/client";
+import type { EventType, LocationType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 interface EditEventParams {
@@ -24,10 +24,11 @@ export const editEvent = async (eventId: string, params: EditEventParams,) => {
                 id: eventId
             },
         });
+        let edited: EventType | null = null;
 
         if (existingEvent) {
             // Se o evento existir, atualize-o com os novos dados
-            await db.eventType.update({
+            edited = await db.eventType.update({
                 where: {
                     id: eventId
                 },
@@ -45,8 +46,8 @@ export const editEvent = async (eventId: string, params: EditEventParams,) => {
         } else {
             throw new Error(`Evento com ID ${eventId} não encontrado.`);
         }
-
         revalidatePath("/dashboard");
+        return edited;
     } catch (error) {
         if (error instanceof Error) {
             throw new Error(`Erro ao editar o evento: ${error.message}`);

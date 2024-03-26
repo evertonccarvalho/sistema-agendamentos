@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { editEvent } from "@/actions/eventType/editEvent";
 import { useSession } from "next-auth/react";
 import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const durationOptions = [
 	{ value: 15, label: "15 minutos" },
@@ -125,12 +126,11 @@ export function NewEventForm({
 					capacity: Number(data.capacity),
 					arrivalInfo: data.arrivalInfo,
 				}
-				console.log("veio data", initialData);
 				const res = await editEvent(update.id, update);
-				console.log("resupdate", res);
+				res && toast.success("Evento editado com sucesso!");
 			} else {
 				const res = await createEvent(create);
-				console.log("Resposta do servidor:", res);
+				res && toast.success("Evento criado com sucesso!");
 			}
 			router.push("/dashboard");
 			reset();
