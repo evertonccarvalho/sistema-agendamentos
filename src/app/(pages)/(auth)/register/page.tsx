@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { UserAuthForm } from "./user-auth-form";
+import { RegisterForm } from "../_components/register-form";
+import { Social } from "../_components/social";
 
-export default function LoginPage() {
+export default function RegisterPage() {
 	return (
 		<div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
 			<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -27,7 +28,9 @@ export default function LoginPage() {
 							Digite seu e-mail abaixo para fazer login na sua conta
 						</p>
 					</div>
-					<UserAuthForm />
+					{/* <UserAuthForm /> */}
+					<RegisterForm />
+					<Social />
 					<p className="px-8 text-center text-sm text-muted-foreground">
 						Já tem uma conta?{" "}
 						<Link

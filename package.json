@@ -29,6 +29,9 @@
 		"@radix-ui/react-slot": "^1.0.2",
 		"@radix-ui/react-switch": "^1.0.3",
 		"@radix-ui/react-tabs": "^1.0.4",
+		"@types/uuid": "^9.0.8",
+		"bcrypt": "^5.1.1",
+		"bcryptjs": "^2.4.3",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.0",
 		"date-fns": "^3.6.0",
@@ -47,10 +50,12 @@
 		"tailwind-merge": "^2.2.2",
 		"tailwind-scrollbar": "^3.1.0",
 		"tailwindcss-animate": "^1.0.7",
+		"uuid": "^9.0.1",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.6.1",
+		"@types/bcryptjs": "^2.4.6",
 		"@types/node": "^20.11.29",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",

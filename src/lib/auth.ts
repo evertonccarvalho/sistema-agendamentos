@@ -4,6 +4,7 @@ import type { Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./prisma";
+import { getUserById } from "@/services/user";
 
 export const authOptions: AuthOptions = {
 	adapter: PrismaAdapter(db) as Adapter,
@@ -41,6 +42,28 @@ export const authOptions: AuthOptions = {
 		}),
 	],
 	callbacks: {
+		async signIn({ user, account }) {
+			// Allow OAuth without email verification
+			if (account?.provider !== "credentials") return true;
+
+			const existingUser = await getUserById(user.id);
+
+			// Prevent sign in without email verification
+			if (!existingUser?.emailVerified) return false;
+
+			// if (existingUser.isTwoFactorEnabled) {
+			//   const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+
+			//   if (!twoFactorConfirmation) return false;
+
+			//   // Delete two factor confirmation for next sign in
+			//   await db.twoFactorConfirmation.delete({
+			//     where: { id: twoFactorConfirmation.id }
+			//   });
+			// }
+
+			return true;
+		},
 		session({ session, user }) {
 			session.user = { ...session.user, id: user.id } as {
 				id: string;
