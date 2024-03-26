@@ -46,7 +46,7 @@ const saveNewEventSchema = z.object({
 	active: z.boolean().default(true),
 	locationType: z.any(),
 	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres.").optional(),
-	capacity: z.coerce.number().default(1),
+	capacity: z.number().min(1, "Capacidade deve ser maior que 0.").optional(),
 	arrivalInfo: z.string().optional(),
 });
 
@@ -114,10 +114,19 @@ export function NewEventForm({
 		}
 		try {
 			if (initialData) {
-				const updateData = saveNewEventSchema.parse(data);
-				const id = initialData.id as string;
+				const update = {
+					id: initialData.id as string,
+					creatorId: loguedUserId as string,
+					name: data.name,
+					description: data.description,
+					duration: Number(data.duration),
+					locationType: data.locationType,
+					address: data.andress,
+					capacity: Number(data.capacity),
+					arrivalInfo: data.arrivalInfo,
+				}
 				console.log("veio data", initialData);
-				const res = await editEvent(id, updateData);
+				const res = await editEvent(update.id, update);
 				console.log("resupdate", res);
 			} else {
 				const res = await createEvent(create);
@@ -134,7 +143,7 @@ export function NewEventForm({
 
 	return (
 		<Card className="flex max-w-96 w-full p-4 flex-col gap-3 border-[1px]">
-			<h1 className="text-2xl font-semibold">Criar Novo Evento</h1>
+			<h1 className="text-2xl font-semibold">{!initialData ? "Criar Novo Evento" : "Editar Evento"}</h1>
 			<Separator orientation="horizontal" />
 			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
 				<label>
@@ -250,7 +259,7 @@ export function NewEventForm({
 				<Separator orientation="horizontal" />
 				{/* <div className="flex gap-3 items-center justify-between"> */}
 				<Button type="submit" size={"lg"} className="text-white flex gap-2">
-					Criar <ArrowRight width={20} />
+					{initialData ? "Editar" : "Criar"} <ArrowRight width={20} />
 				</Button>
 				{/* </div> */}
 			</form>
