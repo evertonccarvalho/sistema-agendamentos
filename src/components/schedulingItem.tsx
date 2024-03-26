@@ -2,12 +2,12 @@
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Timer } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useMemo, useState } from "react";
-import { generateDayTimeList } from "../helpers/hours";
+import { useEffect, useState } from "react";
 import DateSelector from "@/app/(pages)/(creator)/_components/DataSelector";
-import TimeSelector from "@/app/(pages)/(creator)/_components/TimerSelector";
 import { Card } from "./ui/card";
-
+import dayjs from "dayjs";
+import { getTimePerDate } from "@/helpers/hours";
+import { Button } from "./ui/button";
 interface SchedulingItemProps {
 	eventData: {
 		userName?: string;
@@ -16,58 +16,84 @@ interface SchedulingItemProps {
 		eventLocation?: string;
 	};
 }
+
+interface Scheduling {
+	id: string;
+	email: string;
+	phone: string;
+	message: string;
+	// status: $Enums.SchedulingStatus;
+	userId: string;
+	eventId: string;
+	date: Date;
+}
+interface Availability {
+	possibleTimes: number[]
+	availableTimes: number[]
+}
 const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+	const [availability, setAvailability] = useState<Availability>();
 	const { data } = useSession();
-
-	const [date, setDate] = useState<Date | undefined>(undefined);
-	const [hour, setHour] = useState<string | undefined>();
 	const [day, setDay] = useState<Scheduling[]>([]);
-	const [isLoading, setIsloading] = useState(false);
+	const [hour, setHour] = useState<number | undefined>();
 
-	interface Scheduling {
-		id: string;
-		email: string;
-		phone: string;
-		message: string;
-		// status: $Enums.SchedulingStatus;
-		userId: string;
-		eventId: string;
-		date: Date;
-	}
-
-	const handleDateClick = (date: Date | undefined) => {
-		setDate(date);
+	const onSelectDateTime = (date: Date | undefined) => {
+		setSelectedDate(date);
 		setHour(undefined);
 	};
 
-	const handleHourClick = (time: string) => {
+	const handleHourClick = (time: number) => {
 		setHour(time);
 	};
 
-	const timeList = useMemo(() => {
-		if (!date) {
-			return [];
-		}
+	if (!data?.user) {
+		return null;
+	}
 
-		return generateDayTimeList(date).filter((time) => {
-			const timeHour = Number(time.split(":")[0]);
-			const timeMinutes = Number(time.split(":")[1]);
+	const isDateSelected = !!selectedDate;
+	const userId = data.user.id;
 
-			const scheduling = day.find((scheduling) => {
-				const schedulingHour = scheduling.date.getHours();
-				const schedulingMinutes = scheduling.date.getMinutes();
+	const weekDay = selectedDate ? dayjs(selectedDate).format("dddd") : null;
 
-				return schedulingHour === timeHour && schedulingMinutes === timeMinutes;
-			});
+	const describedDate = selectedDate
+		? dayjs(selectedDate).format("DD[ de ]MMMM")
+		: null;
 
-			if (!scheduling) {
-				return true;
+	const selectedDateWithoutTime = selectedDate
+		? dayjs(selectedDate).format("YYYY-MM-DD")
+		: null;
+
+
+	useEffect(() => {
+		const fetchAvailability = async () => {
+			try {
+				if (selectedDateWithoutTime) {
+
+					const res = await getTimePerDate(userId, selectedDateWithoutTime);
+					setAvailability(res);
+				}
+			} catch (error) {
+				console.error("Error fetching availability:", error);
 			}
+		};
+		if (selectedDateWithoutTime) {
+			fetchAvailability();
+		}
+	}, [userId, selectedDateWithoutTime]);
 
-			return false;
-		});
-	}, [date, day]);
+	console.log(selectedDateWithoutTime);
 
+	function handleSelectTime(hour: number) {
+		const dateWithTime = dayjs(selectedDate)
+			.set("hour", hour)
+			.startOf("hour")
+			.toDate();
+
+		onSelectDateTime(dateWithTime);
+	}
+
+	console.log(availability);
 	return (
 		<>
 			<Card className="w-full h-full flex flex-col ">
@@ -110,19 +136,31 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 						<h1 className="font-semibold  text-xl">Selectione a Data e Hora</h1>
 
 						<div className=" w-full h-full flex flex-col md:flex-row gap-2 ">
-							<DateSelector date={date} handleDateClick={handleDateClick} />
-							{date && (
-								<TimeSelector
-									date={date}
-									timeList={timeList}
-									hour={hour}
-									handleHourClick={handleHourClick}
-								/>
+							<DateSelector
+								date={selectedDate}
+								handleDateClick={setSelectedDate}
+							/>
+							{isDateSelected && (
+								<div>
+									{availability?.possibleTimes.map((hour) => {
+										return (
+											<Button
+												key={hour}
+												onClick={() => handleSelectTime(hour)}
+												disabled={!availability.availableTimes.includes(hour)}
+												className="rounded-md py-1 w-full mb-2"
+												size="sm"
+											>
+												{String(hour).padStart(2, '0')}:00h
+											</Button>
+										);
+									})}
+								</div>
 							)}
 						</div>
 					</div>
 				</div>
-			</Card>
+			</Card >
 		</>
 	);
 };
