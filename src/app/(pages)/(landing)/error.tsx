@@ -3,7 +3,7 @@
 import { Empty } from "@/components/empty";
 
 const ErrorPage = () => {
-	return <Empty label="Something went wrong." />;
+	return <Empty label="Algo deu errado" />;
 };
 
 export default ErrorPage;

@@ -1,4 +1,8 @@
 "use client";
+import {
+	createAvailability,
+	type CreateAvailabilityParams,
+} from "@/actions/availability/create";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -9,65 +13,56 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { convertTimeStringToNumber } from "@/utils/convertTimeStringToNumber";
+import { convertMinutesToTimeString, convertTimeStringToNumber } from "@/utils/convertTimeStringToNumber";
 import { getWeekDays } from "@/utils/getWeekDay";
-import { zodResolver } from "@hookform/resolvers/zod";
+import type { Availability } from "@prisma/client";
 import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
 
 const ONE_HOUR_IN_MINUTES = 60;
+interface FormSubmitData {
+	availability: {
+		id: string;
+		weekDay: number;
+		startTime: string;
+		endTime: string;
+		enabled: boolean;
+	}[];
+}
 
-const availabilitySchema = z.object({
-	availability: z
-		.array(
-			z.object({
-				weekDay: z.coerce.number(),
-				enabled: z.boolean(),
-				startTime: z.string(),
-				endTime: z.string(),
-			}),
-		)
-		.length(7)
-		.transform((availability) => availability.filter((a) => a.enabled))
-		.refine(
-			(availability) => availability.length > 0,
-			"Você precisa de pelo menos uma disponibilidade em um dia da semana",
-		)
-		.transform((intervals) =>
-			intervals.map((interval) => ({
-				weekDay: interval.weekDay,
-				startTime: convertTimeStringToNumber(interval.startTime),
-				endTime: convertTimeStringToNumber(interval.endTime),
-			})),
-		)
-		.refine(
-			(intervals) =>
-				intervals.every(
-					(interval) =>
-						interval.endTime - ONE_HOUR_IN_MINUTES >= interval.startTime,
-				),
-			{
-				message:
-					"O horário de término do agendamento deve ser pelo menos 1h a frente do horário de início.",
-			},
-		),
-});
-
-const staticDefaultAvailability = [
-	{ weekDay: 0, enabled: false, startTime: "08:00", endTime: "18:00" },
-	{ weekDay: 1, enabled: true, startTime: "08:00", endTime: "18:00" },
-	{ weekDay: 2, enabled: true, startTime: "08:00", endTime: "18:00" },
-	{ weekDay: 3, enabled: true, startTime: "08:00", endTime: "18:00" },
-	{ weekDay: 4, enabled: true, startTime: "08:00", endTime: "18:00" },
-	{ weekDay: 5, enabled: true, startTime: "08:00", endTime: "18:00" },
-	{ weekDay: 6, enabled: false, startTime: "08:00", endTime: "18:00" },
+const defaultAvailability = [
+	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 1, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 2, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 3, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 4, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 5, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: true },
 ];
 
-export function AvailabilityForm() {
+interface AvailabilityFormProps {
+	availability: Availability[];
+}
+const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
+	const weekDays = getWeekDays();
+
+	const formattedAvailability = defaultAvailability.map((defaultDay) => {
+		const existingDay = availability.find(
+			(day) => day.weekDay === defaultDay.weekDay,
+		);
+		return existingDay
+			? {
+				id: existingDay.id,
+				weekDay: existingDay.weekDay,
+				startTime: convertMinutesToTimeString(existingDay.startTime),
+				endTime: convertMinutesToTimeString(existingDay.endTime),
+				enabled: existingDay.enabled,
+			}
+			: defaultDay;
+	});
+
 	const form = useForm({
-		resolver: zodResolver(availabilitySchema),
 		defaultValues: {
-			availability: staticDefaultAvailability,
+			availability: formattedAvailability,
 		},
 	});
 
@@ -76,42 +71,92 @@ export function AvailabilityForm() {
 		name: "availability",
 	});
 
-	const weekDays = getWeekDays();
+	const onSubmit = async (data: FormSubmitData) => {
+		try {
+			for (const day of data.availability) {
+				const availabilityData: CreateAvailabilityParams = {
+					weekDay: day.weekDay,
+					startTime: convertTimeStringToNumber(day.startTime),
+					endTime: convertTimeStringToNumber(day.endTime),
+					enabled: day.enabled,
+				};
+
+				if (day.enabled) {
+					const res = await createAvailability(availabilityData);
+					if (res !== null) {
+						console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
+						if (!res.success) {
+							console.error(
+								`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
+								res.message,
+							);
+						}
+					} else {
+						console.error("Resposta nula recebida do servidor.");
+					}
+				}
+			}
+			console.log("Todas as disponibilidades foram processadas com sucesso!");
+		} catch (error) {
+			console.error("Ocorreu um erro ao enviar o formulário:", error);
+			console.log(
+				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
+			);
+		}
+	};
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(console.log)}>
+			<form onSubmit={form.handleSubmit(onSubmit)}>
 				{fields.map((field, index) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: this list is static
-					<div key={index}>
+					<div
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						key={index}
+						className="flex w-full items-start pt-3 justify-between gap-2 mb-2"
+					>
 						<FormField
 							control={form.control}
 							name={`availability.${index}.enabled`}
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="flex justify-start gap-1 items-center">
 									<FormControl>
-										<Checkbox
+										{/* <Checkbox
 											checked={field.value}
 											onCheckedChange={(checked) =>
 												field.onChange(checked === true)
 											}
+										/> */}
+										<Checkbox
+											checked={field.value}
+											onCheckedChange={field.onChange}
+											aria-readonly
 										/>
 									</FormControl>
-									<FormLabel>{weekDays[index]}</FormLabel>
+									<FormLabel className="truncate p-0 m-0 text-xs">
+										{weekDays[index]}
+									</FormLabel>
 								</FormItem>
 							)}
 						/>
 
-						<Input
-							disabled={!field.enabled}
-							{...form.register(`availability.${index}.startTime`)}
-							type="time"
-						/>
-						<Input
-							disabled={!field.enabled}
-							{...form.register(`availability.${index}.endTime`)}
-							type="time"
-						/>
+						<div className="flex gap-1">
+							<div className="flex flex-col items-start gap-2">
+								<Input
+									className="w-32"
+									disabled={!field.enabled}
+									{...form.register(`availability.${index}.startTime`, {})}
+									type="time"
+								/>
+							</div>
+							<div className="flex flex-col items-start gap-2">
+								<Input
+									className="w-32"
+									disabled={!field.enabled}
+									{...form.register(`availability.${index}.endTime`, {})}
+									type="time"
+								/>
+							</div>
+						</div>
 					</div>
 				))}
 				<Button disabled={form.formState.isSubmitting} type="submit">
@@ -120,4 +165,6 @@ export function AvailabilityForm() {
 			</form>
 		</Form>
 	);
-}
+};
+
+export default AvailabilityForm;
