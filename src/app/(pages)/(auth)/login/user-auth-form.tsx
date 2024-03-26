@@ -8,10 +8,9 @@ import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { z } from "zod";
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -48,7 +47,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 			email: data.email,
 			password: data.password,
 			redirect: true,
-			callbackUrl: "/",
+			callbackUrl: "/dashboard",
 		});
 		console.log("loginres", res);
 	}
@@ -58,7 +57,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 			<form onSubmit={form.handleSubmit(onSubmit)}>
 				<div className="grid gap-2">
 					<div className="grid gap-1">
-						<Label className="sr-only" htmlFor="email">
+						<Label className="" htmlFor="email">
 							Email
 						</Label>
 						<Input
@@ -67,6 +66,18 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 							type="email"
 							autoCapitalize="none"
 							autoComplete="email"
+							autoCorrect="off"
+							disabled={isLoading}
+						/>
+						<Label className="" htmlFor="password">
+							Senha
+						</Label>
+						<Input
+							id="password"
+							placeholder="name@example.com"
+							type="password"
+							autoCapitalize="none"
+							autoComplete="password"
 							autoCorrect="off"
 							disabled={isLoading}
 						/>
@@ -102,7 +113,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 					)}
 					Google
 				</Button>
-				<Button
+				{/* <Button
 					onClick={handleGithubClick}
 					className="w-full"
 					variant="default"
@@ -115,7 +126,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 						<FaGithub className="mr-2 h-4 w-4" />
 					)}
 					Github
-				</Button>
+				</Button> */}
 			</div>
 		</div>
 	);

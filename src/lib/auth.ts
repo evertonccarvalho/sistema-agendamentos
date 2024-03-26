@@ -44,8 +44,10 @@ export const authOptions: AuthOptions = {
 		session({ session, user }) {
 			session.user = { ...session.user, id: user.id } as {
 				id: string;
-				name: string;
-				email: string;
+				name: string | null;
+				email: string | null;
+				emailVerified: Date | null;
+				image: string | null;
 			};
 			return session;
 		},
@@ -54,6 +56,7 @@ export const authOptions: AuthOptions = {
 		signIn: "/login",
 		newUser: "/register",
 		signOut: "/",
+		error: '/error'
 	},
 	secret: process.env.NEXT_AUTH_SECRET,
 };

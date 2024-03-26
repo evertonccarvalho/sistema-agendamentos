@@ -8,6 +8,7 @@ import { Card } from "./ui/card";
 import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
 import { Button } from "./ui/button";
+import { redirect } from "next/navigation";
 interface SchedulingItemProps {
 	eventData: {
 		userName?: string;
@@ -33,31 +34,21 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 	const [availability, setAvailability] = useState<Availability>();
 	const { data } = useSession();
-	const [day, setDay] = useState<Scheduling[]>([]);
-	const [hour, setHour] = useState<number | undefined>();
-
-	const onSelectDateTime = (date: Date | undefined) => {
-		setSelectedDate(date);
-		setHour(undefined);
-	};
 
 	if (!data?.user) {
-		return null;
+		return redirect("/");
 	}
 
 	const isDateSelected = !!selectedDate;
 	const userId = data.user.id;
 
-	const weekDay = selectedDate ? dayjs(selectedDate).format("dddd") : null;
-
-	const describedDate = selectedDate
-		? dayjs(selectedDate).format("DD[ de ]MMMM")
-		: null;
-
 	const selectedDateWithoutTime = selectedDate
 		? dayjs(selectedDate).format("YYYY-MM-DD")
 		: null;
 
+	const onSelectDateTime = (date: Date | undefined) => {
+		setSelectedDate(date);
+	};
 
 	useEffect(() => {
 		const fetchAvailability = async () => {
