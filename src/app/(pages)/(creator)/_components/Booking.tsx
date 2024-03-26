@@ -1,7 +1,6 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
-
 import { ptBR } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { createBooking } from "@/actions/scheduling/createBooking";
@@ -26,21 +25,16 @@ interface Availability {
   availableTimes: number[];
 }
 const BookingItem = ({ data }: BookingItemProps) => {
-  // const [date, setDate] = useState<Date | undefined>(undefined);
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const [dayBookings, setDayBookings] = useState<Scheduling[]>([]);
-
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [availability, setAvailability] = useState<Availability>();
-
   const [hour, setHour] = useState<number | undefined>();
-
   const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
-
   const isDateSelected = !!selectedDate;
   const userId = data.creatorId;
+  const [dayBookings, setDayBookings] = useState<Scheduling[]>([]);
 
   const selectedDateWithoutTime = selectedDate
     ? dayjs(selectedDate).format("YYYY-MM-DD")
@@ -171,7 +165,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
         0,
         data.creator.email.indexOf("@"),
       );
-      console.log("Query params:", queryParams.toString());
       router.push(`${`/${username}/success`}?${queryParams}`);
     } catch (error) {
       console.error("Error during booking submission:", error);
@@ -194,14 +187,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
               date={selectedDate}
               handleDateClick={handleDateClick}
             />
-            {/* {date && (
-              <TimeSelector
-                date={date}
-                timeList={timeList}
-                hour={hour}
-                handleHourClick={handleHourClick}
-              />
-            )} */}
             {isDateSelected && (
               <div>
                 {availability?.possibleTimes.map((hour) => {

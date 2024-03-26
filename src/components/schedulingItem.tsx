@@ -16,13 +16,11 @@ interface SchedulingItemProps {
 		eventLocation?: string;
 	};
 }
-
 interface Scheduling {
 	id: string;
 	email: string;
 	phone: string;
 	message: string;
-	// status: $Enums.SchedulingStatus;
 	userId: string;
 	eventId: string;
 	date: Date;
@@ -41,10 +39,6 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 	const onSelectDateTime = (date: Date | undefined) => {
 		setSelectedDate(date);
 		setHour(undefined);
-	};
-
-	const handleHourClick = (time: number) => {
-		setHour(time);
 	};
 
 	if (!data?.user) {
@@ -82,8 +76,6 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 		}
 	}, [userId, selectedDateWithoutTime]);
 
-	console.log(selectedDateWithoutTime);
-
 	function handleSelectTime(hour: number) {
 		const dateWithTime = dayjs(selectedDate)
 			.set("hour", hour)
@@ -93,7 +85,6 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 		onSelectDateTime(dateWithTime);
 	}
 
-	console.log(availability);
 	return (
 		<>
 			<Card className="w-full h-full flex flex-col ">
