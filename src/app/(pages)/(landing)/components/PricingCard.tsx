@@ -56,7 +56,7 @@ const PricingCard = ({ pricing }: CardProps) => {
 
       <CardContent>
         <Link
-          href="/register"
+          href="/auth/register"
           className={`w-full  ${buttonVariants({
             variant: "default",
           })}`}

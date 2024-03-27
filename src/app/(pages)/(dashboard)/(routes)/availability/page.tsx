@@ -1,14 +1,13 @@
 import BreadCrumb from "@/components/breadcrumb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { getAvailabilitys } from "@/actions/availability/getAvailabilitys";
 import TabsAvailabilityComponent from "./_components/tabsBookingItems";
+import { auth } from "../../../../../../auth";
 
 const AvailabilityPage = async () => {
 	const breadcrumbItems = [{ title: "Disponibilidade", link: "/dashboard" }];
-	const session = await getServerSession(authOptions);
+	const session = await auth();
 
 	if (!session?.user) {
 		return redirect("/");
