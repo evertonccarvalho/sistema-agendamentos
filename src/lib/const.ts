@@ -1,6 +1,8 @@
-import type { Pricing } from "../PricingCard";
-import type { Team } from "../TeamCard";
-import type { Testimonial } from "../TestimonialsCard";
+import type { Pricing } from "../app/(pages)/(landing)/components/PricingCard";
+import type { Team } from "../app/(pages)/(landing)/components/TeamCard";
+import type { Testimonial } from "../app/(pages)/(landing)/components/TestimonialsCard";
+
+export const MAX_FREE_COUNTS = 3;
 
 export const pricingList: Pricing[] = [
   {
@@ -139,3 +141,5 @@ export const testimonialsList: Testimonial[] = [
   },
 
 ];
+
+

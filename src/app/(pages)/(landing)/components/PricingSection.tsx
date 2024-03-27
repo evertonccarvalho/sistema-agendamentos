@@ -1,4 +1,4 @@
-import { pricingList } from "./const/const";
+import { pricingList } from "../../../../lib/const";
 import type { Pricing } from "./PricingCard";
 import PricingCard from "./PricingCard";
 

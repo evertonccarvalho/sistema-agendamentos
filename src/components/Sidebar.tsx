@@ -3,13 +3,16 @@ import SideBarLinks from "./sideBarLinks";
 import Logos from "./logo";
 import CreateButton from "./createButton";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FreeCounter } from "./FreeCounter";
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
+  apiLimitCount: number;
+  isPro: boolean;
 }
 
-const MainSideBar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const MainSideBar = ({ apiLimitCount = 0, isPro = false, sidebarOpen, setSidebarOpen }: SidebarProps) => {
   useEffect(() => {
     function handleResize() {
       const screenWidth = window.innerWidth;
@@ -59,6 +62,8 @@ const MainSideBar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <div className="flex flex-col gap-4 py-3">
           <SideBarLinks sidebarOpen={sidebarOpen} />
         </div>
+        <FreeCounter apiLimitCount={apiLimitCount} isPro={isPro} />
+
       </aside>
     </>
   );
