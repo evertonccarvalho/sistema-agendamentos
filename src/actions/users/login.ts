@@ -5,6 +5,7 @@ import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/services/user";
 import { signIn } from "next-auth/react";
+import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 export const LoginSchema = z.object({
   email: z.string().email({
@@ -51,10 +52,10 @@ export const login = async (
     await signIn("credentials", {
       email,
       password,
-      redirectTo: callbackUrl || '/dashboard',
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof AuthenticatorResponse) {
       switch (error.type) {
         case "CredentialsSignin":
           return { error: "Invalid credentials!" };

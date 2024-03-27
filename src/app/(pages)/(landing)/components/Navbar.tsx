@@ -95,7 +95,7 @@ export const Navbar = () => {
                     </Link>
                   ))}
                   <Link
-                    href="/login"
+                    href="/auth/login"
                     className={`w-[110px] border ${buttonVariants({
                       variant: "secondary",
                     })}`}
@@ -131,7 +131,7 @@ export const Navbar = () => {
                 Minha Conta
               </Link>
             ) : (
-              <Link href="/login" className={`border ${buttonVariants({ variant: "default" })}`}>
+              <Link href="/auth/login" className={`border ${buttonVariants({ variant: "default" })}`}>
                 <LogIn className="mr-2 w-5 h-5" />
                 Entrar
               </Link>

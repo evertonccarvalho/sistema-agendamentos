@@ -76,10 +76,10 @@ export const authOptions: AuthOptions = {
 		},
 	},
 	pages: {
-		signIn: "/login",
-		newUser: "/register",
+		signIn: "/auth/login",
+		newUser: "/auth/register",
 		signOut: "/",
-		error: '/error'
+		error: '/auth/error'
 	},
 	secret: process.env.NEXT_AUTH_SECRET,
 };
