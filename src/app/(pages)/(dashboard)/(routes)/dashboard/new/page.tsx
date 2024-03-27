@@ -15,7 +15,7 @@ const NewEvent = () => {
 	const [eventName, setEventName] = useState<string | undefined>(undefined);
 	const [eventDuration, setEventDuration] = useState<string | undefined>("30");
 	const [eventLocation, setEventLocation] = useState<string | undefined>(
-		undefined,
+		undefined
 	);
 
 	const getLogedUserName = () => {
@@ -26,7 +26,6 @@ const NewEvent = () => {
 	});
 
 	// const [data, setData] = useState<EventFormValues | undefined>(undefined);
-	// console.log(data);
 	return (
 		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />

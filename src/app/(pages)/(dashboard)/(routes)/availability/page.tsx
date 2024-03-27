@@ -14,7 +14,6 @@ const AvailabilityPage = async () => {
 	}
 
 	const availability = await getAvailabilitys("clu4iswxk0000k6j18161c2cs");
-	console.log(availability);
 
 	return (
 		<main className="flex-1 space-y-4 md:p-8 pt-6">
