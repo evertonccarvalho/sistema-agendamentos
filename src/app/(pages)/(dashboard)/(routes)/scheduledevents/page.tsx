@@ -17,9 +17,6 @@ const ScheduledEvents = async () => {
 	const confirmedBookings = await getBookings(session.user.id);
 	const finishedBookings = await getFinishedBookings(session.user.id);
 
-	console.log(confirmedBookings);
-	console.log(finishedBookings);
-
 	return (
 		<main className="flex-1 space-y-4 md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />

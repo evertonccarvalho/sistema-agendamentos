@@ -42,11 +42,16 @@ const saveNewEventSchema = z.object({
 	id: z.string().optional(),
 	creatorId: z.string(),
 	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
-	description: z.string().min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
+	description: z
+		.string()
+		.min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
 	duration: z.coerce.number().default(60),
 	active: z.boolean().default(true),
 	locationType: z.any(),
-	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres.").optional(),
+	andress: z
+		.string()
+		.min(5, "Endereço deve ter no mínimo 5 caracteres.")
+		.optional(),
 	capacity: z.coerce.number().default(1),
 	arrivalInfo: z.string().optional(),
 });
@@ -77,14 +82,14 @@ export function NewEventForm({
 	const defaultValues = initialData
 		? initialData
 		: {
-			name: "",
-			description: "",
-			creatorId: loguedUserId,
-			address: "",
-			arrivalInfo: "",
-			capacity: 1,
-			duration: 60,
-		};
+				name: "",
+				description: "",
+				creatorId: loguedUserId,
+				address: "",
+				arrivalInfo: "",
+				capacity: 1,
+				duration: 60,
+		  };
 
 	const {
 		register,
@@ -101,8 +106,7 @@ export function NewEventForm({
 
 	const onSubmit = async (data: SaveNewEvent) => {
 		const createData = saveNewEventSchema.parse(data);
-		console.log("botao clicado", createData);
-		console.log("botao clicado", data);
+
 		const create = {
 			creatorId: loguedUserId as string,
 			name: data.name,
@@ -112,7 +116,7 @@ export function NewEventForm({
 			address: data.andress,
 			capacity: Number(data.capacity),
 			arrivalInfo: data.arrivalInfo,
-		}
+		};
 		try {
 			if (initialData) {
 				const update = {
@@ -125,7 +129,7 @@ export function NewEventForm({
 					address: data.andress,
 					capacity: Number(data.capacity),
 					arrivalInfo: data.arrivalInfo,
-				}
+				};
 				const res = await editEvent(update.id, update);
 				res && toast.success("Evento editado com sucesso!");
 			} else {
@@ -143,7 +147,9 @@ export function NewEventForm({
 
 	return (
 		<Card className="flex max-w-96 w-full p-4 flex-col gap-3 border-[1px]">
-			<h1 className="text-2xl font-semibold">{!initialData ? "Criar Novo Evento" : "Editar Evento"}</h1>
+			<h1 className="text-2xl font-semibold">
+				{!initialData ? "Criar Novo Evento" : "Editar Evento"}
+			</h1>
 			<Separator orientation="horizontal" />
 			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
 				<label>
