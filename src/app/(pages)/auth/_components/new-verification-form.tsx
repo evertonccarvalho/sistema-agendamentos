@@ -43,20 +43,25 @@ export const NewVerificationForm = () => {
   }, [onSubmit]);
 
   return (
-    <CardWrapper
-      headerLabel="Confirming your verification"
-      backButtonLabel="Back to login"
-      backButtonHref="/auth/login"
-    >
-      <div className="flex items-center w-full justify-center">
-        {!success && !error && (
-          <Loader2 />
-        )}
-        <FormSuccess message={success} />
-        {!success && (
-          <FormError message={error} />
-        )}
-      </div>
-    </CardWrapper>
+    <div className="flex w-full h-svh items-center justify-center">
+
+      <CardWrapper
+        headerLabel="Confirming your verification"
+        backButtonLabel="Back to login"
+        backButtonHref="/auth/login"
+      >
+        <div className="flex items-center w-full justify-center">
+          {!success && !error && (
+            <Loader2 />
+          )}
+          {success && (
+            <FormSuccess message={success} />
+          )}
+          {!success && (
+            <FormError message={error} />
+          )}
+        </div>
+      </CardWrapper>
+    </div>
   )
 }
