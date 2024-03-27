@@ -1,21 +1,12 @@
 "use server";
 
-import * as z from "zod";
+import type * as z from "zod";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/services/user";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
-
-export const LoginSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required",
-  }),
-  code: z.optional(z.string()),
-});
+import { LoginSchema } from "@/lib/schemas";
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,

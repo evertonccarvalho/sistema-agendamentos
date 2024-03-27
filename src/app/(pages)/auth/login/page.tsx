@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { UserAuthForm } from "./user-auth-form";
+import { LoginForm } from "./login-form";
+import { Social } from "../_components/social";
 
 export default function LoginPage() {
 	return (
@@ -27,7 +28,9 @@ export default function LoginPage() {
 							Digite seu e-mail abaixo para fazer login na sua conta
 						</p>
 					</div>
-					<UserAuthForm />
+					<LoginForm />
+					<Social />
+
 					<p className="px-8 text-center text-sm text-muted-foreground">
 						Não tem uma conta?{" "}
 						<Link
