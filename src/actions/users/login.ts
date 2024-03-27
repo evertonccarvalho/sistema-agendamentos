@@ -4,9 +4,10 @@ import type * as z from "zod";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { getUserByEmail } from "@/services/user";
-import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 import { LoginSchema } from "@/lib/schemas";
+import { AuthError } from "next-auth";
+import { signIn } from "../../../auth";
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
@@ -18,7 +19,7 @@ export const login = async (
     return { error: "Invalid fields!" };
   }
 
-  const { email, password, code } = validatedFields.data;
+  const { email, password } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
 
@@ -39,19 +40,21 @@ export const login = async (
     return { success: "Confirmation email sent!" };
   }
 
+
+
   try {
     await signIn("credentials", {
       email,
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-    });
+    })
   } catch (error) {
-    if (error instanceof AuthenticatorResponse) {
+    if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" };
+          return { error: "Invalid credentials!" }
         default:
-          return { error: "Something went wrong!" };
+          return { error: "Something went wrong!" }
       }
     }
 

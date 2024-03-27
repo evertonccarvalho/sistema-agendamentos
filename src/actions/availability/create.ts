@@ -1,8 +1,7 @@
 // No seu arquivo de actions.js ou onde desejar organizar suas ações:
 "use server";
-import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
+import { auth } from "../../../auth";
 export interface CreateAvailabilityParams {
 	weekDay: number;
 	startTime: number;
@@ -11,7 +10,7 @@ export interface CreateAvailabilityParams {
 }
 
 export const createAvailability = async (params: CreateAvailabilityParams) => {
-	const session = await getServerSession(authOptions);
+	const session = await auth();
 
 	if (!session) {
 		return null;

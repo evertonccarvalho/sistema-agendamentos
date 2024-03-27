@@ -1,15 +1,14 @@
 import BreadCrumb from "@/components/breadcrumb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getBookings } from "@/actions/scheduling/getBookings";
 import TabsComponent from "./components/tabsBookingItems";
 import { getFinishedBookings } from "@/actions/scheduling/getFinishedBookings";
 import { Card } from "@/components/ui/card";
+import { auth } from "../../../../../../auth";
 
 const ScheduledEvents = async () => {
 	const breadcrumbItems = [{ title: "Eventos agendados", link: "/dashboard" }];
-	const session = await getServerSession(authOptions);
+	const session = await auth();
 
 	if (!session?.user) {
 		return redirect("/");

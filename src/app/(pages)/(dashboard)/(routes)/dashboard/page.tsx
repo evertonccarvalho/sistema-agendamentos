@@ -1,16 +1,15 @@
 import BreadCrumb from "@/components/breadcrumb";
 import EventPageHeader from "./components/eventPageHeader";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import CardEventTypes from "../../components/CardEventTypes";
 import { getEventsByCreatorId } from "@/actions/eventType/getEvent";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { auth } from "../../../../../../auth";
 
 const Dashboard = async () => {
 	const breadcrumbItems = [{ title: "Tipos de Evento", link: "/dashboard" }];
-	const session = await getServerSession(authOptions);
+	const session = await auth();
 
 	if (!session?.user) {
 		return redirect("/");

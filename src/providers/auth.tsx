@@ -6,7 +6,9 @@ import type { ReactNode } from "react";
 const AuthProvider = ({ children }: { children: ReactNode }) => {
 	return (
 		<>
-			<SessionProvider>{children}</SessionProvider>
+			<SessionProvider>
+				{children}
+			</SessionProvider>
 		</>
 	);
 };
