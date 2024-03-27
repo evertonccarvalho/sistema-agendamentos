@@ -9,6 +9,7 @@ interface BookingPageProps {
 }
 const BookingPage = async ({ params }: BookingPageProps) => {
 	const event = await getEventActiveById(params.id);
+
 	return (
 		<>
 			<ContainerWrapper>

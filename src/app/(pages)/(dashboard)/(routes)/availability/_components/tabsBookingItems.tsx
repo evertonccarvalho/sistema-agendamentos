@@ -6,29 +6,29 @@ import AvailabilityForm from "../../../components/AvailabilityForm";
 import type { Availability } from "@prisma/client";
 
 interface TabsAvailabilityComponentProps {
-  availability: Availability[];
+	availability: Availability[];
 }
 const TabsAvailabilityComponent = ({
-  availability,
+	availability,
 }: TabsAvailabilityComponentProps) => {
-  return (
-    <Tabs defaultValue="listView" className="w-full space-y-2">
-      <TabsList className="bg-secondary">
-        <TabsTrigger value="listView">Lista</TabsTrigger>
-        <TabsTrigger value="calendarView" disabled>
-          Calendario
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="listView">
-        <Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
-          <Separator className="my-4" />
-          <div className="grid grid-cols-1 md:grid-cols-2 w-full">
-            <AvailabilityForm availability={availability} />
-          </div>
-        </Card>
-      </TabsContent>
-    </Tabs>
-  );
+	return (
+		<Tabs defaultValue="listView" className="w-full space-y-2">
+			<TabsList className="bg-secondary">
+				<TabsTrigger value="listView">Lista</TabsTrigger>
+				<TabsTrigger value="calendarView" disabled>
+					Calendário
+				</TabsTrigger>
+			</TabsList>
+			<TabsContent value="listView">
+				<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
+					<Separator className="my-4" />
+					<div className="grid grid-cols-1 md:grid-cols-2 w-full">
+						<AvailabilityForm availability={availability} />
+					</div>
+				</Card>
+			</TabsContent>
+		</Tabs>
+	);
 };
 
 export default TabsAvailabilityComponent;

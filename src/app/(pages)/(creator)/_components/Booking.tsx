@@ -89,9 +89,11 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
 		try {
 			if (!selectedDateTime) {
+				console.log("selectedDate is not defined:", hour, selectedDate);
 				return;
 			}
 			const newDate = selectedDateTime;
+			console.log("New date:", newDate);
 			await createBooking({
 				name: formData.name,
 				email: formData.email,
@@ -101,6 +103,8 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				userId: data.creatorId,
 				date: newDate,
 			});
+
+			console.log("Booking created successfully.");
 
 			// Prepare data for email sending
 			const dataForEmail = {

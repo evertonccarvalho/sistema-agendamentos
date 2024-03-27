@@ -32,7 +32,10 @@ const CardEvent = ({ eventType, creator }: CardEventProps) => {
 					<Timer size={22} />
 					{eventType.duration} Min
 				</CardContent>
-				<ArrowUpRightIcon size={22} className="text-primary absolute right-0 m-4 top-0" />
+				<ArrowUpRightIcon
+					size={22}
+					className="text-primary absolute right-0 m-4 top-0"
+				/>
 			</Card>
 		</Link>
 	);
