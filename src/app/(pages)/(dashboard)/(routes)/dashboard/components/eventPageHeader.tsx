@@ -4,15 +4,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { absoluteUrl } from "@/lib/utils";
 
 const EventPageHeader = () => {
   const { data } = useSession();
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASEURL
   if (!data?.user) {
     return null;
   }
   const username = data.user.email?.substring(0, data.user.email.indexOf("@"));
+  const eventUrl = absoluteUrl(`/${username}`);
   return (
     <>
       <section className="flex w-full">
@@ -29,8 +30,8 @@ const EventPageHeader = () => {
           <div className="flex flex-col">
             <h1 className="text-base font-semibold ">{data.user.name}</h1>
             <Link className="text-base font-light text-blue-500 hover:underline"
-              href={`${baseUrl}/${username}`}>
-              {`${baseUrl}/${username}`}
+              href={eventUrl}>
+              {eventUrl}
             </Link>
           </div>
         </div>
