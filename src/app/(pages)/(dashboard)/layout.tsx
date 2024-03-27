@@ -9,12 +9,14 @@ interface SettingsLayoutProps {
 
 export default function DashboardLayout({ children }: SettingsLayoutProps) {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
-
+	const apiLimitCount = 2
+	const isPro = true
 	return (
 		<>
 			<div className="flex flex-col h-screen">
 				<div className="flex flex-1 h-full overflow-hidden">
 					<MainSideBar
+						apiLimitCount={apiLimitCount} isPro={isPro}
 						sidebarOpen={sidebarOpen}
 						setSidebarOpen={setSidebarOpen}
 					/>

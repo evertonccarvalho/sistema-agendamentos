@@ -3,7 +3,7 @@ import SideBarLinks from "./sideBarLinks";
 import Logos from "./logo";
 import CreateButton from "./createButton";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { FreeCounter } from "./FreeCounter";
+import UpgradeButton from "./UpgradeButton";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -12,7 +12,12 @@ interface SidebarProps {
   isPro: boolean;
 }
 
-const MainSideBar = ({ apiLimitCount = 0, isPro = false, sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const MainSideBar = ({
+  apiLimitCount = 0,
+  isPro = false,
+  sidebarOpen,
+  setSidebarOpen,
+}: SidebarProps) => {
   useEffect(() => {
     function handleResize() {
       const screenWidth = window.innerWidth;
@@ -33,9 +38,7 @@ const MainSideBar = ({ apiLimitCount = 0, isPro = false, sidebarOpen, setSidebar
 
   return (
     <>
-      <aside
-        className={`relative z-40 min-h-dvh gap-5 grid-cols-1 px-4  border-r-[1px]  duration-500  bg-background dark:border-r-slate-700  ${sidebarOpen ? "w-72" : "md:w-16"}`}
-      >
+      <aside className={`relative z-40 gap-5 grid-cols-1 px-4  border-r-[1px]  duration-500  bg-background dark:border-r-slate-700  ${sidebarOpen ? "w-72" : "md:w-16"}`}>
         <Logos isOpen={sidebarOpen} />
         <div className="hidden md:block">
           {sidebarOpen ? (
@@ -62,8 +65,11 @@ const MainSideBar = ({ apiLimitCount = 0, isPro = false, sidebarOpen, setSidebar
         <div className="flex flex-col gap-4 py-3">
           <SideBarLinks sidebarOpen={sidebarOpen} />
         </div>
-        <FreeCounter apiLimitCount={apiLimitCount} isPro={isPro} />
-
+        <UpgradeButton
+          apiLimitCount={apiLimitCount}
+          isPro={isPro}
+          isOpen={sidebarOpen}
+        />
       </aside>
     </>
   );
