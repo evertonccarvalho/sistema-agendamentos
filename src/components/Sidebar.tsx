@@ -1,23 +1,19 @@
-import { useEffect } from "react";
+"use client"
+import { useEffect, useState } from "react";
 import SideBarLinks from "./sideBarLinks";
 import Logos from "./logo";
 import CreateButton from "./createButton";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import UpgradeButton from "./UpgradeButton";
+import UpgradeButton from "../app/(pages)/(dashboard)/(routes)/user/_components/UpgradeButton";
 
 interface SidebarProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: (arg: boolean) => void;
+
   apiLimitCount: number;
-  isPro: boolean;
+  isPro: boolean | null;
 }
 
-const MainSideBar = ({
-  apiLimitCount = 0,
-  isPro = false,
-  sidebarOpen,
-  setSidebarOpen,
-}: SidebarProps) => {
+const MainSideBar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   useEffect(() => {
     function handleResize() {
       const screenWidth = window.innerWidth;
@@ -34,11 +30,14 @@ const MainSideBar = ({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [setSidebarOpen]);
+  }, []);
 
   return (
     <>
-      <aside className={`relative z-40 gap-5 grid-cols-1 px-4  border-r-[1px]  duration-500  bg-background dark:border-r-slate-700  ${sidebarOpen ? "w-72" : "md:w-16"}`}>
+      <aside
+        className={`relative z-40 gap-5 grid-cols-1 px-4  border-r-[1px]  duration-500  bg-background dark:border-r-slate-700  ${sidebarOpen ? "w-72" : "md:w-16"
+          }`}
+      >
         <Logos isOpen={sidebarOpen} />
         <div className="hidden md:block">
           {sidebarOpen ? (
@@ -68,8 +67,7 @@ const MainSideBar = ({
         <UpgradeButton
           apiLimitCount={apiLimitCount}
           isPro={isPro}
-          isOpen={sidebarOpen}
-        />
+          isOpen={sidebarOpen} />
       </aside>
     </>
   );

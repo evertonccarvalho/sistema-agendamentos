@@ -1,19 +1,31 @@
 import { Zap } from "lucide-react";
-import { ProModal } from "./ProModal";
-import { useState } from "react";
-import { Button } from "./ui/button";
+import { ProModal } from "../../../../../../components/ProModal";
+import { useEffect, useState } from "react";
+import { Button } from "../../../../../../components/ui/button";
 import { MAX_FREE_COUNTS } from "@/lib/const";
-import { Progress } from "./ui/progress";
+import { Progress } from "../../../../../../components/ui/progress";
 
 interface ButtonProps {
   isOpen: boolean;
   apiLimitCount: number;
-  isPro: boolean;
+  isPro: boolean | null
 }
 
 const UpgradeButton = ({ isOpen, apiLimitCount, isPro }: ButtonProps) => {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  if (isPro) {
+    return null;
+  }
   return (
     <>
       <div className={` pt-4 ${!isOpen && "flex items-center justify-center"}`}>

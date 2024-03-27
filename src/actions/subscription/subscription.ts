@@ -1,5 +1,6 @@
-import { auth } from "../../auth";
-import { db } from "./prisma";
+"use server"
+import { auth } from "../../../auth";
+import { db } from "../../lib/prisma";
 
 
 const DAY_IN_MS = 86_400_000;
@@ -10,6 +11,7 @@ export const checkSubscription = async () => {
 	if (!session?.user) {
 		return null
 	}
+
 	const userId = session.user.id
 
 	if (!userId) {

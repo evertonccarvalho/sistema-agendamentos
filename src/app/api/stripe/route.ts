@@ -5,7 +5,7 @@ import { absoluteUrl } from '@/lib/utils';
 import { db } from '@/lib/prisma';
 import { auth } from '../../../../auth';
 
-const settingsUrl = absoluteUrl('/settings');
+const settingsUrl = absoluteUrl('/user/myaccount');
 
 export async function GET() {
 	try {

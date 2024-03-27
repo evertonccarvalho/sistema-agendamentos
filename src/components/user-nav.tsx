@@ -56,9 +56,9 @@ export function UserNav() {
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuGroup>
-						<Link href="/profile">
+						<Link href="/user/myaccount">
 							<DropdownMenuItem>
-								Profile
+								Minha Conta
 								<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
 							</DropdownMenuItem>
 						</Link>

@@ -50,6 +50,8 @@ export async function POST(req: Request) {
 		const subscription = await stripe.subscriptions.retrieve(
 			session.subscription as string,
 		);
+		console.log(subscription)
+		console.log(session)
 
 		await db.userSubscription.update({
 			where: {
