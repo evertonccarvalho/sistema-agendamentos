@@ -1,5 +1,6 @@
 import type React from "react";
 import { format } from "date-fns";
+import Image from "next/image";
 
 interface EmailTemplateProps {
 	creatorName: string;
@@ -18,18 +19,24 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
 	date,
 	message,
 }) => (
-	<div className="p-4 bg-gray-100">
-		<h1 className="text-2xl font-bold">Olá {name},</h1>
-		<p className="text-lg mt-4">Um novo evento foi agendado.</p>
-		<p>Tipo de evento: {eventType}</p>
-		<p>Anfitrião: {creatorName}</p>
-		<p>E-mail do convidado: {email}</p>
-		<p>Data/Hora do Evento:
-			{format(new Date(date ?? ""), "dd/MM/yyyy 'às' HH:mm")}
-		</p>
-
-		<p>Questões: {message}</p>
-	</div>
+	<div className="flex flex-col items-center gap-3 justify-center p-4">
+			<div className="w-full">
+				<Image
+					src="/agendae-banner.png"
+					className="object-cover w-full"
+					alt="Logo"
+					width={1000}
+					height={1000}
+				/>
+			</div>
+			<h1 className="text-3xl font-bold text-primary mt-5">Olá {name}!</h1>
+			<p className="text-xl mt-4">Um novo evento foi agendado.</p>
+			<div className="flex flex-col bg-secondary rounded-md p-5 border border-gray-400">
+				<p className="text-base font-semibold">Tipo de evento:<span className="text-sm font-light"> {eventType}</span></p>
+				<p className="text-base font-semibold">Anfitrião: <span className="text-sm font-light"> {creatorName}</span></p>
+				<p className="text-base font-semibold">E-mail do convidado:<span className="text-sm font-light"> {email}</span></p>
+				<p className="text-base font-semibold">Data/Hora do Evento: <span className="text-sm font-light"> {format(new Date(date ?? ""), "dd/MM/yyyy 'às' HH:mm")}</span></p>
+				<p className="text-base font-semibold">Questões:<span className="text-sm font-light"> {message}</span></p>
+			</div>
+		</div>
 );
-
-
