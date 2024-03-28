@@ -30,7 +30,7 @@ const EmailVerification = ({ confirmLink, name }: EmailVerificationProps) => {
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
             <Section className="mt-[32px]">
               <Img
-                src={`${baseUrl}/static/logo.png`}
+                src={`${baseUrl}/public/logo.png`}
                 width="100"
                 height="37"
                 alt="AgendaÊ"
