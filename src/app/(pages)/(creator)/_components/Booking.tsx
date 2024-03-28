@@ -15,7 +15,7 @@ import { getDayBookings } from "@/actions/scheduling/getDayBookings";
 import type { Scheduling } from "@prisma/client";
 import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
-import { Button } from "@/components/ui/button";
+import AvailabilityList from "../../(dashboard)/(routes)/dashboard/components/AvailabilityList ";
 interface BookingItemProps {
 	data: IEventType;
 }
@@ -180,29 +180,17 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				<Separator orientation="vertical" className="max-md:hidden" />
 				<div className="w-full flex flex-col gap-2 p-2 items-center justify-center">
 					<h1 className="font-semibold  text-xl">Selectione a Data e Hora</h1>
-
 					<div className=" w-full h-full flex flex-col md:flex-row gap-2 ">
 						<DateSelector
 							date={selectedDate}
 							handleDateClick={handleDateClick}
 						/>
-						{isDateSelected && (
-							<div>
-								{availability?.possibleTimes.map((hour) => {
-									return (
-										<Button
-											key={hour}
-											onClick={() => handleSelectTime(hour)}
-											disabled={!availability.availableTimes.includes(hour)}
-											className="rounded-md py-1 w-full mb-2"
-											size="sm"
-										>
-											{String(hour).padStart(2, "0")}:00h
-										</Button>
-									);
-								})}
-							</div>
-						)}
+						<AvailabilityList
+							availability={availability}
+							handleSelectTime={handleSelectTime}
+							isDateSelected={isDateSelected}
+							selectedDate={selectedDate}
+						/>
 					</div>
 				</div>
 				<FormModal
