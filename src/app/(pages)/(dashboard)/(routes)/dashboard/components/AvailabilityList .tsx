@@ -27,9 +27,7 @@ const AvailabilityList: React.FC<AvailabilityListProps> = ({
       {isDateSelected && availability && availability?.availableTimes?.length && (
         <div className="max-h-[23rem] w-64 p-2 flex flex-col gap-2 items-center">
           <h1 className="text-sm font-semibold capitalize truncate text-center mx-2 md:py-4">
-            {selectedDate
-              ? dayjs(selectedDate).locale("pt-br").format("dddd, D MMMM")
-              : null}
+            {selectedDate ? dayjs(selectedDate).locale("pt-br").format("dddd, D MMMM") : null}
           </h1>
           <ScrollArea className="h-[23rem] w-52 p-4">
             {availability?.possibleTimes.map((hour) => {

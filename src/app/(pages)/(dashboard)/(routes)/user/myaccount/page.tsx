@@ -5,6 +5,9 @@ import { auth } from "../../../../../../../auth";
 import { SubscriptionButton } from "../_components/subscription-button";
 import { checkSubscription } from "@/actions/subscription/subscription";
 import { ModeToggle } from "@/components/theme-toggle";
+import { checkSubscriptionTimeExpires } from "@/actions/subscription/checkSubscriptionTimeExpires";
+import dayjs from "dayjs";
+import 'dayjs/locale/pt-br';
 
 const SettingsProfilePage = async () => {
   const session = await auth();
@@ -12,7 +15,10 @@ const SettingsProfilePage = async () => {
   if (!session) {
     return null;
   }
+
   const isPro = await checkSubscription();
+  const timeExpires = await checkSubscriptionTimeExpires();
+  const EXPIRATION_TIME = dayjs(timeExpires?.stripeCurrentPeriodEnd).locale("pt-br").format("dddd, D MMMM - HH:mm")
 
   return (
     <>
@@ -46,10 +52,7 @@ const SettingsProfilePage = async () => {
                       <p>{session.user.email}</p>
                     </div>
                   </div>
-
                   <ModeToggle />
-
-
                 </div>
               </div>
             </div>
@@ -63,6 +66,7 @@ const SettingsProfilePage = async () => {
                       ? "Você está atualmente em um plano Pro."
                       : "Você está atualmente em um plano gratuito."}
                   </div>
+                  {isPro && (<h1 className="text-sm text">Seu plano expira<span className="capitalize"> {EXPIRATION_TIME}</span></h1>)}
                   <SubscriptionButton isPro={isPro} />
                 </div>
               </div>
