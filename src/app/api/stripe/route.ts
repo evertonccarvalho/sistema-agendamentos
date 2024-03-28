@@ -7,13 +7,12 @@ import { auth } from '../../../../auth';
 
 const settingsUrl = absoluteUrl('/user/myaccount');
 
-export async function GET() {
+export async function GET(): Promise<NextResponse> {
 	try {
 		const session = await auth();
 
 		if (!session?.user) {
 			return new NextResponse('Unauthorized', { status: 401 });
-
 		}
 
 		const user = session.user
@@ -50,7 +49,7 @@ export async function GET() {
 						currency: 'BRL',
 						product_data: {
 							name: 'AgendaÊ Pro',
-							description: 'Agendametos e Tipos de Eventos Ilimitados Plano Padrão',
+							description: 'Agendamentos e Tipos de Eventos Ilimitados Plano Padrão',
 						},
 						unit_amount: 1000,
 						recurring: {
