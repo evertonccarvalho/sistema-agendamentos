@@ -10,7 +10,7 @@ const ScheduledEvents = async () => {
 	const breadcrumbItems = [{ title: "Eventos agendados", link: "/dashboard" }];
 	const session = await auth();
 
-	if (!session?.user) {
+	if (!session?.user || !session.user.id) {
 		return redirect("/");
 	}
 

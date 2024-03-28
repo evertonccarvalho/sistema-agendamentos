@@ -1,3 +1,4 @@
+"use client"
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { CheckIcon } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface CardProps {
   pricing: Pricing;
@@ -28,6 +30,8 @@ enum PopularPlanType {
 }
 
 const PricingCard = ({ pricing }: CardProps) => {
+  const { data } = useSession();
+
   return (
     <Card
       key={pricing.title}
@@ -55,14 +59,25 @@ const PricingCard = ({ pricing }: CardProps) => {
       </CardHeader>
 
       <CardContent>
-        <Link
-          href="/auth/register"
-          className={`w-full  ${buttonVariants({
-            variant: "default",
-          })}`}
-        >
-          {pricing.buttonText}
-        </Link>
+        {data?.user ? (
+          <Link
+            href="/dashboard"
+            className={`w-full  ${buttonVariants({
+              variant: "default",
+            })}`}
+          >
+            {pricing.buttonText}
+          </Link>
+        ) : (
+          <Link
+            href="/auth/register"
+            className={`w-full  ${buttonVariants({
+              variant: "default",
+            })}`}
+          >
+            {pricing.buttonText}
+          </Link>
+        )}
       </CardContent>
 
       <hr className="w-4/5 m-auto mb-4" />

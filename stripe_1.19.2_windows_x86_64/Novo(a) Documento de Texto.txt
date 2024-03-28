@@ -1,0 +1,3 @@
+$path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine')
+$newPath = "D:\Estudos\PROJETOS\sistema-agendamentos\stripe_1.19.2_windows_x86_64"
+[System.Environment]::SetEnvironmentVariable('Path', $path + ';' + $newPath, 'Machine')

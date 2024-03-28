@@ -1,4 +1,4 @@
-import { teamList } from "./const/const";
+import { teamList } from "../../../../lib/const";
 import TeamCard, { type Team } from "./TeamCard";
 
 export const TeamSection = () => {

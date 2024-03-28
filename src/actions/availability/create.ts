@@ -12,7 +12,7 @@ export interface CreateAvailabilityParams {
 export const createAvailability = async (params: CreateAvailabilityParams) => {
 	const session = await auth();
 
-	if (!session) {
+	if (!session?.user) {
 		return null;
 	}
 
@@ -22,7 +22,7 @@ export const createAvailability = async (params: CreateAvailabilityParams) => {
 		const existingAvailability = await db.availability.findFirst({
 			where: {
 				weekDay: params.weekDay,
-				userId: session.user?.id || '',
+				userId: session.user?.id,
 			},
 		});
 

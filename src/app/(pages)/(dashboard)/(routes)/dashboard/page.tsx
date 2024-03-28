@@ -11,7 +11,7 @@ const Dashboard = async () => {
 	const breadcrumbItems = [{ title: "Tipos de Evento", link: "/dashboard" }];
 	const session = await auth();
 
-	if (!session?.user) {
+	if (!session?.user || !session.user.id) {
 		return redirect("/");
 	}
 

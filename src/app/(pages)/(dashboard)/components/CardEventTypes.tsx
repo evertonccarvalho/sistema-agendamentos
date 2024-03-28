@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import type { IEventType } from "@/actions/eventType/interface";
 import { toast } from "sonner";
+import { absoluteUrl } from "@/lib/utils";
 
 interface CardEventProps {
 	eventType: IEventType;
@@ -28,12 +29,12 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
+
 	const username = eventType.creator.email?.substring(
 		0,
 		eventType.creator.email.indexOf("@"),
 	);
-	const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
-	const eventUrl = `${baseUrl}/${username}/${eventType.id}`;
+	const eventUrl = absoluteUrl(`/${username}/${eventType.id}`);
 	const handleDelete = async () => {
 		try {
 			setLoading(true);
