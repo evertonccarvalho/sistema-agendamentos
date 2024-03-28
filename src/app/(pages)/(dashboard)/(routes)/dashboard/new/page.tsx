@@ -18,8 +18,7 @@ const NewEvent = () => {
 	);
 
 	const userName = data?.user.name || "";
-	const userId = data?.expires || "";
-
+	const userId = data?.user.id || ""
 	return (
 		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
