@@ -32,7 +32,6 @@ const EventPageHeader = () => {
 			});
 	};
 
-
 	return (
 		<>
 			<section className="flex w-full">
