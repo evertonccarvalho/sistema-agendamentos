@@ -7,7 +7,7 @@ import { auth } from '../../../../auth';
 
 const settingsUrl = absoluteUrl('/user/myaccount');
 
-export async function GET(): Promise<NextResponse<unknown>> {
+export async function GET() {
 	try {
 		const session = await auth();
 
