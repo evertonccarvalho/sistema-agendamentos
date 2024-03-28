@@ -24,30 +24,30 @@ const Dashboard = async () => {
 			<BreadCrumb items={breadcrumbItems} />
 			<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
 				<EventPageHeader />
-				<Separator className='my-4' />
+				<Separator className="my-4" />
 				<section className="flex flex-wrap w-full gap-5 items-center justify-center">
 					{events && events.length > 0 ? (
 						events.map((event) => (
 							<CardEventTypes key={event.id} eventType={event} />
 						))
 					) : (
-						<div className="py-10 flex gap-2 items-center flex-col justify-center">
+						<div className="py-10 flex w-9/12 gap-2 items-center flex-col justify-center">
 							<Image
-								src='/Zero_Events.svg'
+								src="/Zero_Events.svg"
 								alt="zeroEvents"
 								width={100}
 								height={100}
 							/>
-							<h1 className="font-semibold text-lg">
-								Crie um tipo de evento
-							</h1>
-							<p className="text-xs text-center text-muted-foreground">
-								Você pode usar tipos de evento para configurar detalhes de reuniões para eventos que você agendará regularmente, como demonstração de produto, ligação de cliente ou horário comercial.
+							<h1 className="font-semibold text-xl">Crie um tipo de evento</h1>
+							<p className="text-sm text-center text-muted-foreground break-words">
+								Você pode usar tipos de evento para configurar detalhes de
+								reuniões para eventos que você agendará regularmente, como
+								demonstração de produto, ligação de cliente ou horário
+								comercial.
 							</p>
 						</div>
 					)}
 				</section>
-
 			</Card>
 		</main>
 	);
