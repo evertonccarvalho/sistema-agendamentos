@@ -28,14 +28,7 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 	const [availability, setAvailability] = useState<Availability>();
 
-	// const { data } = useSession();
-
-	// if (!data?.user) {
-	// 	return null
-	// }
-
 	const isDateSelected = !!selectedDate;
-	// const userId = data.user.id;
 
 	const selectedDateWithoutTime = selectedDate
 		? dayjs(selectedDate).format("YYYY-MM-DD")

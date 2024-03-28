@@ -2,7 +2,7 @@
 
 import bcrypt from "bcryptjs";
 import type { z } from "zod";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendVerificationEmail } from "@/actions/email/mail";
 import { generateVerificationToken } from "@/actions/users/tokens";
 import { db } from "@/lib/prisma";
 import { getUserByEmail } from "@/services/user";

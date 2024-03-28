@@ -1,7 +1,7 @@
 "use server";
 
 import type * as z from "zod";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendVerificationEmail } from "@/actions/email/mail";
 import { generateVerificationToken } from "@/actions/users/tokens";
 import { getUserByEmail } from "@/services/user";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";

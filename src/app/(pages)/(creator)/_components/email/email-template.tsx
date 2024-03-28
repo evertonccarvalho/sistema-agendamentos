@@ -12,12 +12,12 @@ interface EmailTemplateProps {
 }
 
 export const EmailTemplate: React.FC<EmailTemplateProps> = ({
-	creatorName,
 	name,
-	eventType,
+	creatorName,
 	email,
-	date,
+	eventType,
 	message,
+	date,
 }) => (
 	<div className="flex flex-col items-center gap-3 justify-center p-4">
 			<div className="w-full">

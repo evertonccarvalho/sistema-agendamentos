@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import EmailVerification from "./_components/email-verification";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -30,6 +31,8 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 		from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
 		to: email,
 		subject: "Confirm your email",
-		html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`,
+		react: EmailVerification({
+			confirmLink: confirmLink,
+		})
 	});
 };

@@ -11,7 +11,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +23,7 @@ import { useSession } from "next-auth/react";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { ProModal } from "@/components/ProModal";
+import type { EventType } from "@prisma/client";
 
 const durationOptions = [
 	{ value: 15, label: "15 minutos" },
@@ -40,21 +41,32 @@ enum Locations {
 }
 
 const saveNewEventSchema = z.object({
-	id: z.string().optional(),
-	creatorId: z.string(),
+	// id: z.string().optional(),
+	// creatorId: z.string(),
 	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
 	description: z
 		.string()
 		.min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
 	duration: z.coerce.number().default(30),
 	active: z.boolean().default(true),
-	locationType: z.enum(["ZOOM", "PHONE_CALL", "PRESENCIAL"]),
-	andress: z
+	locationType: z.enum(["ZOOM", "PHONE_CALL", "PRESENCIAL"]).nullable(),
+	address: z.string().nullable(),
+
+	capacity: z.coerce.number().nullable().default(1),
+	arrivalInfo: z.string().nullable(),
+});
+const updateEventSchema = z.object({
+	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
+	description: z
 		.string()
-		.min(5, "Endereço deve ter no mínimo 5 caracteres.")
-		.optional(),
-	capacity: z.coerce.number().default(1),
-	arrivalInfo: z.string().optional(),
+		.min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
+	duration: z.coerce.number().default(30),
+	active: z.boolean().default(true),
+	locationType: z.enum(["ZOOM", "PHONE_CALL", "PRESENCIAL"]).nullable(),
+	address: z.string().nullable(),
+
+	capacity: z.coerce.number().nullable().default(1),
+	arrivalInfo: z.string().nullable(),
 });
 
 export type SaveNewEvent = z.infer<typeof saveNewEventSchema>;
@@ -63,7 +75,7 @@ interface INewEventDataProps {
 	setEventName: Dispatch<SetStateAction<string | undefined>>;
 	setEventDuration: Dispatch<SetStateAction<string | undefined>>;
 	setEventLocation: Dispatch<SetStateAction<string | undefined>>;
-	initialData?: SaveNewEvent;
+	initialData?: EventType;
 }
 export interface IEventDataProps {
 	eventName: string;
@@ -79,13 +91,15 @@ export function NewEventForm({
 	initialData,
 }: INewEventDataProps) {
 	const { data } = useSession();
-	const loguedUserId = data?.user?.id;
+	const USER_ID = data?.user?.id;
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
 	const defaultValues = initialData
 		? initialData
 		: {
 			name: "",
 			description: "",
-			creatorId: loguedUserId,
+			creatorId: USER_ID,
 			locationType: Locations.ZOOM,
 			address: "",
 			arrivalInfo: "",
@@ -96,7 +110,8 @@ export function NewEventForm({
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, },
+
 		reset,
 	} = useForm<SaveNewEvent>({
 		resolver: zodResolver(saveNewEventSchema),
@@ -108,40 +123,27 @@ export function NewEventForm({
 	const [open, setOpen] = useState(false);
 
 	const onSubmit = async (data: SaveNewEvent) => {
-		const create = {
-			creatorId: loguedUserId as string,
-			name: data.name,
-			description: data.description,
-			duration: Number(data.duration),
-			locationType: data.locationType,
-			address: data.andress,
-			capacity: Number(data.capacity),
-			arrivalInfo: data.arrivalInfo,
-		};
+		setIsSubmitting(true);
+		const FORM_DATA = saveNewEventSchema.parse(data);
+
 		try {
 			if (initialData) {
-				const update = {
-					id: initialData.id as string,
-					creatorId: loguedUserId as string,
-					name: data.name,
-					description: data.description,
-					duration: Number(data.duration),
-					locationType: data.locationType,
-					address: data.andress,
-					capacity: Number(data.capacity),
-					arrivalInfo: data.arrivalInfo,
-				};
-				const res = await editEvent(update.id, update);
-				res && router.push("/dashboard");
+				const res = await editEvent(initialData.id, initialData.creatorId, FORM_DATA);
 				res && toast.success("Evento editado com sucesso!");
+				res && router.push("/dashboard");
+
 			} else {
-				const res = await createEvent(create);
-				if (res && 'error' in res && res.error === "Período de teste gratuito expirou") {
+				const res = await createEvent(FORM_DATA, USER_ID as string);
+				if (
+					res &&
+					"error" in res &&
+					res.error === "Período de teste gratuito expirou"
+				) {
 					setOpen(true);
 				} else {
-					router.push("/dashboard");
 					reset();
 					res && toast.success("Evento criado com sucesso!");
+					router.push("/dashboard");
 				}
 			}
 		} catch (error) {
@@ -186,7 +188,10 @@ export function NewEventForm({
 							</SelectTrigger>
 							<SelectContent>
 								{durationOptions.map((option) => (
-									<SelectItem key={option.value} value={option.value.toString()}>
+									<SelectItem
+										key={option.value}
+										value={option.value.toString()}
+									>
 										{option.label}
 									</SelectItem>
 								))}
@@ -227,13 +232,15 @@ export function NewEventForm({
 							<label>
 								<span>Endereço.</span>
 								<Input
-									{...register("andress")}
+									{...register("address")}
 									onChange={(ev) => setEventLocation(ev.target.value)}
 									type="text"
 									placeholder="Ex. Rua dos Bobos, 0"
 								/>
-								{errors.andress && (
-									<p className="text-red-500 text-xs">{errors.andress.message}</p>
+								{errors.address && (
+									<p className="text-red-500 text-xs">
+										{errors.address.message}
+									</p>
 								)}
 							</label>
 							<label>
@@ -267,13 +274,29 @@ export function NewEventForm({
 							placeholder="Ex. Marque reuniões comigo..."
 						/>
 						{errors.description && (
-							<p className="text-red-500 text-xs">{errors.description.message}</p>
+							<p className="text-red-500 text-xs">
+								{errors.description.message}
+							</p>
 						)}
 					</label>
 					<Separator orientation="horizontal" />
 					{/* <div className="flex gap-3 items-center justify-between"> */}
-					<Button type="submit" size={"lg"} className="text-white flex gap-2">
-						{initialData ? "Editar" : "Criar"} <ArrowRight width={20} />
+					<Button
+						disabled={isSubmitting}
+						type="submit" size={"lg"}
+						className="text-white flex gap-2"
+					>
+						{isSubmitting ? (
+							<>
+								<span className="hidden">Submitting...</span>
+								<Loader2 className="animate-spin w-5 h-5 mr-3" />
+							</>
+						) : (
+							<>
+								{initialData ? "Editar" : "Criar"}
+								< ArrowRight width={20} />
+							</>
+						)}
 					</Button>
 					{/* </div> */}
 				</form>

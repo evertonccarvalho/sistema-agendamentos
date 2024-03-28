@@ -3,11 +3,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { CardWrapper } from "./card-wrapper";
 import { FormSuccess } from "./form-success";
 import { FormError } from "./form-error";
 import { newVerification } from "@/actions/users/new-verification";
 import { Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { BackButton } from "./back-button";
 
 export const NewVerificationForm = () => {
   const [error, setError] = useState<string | undefined>();
@@ -35,7 +41,7 @@ export const NewVerificationForm = () => {
       })
       .catch(() => {
         setError("Something went wrong!");
-      })
+      });
   }, [token, success, error]);
 
   useEffect(() => {
@@ -44,24 +50,19 @@ export const NewVerificationForm = () => {
 
   return (
     <div className="flex w-full h-svh items-center justify-center">
-
-      <CardWrapper
-        headerLabel="Confirming your verification"
-        backButtonLabel="Back to login"
-        backButtonHref="/auth/login"
-      >
-        <div className="flex items-center w-full justify-center">
-          {!success && !error && (
-            <Loader2 />
-          )}
-          {success && (
-            <FormSuccess message={success} />
-          )}
-          {!success && (
-            <FormError message={error} />
-          )}
-        </div>
-      </CardWrapper>
+      <Card className="w-[400px] ">
+        <CardHeader className="text-center text-sm font-semibold">Verificando email</CardHeader>
+        <CardContent>
+          <div className="flex items-center w-full justify-center">
+            {!success && !error && <Loader2 />}
+            {success && <FormSuccess message={success} />}
+            {!success && <FormError message={error} />}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <BackButton label="Ir paga login" href="/auth/login" />
+        </CardFooter>
+      </Card>
     </div>
-  )
-}
+  );
+};
