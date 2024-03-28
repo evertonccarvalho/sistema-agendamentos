@@ -47,9 +47,6 @@ const routeList: RouteProps[] = [
 
 export const Navbar = () => {
   const { data } = useSession();
-
-
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <header className="sticky border-b-[1px] top-0  z-40 w-full bg-background  dark:border-b-slate-700 ">

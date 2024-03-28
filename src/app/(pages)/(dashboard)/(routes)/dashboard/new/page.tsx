@@ -1,7 +1,7 @@
 "use client";
 
 import BreadCrumb from "@/components/breadcrumb";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SchedulingItem from "@/components/schedulingItem";
 import { useSession } from "next-auth/react";
 import { NewEventForm } from "../../../components/NewEventForm";
@@ -11,21 +11,14 @@ const NewEvent = () => {
 	const breadcrumbItems = [{ title: "Criar Novo Evento", link: "/new" }];
 	const { data } = useSession();
 
-	const [userName, setUserName] = useState<string | undefined>("Zé da manga");
 	const [eventName, setEventName] = useState<string | undefined>(undefined);
 	const [eventDuration, setEventDuration] = useState<string | undefined>("30");
 	const [eventLocation, setEventLocation] = useState<string | undefined>(
-		undefined
+		undefined,
 	);
 
-	const getLogedUserName = () => {
-		data?.user?.name && setUserName(data.user.name);
-	};
-	useEffect(() => {
-		getLogedUserName();
-	});
+	const userName = data?.user.name || ''
 
-	// const [data, setData] = useState<EventFormValues | undefined>(undefined);
 	return (
 		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />

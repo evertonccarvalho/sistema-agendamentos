@@ -1,14 +1,15 @@
 "use client";
-import { Separator } from "@/components/ui/separator";
-import { MapPin, Timer } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { Separator } from "@/components/ui/separator";
+
+import { MapPin, Timer } from "lucide-react";
+
 import { useEffect, useState } from "react";
 import DateSelector from "@/app/(pages)/(creator)/_components/DataSelector";
 import { Card } from "./ui/card";
 import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
 import { Button } from "./ui/button";
-import { redirect } from "next/navigation";
 interface SchedulingItemProps {
 	eventData: {
 		userName?: string;
@@ -27,8 +28,8 @@ interface Scheduling {
 	date: Date;
 }
 interface Availability {
-	possibleTimes: number[]
-	availableTimes: number[]
+	possibleTimes: number[];
+	availableTimes: number[];
 }
 const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
@@ -36,7 +37,7 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 	const { data } = useSession();
 
 	if (!data?.user) {
-		return redirect("/");
+		return null
 	}
 
 	const isDateSelected = !!selectedDate;
@@ -54,8 +55,7 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 		const fetchAvailability = async () => {
 			try {
 				if (selectedDateWithoutTime) {
-
-					const res = await getTimePerDate(userId, selectedDateWithoutTime);
+					const res = await getTimePerDate(userId || '', selectedDateWithoutTime);
 					setAvailability(res);
 				}
 			} catch (error) {
@@ -133,7 +133,7 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 												className="rounded-md py-1 w-full mb-2"
 												size="sm"
 											>
-												{String(hour).padStart(2, '0')}:00h
+												{String(hour).padStart(2, "0")}:00h
 											</Button>
 										);
 									})}
@@ -142,7 +142,7 @@ const SchedulingItem = ({ eventData }: SchedulingItemProps) => {
 						</div>
 					</div>
 				</div>
-			</Card >
+			</Card>
 		</>
 	);
 };
