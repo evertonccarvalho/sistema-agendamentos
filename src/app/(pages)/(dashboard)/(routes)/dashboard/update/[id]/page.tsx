@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import BreadCrumb from "@/components/breadcrumb";
 import { NewEventForm } from "../../../../components/NewEventForm";
 import SchedulingItem from "@/components/schedulingItem";
@@ -67,7 +67,7 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 		getData();
 	});
 
-	const breadcrumbItems = [{ title: "Criar Novo Evento", link: "/new" }];
+	const breadcrumbItems = [{ title: "Editar Evento", link: "/new" }];
 
 	return (
 		<main className="flex-1 gap-5 space-y-4 bg-card/80 p-4 md:p-8 pt-6">
@@ -80,9 +80,14 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 						setEventLocation={setEventLocation}
 						initialData={initialData}
 					/>
-					<section className="w-[37rem] h-[26rem] rounded-md max-w-[1200px] border-[1px] border-zinc-700 flex flex-col max-[1135px]:w-full md:flex-row">
+					<section className="w-[37rem] h-[30rem] rounded-md max-w-[1200px] border-[1px] border-zinc-700 flex flex-col max-[1135px]:w-full md:flex-row">
 						<SchedulingItem
-							eventData={{ userName, eventName: initialData.name, eventDuration: JSON.stringify(initialData.duration), eventLocation: JSON.stringify(initialData.locationType)}}
+							eventData={{
+								userName,
+								eventName: initialData.name,
+								eventDuration: JSON.stringify(initialData.duration),
+								eventLocation: JSON.stringify(initialData.locationType),
+							}}
 						/>
 					</section>
 				</section>

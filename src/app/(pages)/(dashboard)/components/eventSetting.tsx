@@ -62,7 +62,7 @@ export function EventSettings({
 
 					<DropdownMenuItem onClick={onToggleActive}>
 						<div className="flex items-center space-x-2">
-							<Label htmlFor="airplane-mode">off/on</Label>
+							<Label htmlFor="airplane-mode">{eventActive ? "Desabilitar" : "Habilitar"}</Label>
 							<Switch
 								id="airplane-mode"
 								checked={eventActive}

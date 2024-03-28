@@ -83,14 +83,14 @@ export function NewEventForm({
 	const defaultValues = initialData
 		? initialData
 		: {
-			name: "",
-			description: "",
-			creatorId: loguedUserId,
-			address: "",
-			arrivalInfo: "",
-			capacity: 1,
-			duration: 60,
-		};
+				name: "",
+				description: "",
+				creatorId: loguedUserId,
+				address: "",
+				arrivalInfo: "",
+				capacity: 1,
+				duration: 60,
+		  };
 
 	const {
 		register,
@@ -154,11 +154,10 @@ export function NewEventForm({
 	return (
 		<>
 			<ProModal isOpen={open} onClose={() => setOpen(false)} />
-
-			<Card className="flex max-w-96 w-full p-4 flex-col gap-3 border-[1px]">
-				<h1 className="text-2xl font-semibold">
-					{!initialData ? "Criar Novo Evento" : "Editar Evento"}
-				</h1>
+		<Card className="flex max-w-96 w-full p-4 flex-col gap-3 border-[1px]">
+			<h1 className="text-2xl font-semibold">
+				{!initialData ? "Criar Novo Evento" : "Editar Evento"}
+			</h1>
 				<Separator orientation="horizontal" />
 				<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
 					<label>

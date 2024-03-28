@@ -15,7 +15,7 @@ const Dashboard = async () => {
 		return redirect("/");
 	}
 
-	const events = await getEventsByCreatorId(session.user.id);
+	const events = session.user.id ? await getEventsByCreatorId(session.user.id) : [];
 	return (
 		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
