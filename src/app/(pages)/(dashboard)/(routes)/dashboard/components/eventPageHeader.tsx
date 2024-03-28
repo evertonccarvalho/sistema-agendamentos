@@ -3,60 +3,36 @@ import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-mport { Plus } from "lucide-react";
 import { absoluteUrl } from "@/lib/utils";
-mport { Copy, Plus } from "lucide-react";
+import { Copy, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 const EventPageHeader = () => {
 	const { data } = useSession();
 	const eventUserName = data?.user?.email?.substring(
 		0,
-		data?.user?.email?.indexOf("@")
+		data?.user?.email?.indexOf("@"),
 	);
 	const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
-	const eventUrl = `${baseUrl}/${eventUserName}`;
 
- if (!data?.user) {
-    return null;
-  }
-  const username = data.user.email?.substring(0, data.user.email.indexOf("@"));
-  const eventUrl = absoluteUrl(`/${username}`);
-  return (
-    <>
-      <section className="flex w-full">
-        <div className="flex w-full gap-3 items-center">
-          <Avatar className="h-10 w-10 ">
-            <AvatarImage
-              src={data.user.image ?? ""}
-              alt={data.user.name ?? ""}
-            />
-            <AvatarFallback className="uppercase">
-              {data.user?.name ? data.user.name[0] : ""}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <h1 className="text-base font-semibold ">{data.user.name}</h1>
-            <Link className="text-base font-light text-blue-500 hover:underline"
-              href={eventUrl}>
-              {eventUrl}
-            </Link>
-          </div>
-        </div>
+	if (!data?.user) {
+		return null;
+	}
+	const username = data.user.email?.substring(0, data.user.email.indexOf("@"));
+	const eventUrl = absoluteUrl(`/${username}`);
+
 	const handleShare = () => {
 		navigator.clipboard
 			.writeText(eventUrl)
 			.then(() => {
-        toast.success("URL copiada com sucesso");
+				toast.success("URL copiada com sucesso");
 			})
 			.catch((error) => {
 				console.error("Erro ao copiar a URL:", error);
 			});
 	};
-	if (!data?.user) {
-		return null;
-	}
-	const username = data.user.email?.substring(0, data.user.email.indexOf("@"));
+
+
 	return (
 		<>
 			<section className="flex w-full">
@@ -73,11 +49,9 @@ const EventPageHeader = () => {
 					<div className="flex flex-col">
 						<h1 className="text-base font-semibold ">{data.user.name}</h1>
 						<div className="flex items-center gap-2">
-              <Link
-								className="text-base font-light text-blue-500 hover:underline"
-								href={`${baseUrl}/${username}`}
-							>
-								{`${baseUrl}/${username}`}
+							<Link className="text-base font-light text-blue-500 hover:underline"
+								href={eventUrl}>
+								{eventUrl}
 							</Link>
 							<Button
 								onClick={handleShare}
@@ -90,6 +64,7 @@ const EventPageHeader = () => {
 							</Button>
 						</div>
 					</div>
+
 				</div>
 				<Link href={"/dashboard/new"}>
 					<Button
