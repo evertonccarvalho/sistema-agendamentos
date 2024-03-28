@@ -61,3 +61,26 @@ export const RegisterSchema = z.object({
     message: "Name is required",
   }),
 });
+
+
+// export const ContactSchema = z.object({
+//   name: z
+//     .string()
+//     .min(5, { message: "mínimo 5 caracteres" })
+//     .refine((value) => !/^\s*$/.test(value), {
+//       message: "Não pode ter apenas espaços!",
+//     }),
+//   email: z.string().email(),
+//   subject: z
+//     .string()
+//     .min(5, { message: "mínimo 5 caracteres" })
+//     .refine((value) => !/^\s*$/.test(value), {
+//       message: "Não pode ter apenas espaços!",
+//     }),
+//   message: z
+//     .string()
+//     .min(5, { message: "mínimo 5 caracteres" })
+//     .refine((value) => !/^\s*$/.test(value), {
+//       message: "Não pode ter apenas espaços!",
+//     }),
+// });

@@ -2,29 +2,6 @@ import EmailToClient from "@/actions/email/_components/email-to-client";
 import EmailToCreator from "@/actions/email/_components/email-to-creator";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { z } from "zod";
-
-export const ContactSchema = z.object({
-	name: z
-		.string()
-		.min(5, { message: "mínimo 5 caracteres" })
-		.refine((value) => !/^\s*$/.test(value), {
-			message: "Não pode ter apenas espaços!",
-		}),
-	email: z.string().email(),
-	subject: z
-		.string()
-		.min(5, { message: "mínimo 5 caracteres" })
-		.refine((value) => !/^\s*$/.test(value), {
-			message: "Não pode ter apenas espaços!",
-		}),
-	message: z
-		.string()
-		.min(5, { message: "mínimo 5 caracteres" })
-		.refine((value) => !/^\s*$/.test(value), {
-			message: "Não pode ter apenas espaços!",
-		}),
-});
 
 export type ContactForm = {
 	name: string;
@@ -92,5 +69,3 @@ export async function POST(request: Request) {
 		return NextResponse.json({ error });
 	}
 }
-
-
