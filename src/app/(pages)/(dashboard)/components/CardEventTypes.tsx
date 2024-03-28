@@ -2,7 +2,7 @@
 import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
 // import type { EventType } from "@prisma/client";
-import { Copy, Share2Icon, Timer } from "lucide-react";
+import { Share2Icon, Timer } from "lucide-react";
 import { useState } from "react";
 import { EventSettings } from "./eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
@@ -58,10 +58,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 		navigator.clipboard
 			.writeText(eventUrl)
 			.then(() => {
-				console.log(
-					"Link do evento copiado para a área de transferência:",
-					eventUrl,
-				);
+				toast.success("Link do evento copiado com sucesso.");
 			})
 			.catch((error) => {
 				console.error(
@@ -121,8 +118,8 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 
 			<Separator />
 			<CardContent className="flex gap-2 p-2 items-center justify-center">
-				<div className="w-full flex justify-between">
-					<Button
+				<div className="w-full flex justify-end">
+					{/* <Button
 						onClick={handleShare}
 						variant="link"
 						size="sm"
@@ -130,7 +127,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 					>
 						<Copy size={16} />
 						Copiar
-					</Button>
+					</Button> */}
 					<Button
 						onClick={handleShare}
 						variant="outline"

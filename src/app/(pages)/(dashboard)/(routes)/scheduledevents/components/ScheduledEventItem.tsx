@@ -84,7 +84,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 			<AlertModal
 				isOpen={openDelete}
 				onClose={() => setOpenDelete(false)}
-				onConfirm={handleCancel}
+				onConfirm={handleDelete}
 				loading={loading}
 			/>
 
@@ -102,7 +102,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 										? "bg-red-600"
 										: ""
 								}`}
-							></div>
+							/>
 							<h1 className=" font-semibold">
 								{format(new Date(scheduling.date ?? ""), "dd/MM/yyyy")}
 							</h1>
