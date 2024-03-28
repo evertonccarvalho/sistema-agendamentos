@@ -2,7 +2,7 @@
 import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
 import { Share2Icon, Timer } from "lucide-react";
-import { useState, useEffect } from "react"
+import { useState } from "react";
 import { EventSettings } from "./eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
 import { useRouter } from "next/navigation";
@@ -18,9 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import type { IEventType } from "@/actions/eventType/interface";
 import { toast } from "sonner";
-import { getBookings } from "../../../../actions/scheduling/getBookings";
 import { absoluteUrl } from "@/lib/utils";
-import type { IScheduling } from "../(routes)/scheduledevents/interface/interface";
 
 interface CardEventProps {
 	eventType: IEventType;
@@ -28,7 +26,6 @@ interface CardEventProps {
 const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
-	const [bookings, setBooking] = useState<IScheduling[] | null>(null);
 
 	const router = useRouter();
 
@@ -37,40 +34,19 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 		eventType.creator.email.indexOf("@"),
 	);
 
-	useEffect(() => {
-		const fetchBooking = async () => {
-			try {
-				console.log("Iniciando fetchBooking...");
-				const fetchedBooking = await getBookings(eventType.creatorId);
-				console.log("Dados recebidos:", fetchedBooking);
-				setBooking(fetchedBooking);
-				console.log("Estado booking atualizado:", fetchedBooking);
-			} catch (error) {
-				console.log("Erro ao buscar dados de reserva:", error);
-			}
-		};
-
-		fetchBooking();
-	}, [eventType.creatorId]);
-
 	const eventUrl = absoluteUrl(`/${username}/${eventType.id}`);
 	const handleDelete = async () => {
 		try {
-			if (
-				bookings?.find(
-					(booking: IScheduling) =>
-						booking.eventId === eventType.id && booking.status !== "REJECTED",
-				)
-			) {
-				toast.error(
-					"Não é possível remover o evento, pois já foi realizado um agendamento.",
-				);
-				return;
-			}
 			setLoading(true);
 			setOpenDelete(true);
-			await deleteEvent(eventType.id);
-			toast.success("Evento removido com sucesso!");
+			const res = await deleteEvent(eventType.id);
+			if (res && res.error === "Este tipo de evento tem reservas associadas e não pode ser excluído."
+			) {
+				toast.error("Não é possível remover o evento, pois já foi realizado um agendamento.",);
+			} else {
+				console.log(res);
+				toast.success("Evento removido com sucesso!");
+			}
 		} catch (error) {
 			console.error("Error deleting event:", error);
 		} finally {
@@ -80,7 +56,6 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	};
 
 	const handleEdit = () => {
-		// Implementar a lógica de edição do evento
 		router.push(`/dashboard/update/${eventType.id}`);
 	};
 
