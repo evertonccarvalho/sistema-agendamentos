@@ -46,9 +46,9 @@ const saveNewEventSchema = z.object({
 	description: z
 		.string()
 		.min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
-	duration: z.coerce.number().default(60),
+	duration: z.coerce.number().default(30),
 	active: z.boolean().default(true),
-	locationType: z.any(),
+	locationType: z.enum(["ZOOM", "PHONE_CALL", "PRESENCIAL"]),
 	andress: z
 		.string()
 		.min(5, "Endereço deve ter no mínimo 5 caracteres.")
@@ -86,10 +86,11 @@ export function NewEventForm({
 				name: "",
 				description: "",
 				creatorId: loguedUserId,
+				locationType: Locations.ZOOM,
 				address: "",
 				arrivalInfo: "",
 				capacity: 1,
-				duration: 60,
+				duration: 30,
 		  };
 
 	const {
@@ -107,8 +108,6 @@ export function NewEventForm({
 	const [open, setOpen] = useState(false);
 
 	const onSubmit = async (data: SaveNewEvent) => {
-		const createData = saveNewEventSchema.parse(data);
-
 		const create = {
 			creatorId: loguedUserId as string,
 			name: data.name,
@@ -133,6 +132,7 @@ export function NewEventForm({
 					arrivalInfo: data.arrivalInfo,
 				};
 				const res = await editEvent(update.id, update);
+				res && router.push("/dashboard");
 				res && toast.success("Evento editado com sucesso!");
 			} else {
 				const res = await createEvent(create);
