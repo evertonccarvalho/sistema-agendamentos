@@ -67,15 +67,15 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 		try {
 			setLoading(true);
 			await toggleBookingStatus(scheduling.id, scheduling.userId, "ACCEPTED");
-			toast.success(
-				`O Agendamento para ${scheduling.eventType.name} às ${format(
-					new Date(scheduling.date ?? ""),
-					"dd/MM/yyyy às HH:mm"
-				)}foi Cancelado`
-			);
 		} catch (error) {
 			toast.error("Error ao deletar:");
 		} finally {
+			toast.success(
+				`O Agendamento para ${scheduling.eventType.name} às ${format(
+					new Date(scheduling.date ?? ""),
+					"dd/MM/yyyy - HH:mm"
+				)} foi Aceito.`
+			);
 			setLoading(false);
 		}
 	};
