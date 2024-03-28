@@ -6,10 +6,10 @@ import { MapPin, Timer } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import DateSelector from "@/app/(pages)/(creator)/_components/DataSelector";
-import { Card } from "./ui/card";
+import { Card } from "../../../../../../components/ui/card";
 import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
-import { Button } from "./ui/button";
+import { Button } from "../../../../../../components/ui/button";
 interface SchedulingItemProps {
 	eventData: {
 		userName?: string;
@@ -17,15 +17,6 @@ interface SchedulingItemProps {
 		eventDuration?: string;
 		eventLocation?: string;
 	};
-}
-interface Scheduling {
-	id: string;
-	email: string;
-	phone: string;
-	message: string;
-	userId: string;
-	eventId: string;
-	date: Date;
 }
 interface Availability {
 	possibleTimes: number[];

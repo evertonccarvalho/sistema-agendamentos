@@ -1,17 +1,23 @@
-import { Calendar } from '@/components/ui/calendar';
-import { ptBR } from 'date-fns/locale';
+import { Calendar } from "@/components/ui/calendar";
+import { ptBR } from "date-fns/locale";
 
 interface DateSelectorProps {
   date: Date | undefined;
   handleDateClick: (date: Date | undefined) => void;
+  // availability?: any
 }
 
 const DateSelector = ({ date, handleDateClick }: DateSelectorProps) => {
+  // const availability = getAvailabilitys("clu2p1exz0000zk8juzvmdwjd");
+
+  // console.log(availability);
   return (
     <Calendar
       mode="single"
       initialFocus
       selected={date}
+      // disabled={!availability?.has(dayjs(date).format("YYYY-MM-DD"))}
+
       onSelect={handleDateClick}
       className="w-full h-fit "
       locale={ptBR}
