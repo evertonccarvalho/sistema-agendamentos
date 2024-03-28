@@ -1,27 +1,30 @@
-"use server"
+"use server";
 
 import { db } from "@/lib/prisma";
-import type { EventType, LocationType } from "@prisma/client";
+import type { $Enums, EventType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 interface EditEventParams {
-    id?: string;
     name: string;
-    description?: string;
-    creatorId: string;
+    description: string;
+    active: boolean;
     duration: number;
-    locationType?: LocationType;
-    address?: string;
-    capacity?: number;
-    arrivalInfo?: string;
+    locationType: $Enums.LocationType | null;
+    address: string | null;
+    capacity: number | null;
+    arrivalInfo: string | null;
 }
 
-export const editEvent = async (eventId: string, params: EditEventParams,) => {
+export const editEvent = async (
+    eventId: string,
+    userId: string,
+    params: EditEventParams,
+) => {
     try {
         // Verifica se o evento já existe no banco de dados
         const existingEvent = await db.eventType.findUnique({
             where: {
-                id: eventId
+                id: eventId,
             },
         });
         let edited: EventType | null = null;
@@ -30,17 +33,17 @@ export const editEvent = async (eventId: string, params: EditEventParams,) => {
             // Se o evento existir, atualize-o com os novos dados
             edited = await db.eventType.update({
                 where: {
-                    id: eventId
+                    id: eventId,
                 },
                 data: {
                     name: params.name,
                     description: params.description,
-                    creatorId: params.creatorId,
+                    creatorId: userId,
                     locationType: params.locationType,
                     address: params.address,
                     capacity: params.capacity,
                     arrivalInfo: params.arrivalInfo,
-                    duration: params.duration
+                    duration: params.duration,
                 },
             });
         } else {

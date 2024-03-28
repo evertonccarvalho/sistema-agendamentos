@@ -8,7 +8,6 @@ export const getEventsById = async (eventId: string) => {
       where: {
         id: eventId,
       },
-
     });
 
     return events;
