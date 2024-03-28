@@ -8,7 +8,8 @@
 		"email": "email dev --port 3600",
 		"start": "next start",
 		"lint": "biome check --no-errors-on-unmatched --files-ignore-unknown=true .",
-		"lint:fix": "biome check --no-errors-on-unmatched --files-ignore-unknown=true --apply ."
+		"lint:fix": "biome check --no-errors-on-unmatched --files-ignore-unknown=true --apply .",
+		"postinstall": "prisma generate"
 	},
 	"prisma": {
 		"seed": "ts-node prisma/seed.ts"
