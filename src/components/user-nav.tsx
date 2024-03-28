@@ -56,22 +56,16 @@ export function UserNav() {
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuGroup>
-						<Link href="/profile">
+						<Link href="/user/myaccount">
 							<DropdownMenuItem>
-								Profile
+								Minha Conta
 								<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
 							</DropdownMenuItem>
 						</Link>
-
-						<DropdownMenuItem>
-							Settings
-							<DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-						</DropdownMenuItem>
-						<DropdownMenuItem>New Team</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
-						Log out
+						Sair
 						<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
 					</DropdownMenuItem>
 				</DropdownMenuContent>

@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import PricingCard from "./PricingCard";
-import { pricingList, teamList, testimonialsList } from "./const/const";
+import { pricingList, teamList, testimonialsList } from "../../../../lib/const";
 import TeamCard from "./TeamCard";
 import TestimonialCard from "./TestimonialsCard";
 import { CalendarIcon } from "lucide-react";

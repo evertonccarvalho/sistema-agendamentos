@@ -1,4 +1,4 @@
-import { testimonialsList } from "./const/const";
+import { testimonialsList } from "../../../../lib/const";
 import TestimonialCard, { type Testimonial } from "./TestimonialsCard";
 
 export const TestimonialsSection = () => {

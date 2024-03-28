@@ -128,11 +128,11 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				console.log("Email response:", responseData);
 				if (responseData.status === "OK") {
 					toast.success(
-						`${dataForEmail.name} seu formulário enviado com sucesso!`
+						`${dataForEmail.name} seu formulário enviado com sucesso!`,
 					);
 				} else {
 					toast.error(
-						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
+						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
 					);
 				}
 			} catch (error) {
@@ -162,7 +162,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
 			const username = data.creator.email?.substring(
 				0,
-				data.creator.email.indexOf("@")
+				data.creator.email.indexOf("@"),
 			);
 			router.push(`${`/${username}/success`}?${queryParams}`);
 		} catch (error) {

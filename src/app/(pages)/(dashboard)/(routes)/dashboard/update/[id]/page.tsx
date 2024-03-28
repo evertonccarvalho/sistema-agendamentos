@@ -1,12 +1,12 @@
 "use client";
 import BreadCrumb from "@/components/breadcrumb";
-import { NewEventForm } from "../../../../components/NewEventForm";
-import SchedulingItem from "@/components/schedulingItem";
+import { NewEventForm } from "../../components/NewEventForm";
+import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/components/schedulingItem";
 import { getEventsById } from "@/actions/eventType/getEventById";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { type $Enums } from "@prisma/client";
+import type { $Enums } from "@prisma/client";
 
 interface EventDetailsProps {
 	params: {
@@ -21,7 +21,7 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 	const [eventName, setEventName] = useState<string | undefined>(undefined);
 	const [eventDuration, setEventDuration] = useState<string | undefined>("30");
 	const [eventLocation, setEventLocation] = useState<string | undefined>(
-		undefined
+		undefined,
 	);
 
 	interface IIntialData {
@@ -36,7 +36,7 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 		arrivalInfo: string;
 	}
 	const [initialData, setInititalData] = useState<IIntialData | undefined>(
-		undefined
+		undefined,
 	);
 
 	const getData = async () => {

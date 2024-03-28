@@ -1,9 +1,8 @@
 "use client";
 import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
-// import type { EventType } from "@prisma/client";
-import { Copy, Share2Icon, Timer } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Share2Icon, Timer } from "lucide-react";
+import { useState, useEffect } from "react"
 import { EventSettings } from "./eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
 import { useRouter } from "next/navigation";
@@ -20,6 +19,8 @@ import Link from "next/link";
 import type { IEventType } from "@/actions/eventType/interface";
 import { toast } from "sonner";
 import { getBookings } from "../../../../actions/scheduling/getBookings";
+import { absoluteUrl } from "@/lib/utils";
+import type { IScheduling } from "../(routes)/scheduledevents/interface/interface";
 
 interface CardEventProps {
 	eventType: IEventType;
@@ -27,12 +28,13 @@ interface CardEventProps {
 const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
-	const [bookings, setBooking] = useState<any>(null);
+	const [bookings, setBooking] = useState<IScheduling[] | null>(null);
 
 	const router = useRouter();
+
 	const username = eventType.creator.email?.substring(
 		0,
-		eventType.creator.email.indexOf("@")
+		eventType.creator.email.indexOf("@"),
 	);
 
 	useEffect(() => {
@@ -49,20 +51,19 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 		};
 
 		fetchBooking();
-	}, []);
+	}, [eventType.creatorId]);
 
-	const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
-	const eventUrl = `${baseUrl}/${username}/${eventType.id}`;
+	const eventUrl = absoluteUrl(`/${username}/${eventType.id}`);
 	const handleDelete = async () => {
 		try {
 			if (
-				bookings.find(
-					(booking: any) =>
-						booking.eventId === eventType.id && booking.status !== "REJECTED"
+				bookings?.find(
+					(booking: IScheduling) =>
+						booking.eventId === eventType.id && booking.status !== "REJECTED",
 				)
 			) {
 				toast.error(
-					"Não é possível remover o evento, pois já foi realizado um agendamento."
+					"Não é possível remover o evento, pois já foi realizado um agendamento.",
 				);
 				return;
 			}
@@ -87,15 +88,12 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 		navigator.clipboard
 			.writeText(eventUrl)
 			.then(() => {
-				console.log(
-					"Link do evento copiado para a área de transferência:",
-					eventUrl
-				);
+				toast.success("Link do evento copiado com sucesso.");
 			})
 			.catch((error) => {
 				console.error(
 					"Erro ao copiar link do evento para a área de transferência:",
-					error
+					error,
 				);
 			});
 	};
@@ -106,7 +104,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			await toggleEventTypeActive(
 				eventType.creatorId,
 				eventType.id,
-				!eventType.active
+				!eventType.active,
 			);
 			console.log("Estado do evento alterado com sucesso.");
 		} catch (error) {
@@ -121,11 +119,10 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			className={`
 			relative max-w-xs w-full md:break-inside-avoid overflow-hidden
 		border drop-shadow-md hover:drop-shadow-xl
-		${
-			eventType.active
-				? "border-t-4  border-t-green-800"
-				: "border-t-4  border-t-zinc-700 opacity-80"
-		}`}
+		${eventType.active
+					? "border-t-4  border-t-green-800"
+					: "border-t-4  border-t-zinc-700 opacity-80"
+				}`}
 		>
 			<CardHeader className="flex flex-row items-center gap-4 ">
 				<div className="flex gap-1 flex-col">
@@ -151,8 +148,8 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 
 			<Separator />
 			<CardContent className="flex gap-2 p-2 items-center justify-center">
-				<div className="w-full flex justify-between">
-					<Button
+				<div className="w-full flex justify-end">
+					{/* <Button
 						onClick={handleShare}
 						variant="link"
 						size="sm"
@@ -160,7 +157,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 					>
 						<Copy size={16} />
 						Copiar
-					</Button>
+					</Button> */}
 					<Button
 						onClick={handleShare}
 						variant="outline"

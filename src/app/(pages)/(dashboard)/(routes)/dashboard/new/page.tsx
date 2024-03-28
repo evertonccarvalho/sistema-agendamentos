@@ -1,31 +1,25 @@
 "use client";
 
 import BreadCrumb from "@/components/breadcrumb";
-import { useEffect, useState } from "react";
-import SchedulingItem from "@/components/schedulingItem";
+import { useState } from "react";
+import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/components/schedulingItem";
 import { useSession } from "next-auth/react";
-import { NewEventForm } from "../../../components/NewEventForm";
+import { NewEventForm } from "../components/NewEventForm";
 import { Card } from "@/components/ui/card";
 
 const NewEvent = () => {
 	const breadcrumbItems = [{ title: "Criar Novo Evento", link: "/new" }];
 	const { data } = useSession();
 
-	const [userName, setUserName] = useState<string | undefined>("Zé da manga");
 	const [eventName, setEventName] = useState<string | undefined>(undefined);
 	const [eventDuration, setEventDuration] = useState<string | undefined>("30");
 	const [eventLocation, setEventLocation] = useState<string | undefined>(
-		undefined
+		undefined,
 	);
 
-	const getLogedUserName = () => {
-		data?.user?.name && setUserName(data.user.name);
-	};
-	useEffect(() => {
-		getLogedUserName();
-	});
+	const userName = data?.user.name || "";
+	const userId = data?.expires || "";
 
-	// const [data, setData] = useState<EventFormValues | undefined>(undefined);
 	return (
 		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
@@ -37,6 +31,7 @@ const NewEvent = () => {
 				/>
 				{/* <section className="w-[37rem] h-[26rem] rounded-md max-w-[1200px] border-[1px] flex flex-col max-[1135px]:w-full md:flex-row"> */}
 				<SchedulingItem
+					userId={userId}
 					eventData={{ userName, eventName, eventDuration, eventLocation }}
 				/>
 				{/* </section> */}

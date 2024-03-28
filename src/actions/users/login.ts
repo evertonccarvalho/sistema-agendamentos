@@ -2,7 +2,7 @@
 
 import type * as z from "zod";
 import { sendVerificationEmail } from "@/lib/mail";
-import { generateVerificationToken } from "@/lib/tokens";
+import { generateVerificationToken } from "@/actions/users/tokens";
 import { getUserByEmail } from "@/services/user";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 import { LoginSchema } from "@/lib/schemas";

@@ -13,10 +13,14 @@ import {
 	FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { convertMinutesToTimeString, convertTimeStringToNumber } from "@/utils/convertTimeStringToNumber";
+import {
+	convertMinutesToTimeString,
+	convertTimeStringToNumber,
+} from "@/utils/convertTimeStringToNumber";
 import { getWeekDays } from "@/utils/getWeekDay";
 import type { Availability } from "@prisma/client";
 import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const ONE_HOUR_IN_MINUTES = 60;
 interface FormSubmitData {
@@ -30,13 +34,13 @@ interface FormSubmitData {
 }
 
 const defaultAvailability = [
-	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: false },
 	{ id: "", weekDay: 1, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 2, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 3, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 4, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 5, startTime: "08:00", endTime: "18:00", enabled: true },
-	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: true },
+	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: false },
 ];
 
 interface AvailabilityFormProps {
@@ -47,16 +51,16 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 
 	const formattedAvailability = defaultAvailability.map((defaultDay) => {
 		const existingDay = availability.find(
-			(day) => day.weekDay === defaultDay.weekDay,
+			(day) => day.weekDay === defaultDay.weekDay
 		);
 		return existingDay
 			? {
-				id: existingDay.id,
-				weekDay: existingDay.weekDay,
-				startTime: convertMinutesToTimeString(existingDay.startTime),
-				endTime: convertMinutesToTimeString(existingDay.endTime),
-				enabled: existingDay.enabled,
-			}
+					id: existingDay.id,
+					weekDay: existingDay.weekDay,
+					startTime: convertMinutesToTimeString(existingDay.startTime),
+					endTime: convertMinutesToTimeString(existingDay.endTime),
+					enabled: existingDay.enabled,
+			  }
 			: defaultDay;
 	});
 
@@ -72,6 +76,7 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 	});
 
 	const onSubmit = async (data: FormSubmitData) => {
+		let res: { success: boolean; message: string } | null = null;
 		try {
 			for (const day of data.availability) {
 				const availabilityData: CreateAvailabilityParams = {
@@ -82,13 +87,13 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 				};
 
 				if (day.enabled) {
-					const res = await createAvailability(availabilityData);
+					res = await createAvailability(availabilityData);
 					if (res !== null) {
 						console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
 						if (!res.success) {
 							console.error(
 								`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
-								res.message,
+								res.message
 							);
 						}
 					} else {
@@ -100,8 +105,10 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		} catch (error) {
 			console.error("Ocorreu um erro ao enviar o formulário:", error);
 			console.log(
-				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
+				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
 			);
+		} finally {
+			res?.success && toast.success(res.message);
 		}
 	};
 
@@ -112,23 +119,20 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 					<div
 						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 						key={index}
-						className="flex w-full items-start pt-3 justify-between gap-2 mb-2"
+						className="flex w-96 items-center pt-3 justify-between gap-2"
 					>
 						<FormField
 							control={form.control}
 							name={`availability.${index}.enabled`}
 							render={({ field }) => (
-								<FormItem className="flex justify-start gap-1 items-center">
+								<FormItem className="flex justify-start gap-2 items-center">
 									<FormControl>
-										{/* <Checkbox
-											checked={field.value}
-											onCheckedChange={(checked) =>
-												field.onChange(checked === true)
-											}
-										/> */}
 										<Checkbox
 											checked={field.value}
-											onCheckedChange={field.onChange}
+											onCheckedChange={(checked: boolean) => {
+												field.onChange(checked);
+												form.setValue(`availability.${index}.enabled`, checked);
+											}}
 											aria-readonly
 										/>
 									</FormControl>
@@ -138,20 +142,24 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 								</FormItem>
 							)}
 						/>
-
-						<div className="flex gap-1">
+						<div className="flex gap-1 items-center">
 							<div className="flex flex-col items-start gap-2">
 								<Input
 									className="w-32"
-									disabled={!field.enabled}
+									disabled={
+										form.getValues(`availability.${index}.enabled`) === false
+									}
 									{...form.register(`availability.${index}.startTime`, {})}
 									type="time"
 								/>
 							</div>
+							<span>-</span>
 							<div className="flex flex-col items-start gap-2">
 								<Input
 									className="w-32"
-									disabled={!field.enabled}
+									disabled={
+										form.getValues(`availability.${index}.enabled`) === false
+									}
 									{...form.register(`availability.${index}.endTime`, {})}
 									type="time"
 								/>
@@ -159,8 +167,12 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 						</div>
 					</div>
 				))}
-				<Button disabled={form.formState.isSubmitting} type="submit">
-					Confirmar
+				<Button
+					disabled={form.formState.isSubmitting}
+					className="text-white mt-5"
+					type="submit"
+				>
+					{form.formState.isSubmitting ? "Salvando..." : "Salvar"}
 				</Button>
 			</form>
 		</Form>
