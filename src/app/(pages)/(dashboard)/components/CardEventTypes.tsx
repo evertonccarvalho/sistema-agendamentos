@@ -3,7 +3,7 @@ import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
 // import type { EventType } from "@prisma/client";
 import { Copy, Share2Icon, Timer } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EventSettings } from "./eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
 import { useRouter } from "next/navigation";
@@ -19,30 +19,60 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import type { IEventType } from "@/actions/eventType/interface";
 import { toast } from "sonner";
+import { getBookings } from "../../../../actions/scheduling/getBookings";
 
 interface CardEventProps {
 	eventType: IEventType;
 }
-
 const CardEventTypes = ({ eventType }: CardEventProps) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
+	const [bookings, setBooking] = useState<any>(null);
+
 	const router = useRouter();
 	const username = eventType.creator.email?.substring(
 		0,
-		eventType.creator.email.indexOf("@"),
+		eventType.creator.email.indexOf("@")
 	);
+
+	useEffect(() => {
+		const fetchBooking = async () => {
+			try {
+				console.log("Iniciando fetchBooking...");
+				const fetchedBooking = await getBookings(eventType.creatorId);
+				console.log("Dados recebidos:", fetchedBooking);
+				setBooking(fetchedBooking);
+				console.log("Estado booking atualizado:", fetchedBooking);
+			} catch (error) {
+				console.log("Erro ao buscar dados de reserva:", error);
+			}
+		};
+
+		fetchBooking();
+	}, []);
+
 	const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
 	const eventUrl = `${baseUrl}/${username}/${eventType.id}`;
 	const handleDelete = async () => {
 		try {
+			if (
+				bookings.find(
+					(booking: any) =>
+						booking.eventId === eventType.id && booking.status !== "REJECTED"
+				)
+			) {
+				toast.error(
+					"Não é possível remover o evento, pois já foi realizado um agendamento."
+				);
+				return;
+			}
 			setLoading(true);
 			setOpenDelete(true);
 			await deleteEvent(eventType.id);
+			toast.success("Evento removido com sucesso!");
 		} catch (error) {
 			console.error("Error deleting event:", error);
 		} finally {
-			toast.success("Evento deletado com sucesso.");
 			setLoading(false);
 			setOpenDelete(false);
 		}
@@ -59,13 +89,13 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			.then(() => {
 				console.log(
 					"Link do evento copiado para a área de transferência:",
-					eventUrl,
+					eventUrl
 				);
 			})
 			.catch((error) => {
 				console.error(
 					"Erro ao copiar link do evento para a área de transferência:",
-					error,
+					error
 				);
 			});
 	};
@@ -76,7 +106,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			await toggleEventTypeActive(
 				eventType.creatorId,
 				eventType.id,
-				!eventType.active,
+				!eventType.active
 			);
 			console.log("Estado do evento alterado com sucesso.");
 		} catch (error) {
@@ -90,11 +120,12 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 		<Card
 			className={`
 			relative max-w-xs w-full md:break-inside-avoid overflow-hidden
-		border drop-shadow-md hover:drop-shadow-xl  
-		${eventType.active
-					? "border-t-4  border-t-green-800"
-					: "border-t-4  border-t-zinc-700 opacity-80"
-				}`}
+		border drop-shadow-md hover:drop-shadow-xl
+		${
+			eventType.active
+				? "border-t-4  border-t-green-800"
+				: "border-t-4  border-t-zinc-700 opacity-80"
+		}`}
 		>
 			<CardHeader className="flex flex-row items-center gap-4 ">
 				<div className="flex gap-1 flex-col">
