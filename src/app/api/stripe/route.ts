@@ -7,13 +7,15 @@ import { auth } from '../../../../auth';
 
 const settingsUrl = absoluteUrl('/user/myaccount');
 
-export async function GET() {
+export async function GET(): Promise<NextResponse<unknown>> {
 	try {
 		const session = await auth();
 
 		if (!session?.user) {
-			return null
+			return new NextResponse('Unauthorized', { status: 401 });
+
 		}
+
 		const user = session.user
 		const userId = session.user.id
 		if (!userId || !user || !user.email) {
