@@ -22,6 +22,7 @@ import { editEvent } from "@/actions/eventType/editEvent";
 import { useSession } from "next-auth/react";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { ProModal } from "@/components/ProModal";
 
 const durationOptions = [
 	{ value: 15, label: "15 minutos" },
@@ -42,11 +43,16 @@ const saveNewEventSchema = z.object({
 	id: z.string().optional(),
 	creatorId: z.string(),
 	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
-	description: z.string().min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
+	description: z
+		.string()
+		.min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
 	duration: z.coerce.number().default(60),
 	active: z.boolean().default(true),
 	locationType: z.any(),
-	andress: z.string().min(5, "Endereço deve ter no mínimo 5 caracteres.").optional(),
+	andress: z
+		.string()
+		.min(5, "Endereço deve ter no mínimo 5 caracteres.")
+		.optional(),
 	capacity: z.coerce.number().default(1),
 	arrivalInfo: z.string().optional(),
 });
@@ -98,11 +104,11 @@ export function NewEventForm({
 
 	const [isActive, setIsActive] = useState<boolean>(false);
 	const router = useRouter();
+	const [open, setOpen] = useState(false);
 
 	const onSubmit = async (data: SaveNewEvent) => {
 		const createData = saveNewEventSchema.parse(data);
-		console.log("botao clicado", createData);
-		console.log("botao clicado", data);
+
 		const create = {
 			creatorId: loguedUserId as string,
 			name: data.name,
@@ -112,7 +118,7 @@ export function NewEventForm({
 			address: data.andress,
 			capacity: Number(data.capacity),
 			arrivalInfo: data.arrivalInfo,
-		}
+		};
 		try {
 			if (initialData) {
 				const update = {
@@ -125,144 +131,154 @@ export function NewEventForm({
 					address: data.andress,
 					capacity: Number(data.capacity),
 					arrivalInfo: data.arrivalInfo,
-				}
+				};
 				const res = await editEvent(update.id, update);
 				res && toast.success("Evento editado com sucesso!");
 			} else {
 				const res = await createEvent(create);
-				res && toast.success("Evento criado com sucesso!");
+				if (res && 'error' in res && res.error === "Período de teste gratuito expirou") {
+					setOpen(true);
+				} else {
+					router.push("/dashboard");
+					reset();
+					res && toast.success("Evento criado com sucesso!");
+				}
 			}
-			router.push("/dashboard");
-			reset();
 		} catch (error) {
 			console.error(
-				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
+				"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
 			);
 		}
 	};
 
 	return (
-		<Card className="flex max-w-96 w-full p-4 flex-col gap-3 border-[1px]">
-			<h1 className="text-2xl font-semibold">{!initialData ? "Criar Novo Evento" : "Editar Evento"}</h1>
-			<Separator orientation="horizontal" />
-			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-				<label>
-					<span>Nome do Evento.</span>
-					<Input
-						type="text"
-						{...register("name")}
-						onChange={(ev) => setEventName(ev.target.value)}
-						placeholder="Ex. Aulas de Violão"
-					/>
-					{errors.name && (
-						<p className="text-red-500 text-xs">{errors.name.message}</p>
-					)}
-				</label>
-				<label>
-					<span>Duração.</span>
-					<Select
-						{...register("duration")}
-						onValueChange={(ev) => {
-							setEventDuration(ev);
-						}}
-						defaultValue="30"
-					>
-						<SelectTrigger className="w-full">
-							<SelectValue placeholder="30 min" />
-						</SelectTrigger>
-						<SelectContent>
-							{durationOptions.map((option) => (
-								<SelectItem key={option.value} value={option.value.toString()}>
-									{option.label}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-					{errors.duration && (
-						<p className="text-red-500 text-xs">{errors.duration.message}</p>
-					)}
-				</label>
-				<label>
-					<span>Local.</span>
-					<Select
-						onValueChange={(ev) => {
-							if (ev !== "PRESENCIAL") {
-								setEventLocation(ev);
-								setIsActive(false);
-							} else {
-								setIsActive(true);
-							}
-						}}
-						{...register("locationType")}
-						defaultValue="ZOOM"
-					>
-						<SelectTrigger className="w-full">
-							<SelectValue placeholder="30 min" />
-						</SelectTrigger>
-						<SelectContent>
-							{Object.values(Locations).map((location) => (
-								<SelectItem key={location} value={location}>
-									{location}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				</label>
-				{isActive && (
-					<>
-						<label>
-							<span>Endereço.</span>
-							<Input
-								{...register("andress")}
-								onChange={(ev) => setEventLocation(ev.target.value)}
-								type="text"
-								placeholder="Ex. Rua dos Bobos, 0"
-							/>
-							{errors.andress && (
-								<p className="text-red-500 text-xs">{errors.andress.message}</p>
-							)}
-						</label>
-						<label>
-							<span>Ponto de referência</span>
-							<Input
-								{...register("arrivalInfo")}
-								type="text"
-								placeholder="Ex. Próximo a padaria."
-							/>
-						</label>
-						<label>
-							<span>Capacidade.</span>
-							<Input
-								{...register("capacity")}
-								type="number"
-								min={1}
-								placeholder="Ex. 10"
-							/>
-							{errors.capacity && (
-								<p className="text-red-500 text-xs">
-									{errors.capacity.message}
-								</p>
-							)}
-						</label>
-					</>
-				)}
-				<label>
-					<span>Descrição.</span>
-					<Textarea
-						{...register("description")}
-						placeholder="Ex. Marque reuniões comigo..."
-					/>
-					{errors.description && (
-						<p className="text-red-500 text-xs">{errors.description.message}</p>
-					)}
-				</label>
+		<>
+			<ProModal isOpen={open} onClose={() => setOpen(false)} />
+
+			<Card className="flex max-w-96 w-full p-4 flex-col gap-3 border-[1px]">
+				<h1 className="text-2xl font-semibold">
+					{!initialData ? "Criar Novo Evento" : "Editar Evento"}
+				</h1>
 				<Separator orientation="horizontal" />
-				{/* <div className="flex gap-3 items-center justify-between"> */}
-				<Button type="submit" size={"lg"} className="text-white flex gap-2">
-					{initialData ? "Editar" : "Criar"} <ArrowRight width={20} />
-				</Button>
-				{/* </div> */}
-			</form>
-		</Card>
+				<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+					<label>
+						<span>Nome do Evento.</span>
+						<Input
+							type="text"
+							{...register("name")}
+							onChange={(ev) => setEventName(ev.target.value)}
+							placeholder="Ex. Aulas de Violão"
+						/>
+						{errors.name && (
+							<p className="text-red-500 text-xs">{errors.name.message}</p>
+						)}
+					</label>
+					<label>
+						<span>Duração.</span>
+						<Select
+							{...register("duration")}
+							onValueChange={(ev) => {
+								setEventDuration(ev);
+							}}
+							defaultValue="30"
+						>
+							<SelectTrigger className="w-full">
+								<SelectValue placeholder="30 min" />
+							</SelectTrigger>
+							<SelectContent>
+								{durationOptions.map((option) => (
+									<SelectItem key={option.value} value={option.value.toString()}>
+										{option.label}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+						{errors.duration && (
+							<p className="text-red-500 text-xs">{errors.duration.message}</p>
+						)}
+					</label>
+					<label>
+						<span>Local.</span>
+						<Select
+							onValueChange={(ev) => {
+								if (ev !== "PRESENCIAL") {
+									setEventLocation(ev);
+									setIsActive(false);
+								} else {
+									setIsActive(true);
+								}
+							}}
+							{...register("locationType")}
+							defaultValue="ZOOM"
+						>
+							<SelectTrigger className="w-full">
+								<SelectValue placeholder="30 min" />
+							</SelectTrigger>
+							<SelectContent>
+								{Object.values(Locations).map((location) => (
+									<SelectItem key={location} value={location}>
+										{location}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</label>
+					{isActive && (
+						<>
+							<label>
+								<span>Endereço.</span>
+								<Input
+									{...register("andress")}
+									onChange={(ev) => setEventLocation(ev.target.value)}
+									type="text"
+									placeholder="Ex. Rua dos Bobos, 0"
+								/>
+								{errors.andress && (
+									<p className="text-red-500 text-xs">{errors.andress.message}</p>
+								)}
+							</label>
+							<label>
+								<span>Ponto de referência</span>
+								<Input
+									{...register("arrivalInfo")}
+									type="text"
+									placeholder="Ex. Próximo a padaria."
+								/>
+							</label>
+							<label>
+								<span>Capacidade.</span>
+								<Input
+									{...register("capacity")}
+									type="number"
+									min={1}
+									placeholder="Ex. 10"
+								/>
+								{errors.capacity && (
+									<p className="text-red-500 text-xs">
+										{errors.capacity.message}
+									</p>
+								)}
+							</label>
+						</>
+					)}
+					<label>
+						<span>Descrição.</span>
+						<Textarea
+							{...register("description")}
+							placeholder="Ex. Marque reuniões comigo..."
+						/>
+						{errors.description && (
+							<p className="text-red-500 text-xs">{errors.description.message}</p>
+						)}
+					</label>
+					<Separator orientation="horizontal" />
+					{/* <div className="flex gap-3 items-center justify-between"> */}
+					<Button type="submit" size={"lg"} className="text-white flex gap-2">
+						{initialData ? "Editar" : "Criar"} <ArrowRight width={20} />
+					</Button>
+					{/* </div> */}
+				</form>
+			</Card>
+		</>
 	);
 }

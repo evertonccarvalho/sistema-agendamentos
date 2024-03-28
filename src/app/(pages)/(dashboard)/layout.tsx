@@ -1,3 +1,4 @@
+import { getEventTypeLimit } from "@/actions/subscription/apiLimit";
 import { checkSubscription } from "@/actions/subscription/subscription";
 import HeaderDashboard from "@/components/HeaderDashboard";
 import MainSideBar from "@/components/Sidebar";
@@ -7,8 +8,8 @@ interface SettingsLayoutProps {
 }
 
 const DashboardLayout = async ({ children }: SettingsLayoutProps) => {
-	const apiLimitCount = 2;
-	// const apiLimitCount = await getApiLimitCount();
+	// const apiLimitCount = 2;
+	const apiLimitCount = await getEventTypeLimit();
 
 	const isPro = await checkSubscription();
 
