@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CalendarDays, HomeIcon } from "lucide-react";
+import { CalendarDays, HomeIcon, Clock } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,7 +12,7 @@ const menus = [
   {
     name: "Disponibilidade",
     link: "/availability",
-    icon: CalendarDays,
+    icon: Clock,
     margin: true,
   },
 ];
