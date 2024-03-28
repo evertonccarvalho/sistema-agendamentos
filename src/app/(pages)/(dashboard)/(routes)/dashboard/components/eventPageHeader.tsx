@@ -46,9 +46,9 @@ const EventPageHeader = () => {
 							{data.user?.name ? data.user.name[0] : ""}
 						</AvatarFallback>
 					</Avatar>
-					<div className="flex flex-col">
+					<div className="flex flex-col gap-2">
 						<h1 className="text-base font-semibold ">{data.user.name}</h1>
-						<div className="flex items-center gap-2">
+						<div className="flex items-center gap-2 flex-wrap">
 							<Link className="text-base font-light text-blue-500 hover:underline"
 								href={eventUrl}>
 								{eventUrl}
@@ -71,7 +71,7 @@ const EventPageHeader = () => {
 						variant="outline"
 						className="bg-transparent rounded-full flex items-center gap-1"
 					>
-						<Plus size={18} /> <p className="md:flex hidden"> Adicionar</p>
+						<Plus size={18} /> <p className="md:flex hidden">Criar Evento</p>
 					</Button>
 				</Link>
 			</section>
