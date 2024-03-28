@@ -11,12 +11,12 @@ interface EmailTemplateProps {
 }
 
 export const EmailTemplate: React.FC<EmailTemplateProps> = ({
-	creatorName,
 	name,
-	eventType,
+	creatorName,
 	email,
-	date,
+	eventType,
 	message,
+	date,
 }) => (
 	<div className="p-4 bg-gray-100">
 		<h1 className="text-2xl font-bold">Olá {name},</h1>

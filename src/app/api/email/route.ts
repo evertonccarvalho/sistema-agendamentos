@@ -1,5 +1,5 @@
-import { EmailRecipient } from "@/app/(pages)/(creator)/_components/email/email-recipient";
-import { EmailTemplate } from "@/app/(pages)/(creator)/_components/email/email-template";
+import EmailToClient from "@/actions/email/_components/email-to-client";
+import EmailToCreator from "@/actions/email/_components/email-to-creator";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
@@ -26,13 +26,13 @@ export async function POST(request: Request) {
 			to: email,
 			subject: "Confirmação de Recebimento do Contato",
 			text: "Obrigado por entrar em contato. Recebemos sua mensagem e entraremos em contato em breve.",
-			react: EmailTemplate({
+			react: EmailToClient({
 				name,
 				email,
-				message,
+				creatorEmail,
 				eventType,
-				creatorName,
 				date,
+				creatorName,
 			}),
 		});
 
@@ -42,12 +42,14 @@ export async function POST(request: Request) {
 			to: [`${creatorEmail}`],
 			subject: "Nova mensagem de contato recebida",
 			text: `Você recebeu uma nova mensagem de contato de ${name} (${email}): ${message}`,
-			react: EmailRecipient({
-				Name: name,
-				Subject: subject,
-				Email: email,
-				Message: message,
-				Phone: phone,
+			react: EmailToCreator({
+				name,
+				creatorName,
+				email,
+				eventType,
+				date,
+				phone,
+				creatorEmail,
 			}),
 		});
 
