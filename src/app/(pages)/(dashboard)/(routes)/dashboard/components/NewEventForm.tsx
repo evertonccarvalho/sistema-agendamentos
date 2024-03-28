@@ -11,7 +11,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -92,6 +92,7 @@ export function NewEventForm({
 }: INewEventDataProps) {
 	const { data } = useSession();
 	const USER_ID = data?.user?.id;
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const defaultValues = initialData
 		? initialData
@@ -109,7 +110,8 @@ export function NewEventForm({
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
+		formState: { errors, },
+
 		reset,
 	} = useForm<SaveNewEvent>({
 		resolver: zodResolver(saveNewEventSchema),
@@ -121,13 +123,15 @@ export function NewEventForm({
 	const [open, setOpen] = useState(false);
 
 	const onSubmit = async (data: SaveNewEvent) => {
+		setIsSubmitting(true);
 		const FORM_DATA = saveNewEventSchema.parse(data);
 
 		try {
 			if (initialData) {
 				const res = await editEvent(initialData.id, initialData.creatorId, FORM_DATA);
-				res && router.push("/dashboard");
 				res && toast.success("Evento editado com sucesso!");
+				res && router.push("/dashboard");
+
 			} else {
 				const res = await createEvent(FORM_DATA, USER_ID as string);
 				if (
@@ -137,9 +141,9 @@ export function NewEventForm({
 				) {
 					setOpen(true);
 				} else {
-					router.push("/dashboard");
 					reset();
 					res && toast.success("Evento criado com sucesso!");
+					router.push("/dashboard");
 				}
 			}
 		} catch (error) {
@@ -277,8 +281,22 @@ export function NewEventForm({
 					</label>
 					<Separator orientation="horizontal" />
 					{/* <div className="flex gap-3 items-center justify-between"> */}
-					<Button type="submit" size={"lg"} className="text-white flex gap-2">
-						{initialData ? "Editar" : "Criar"} <ArrowRight width={20} />
+					<Button
+						disabled={isSubmitting}
+						type="submit" size={"lg"}
+						className="text-white flex gap-2"
+					>
+						{isSubmitting ? (
+							<>
+								<span className="hidden">Submitting...</span>
+								<Loader2 className="animate-spin w-5 h-5 mr-3" />
+							</>
+						) : (
+							<>
+								{initialData ? "Editar" : "Criar"}
+								< ArrowRight width={20} />
+							</>
+						)}
 					</Button>
 					{/* </div> */}
 				</form>
