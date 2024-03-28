@@ -62,6 +62,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.6.1",
+		"@next/eslint-plugin-next": "^14.1.4",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/node": "^20.11.29",
 		"@types/react": "^18",
