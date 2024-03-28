@@ -8,7 +8,17 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
 	try {
-		const { email, name, message, subject, phone, eventType, creatorName, date, }: ContactForm = await request.json();
+		const {
+			email,
+			name,
+			message,
+			subject,
+			phone,
+			eventType,
+			creatorName,
+			creatorEmail,
+			date,
+		}: ContactForm = await request.json();
 
 		// Enviar e-mail para o remetente
 		await resend.emails.send({
@@ -16,13 +26,20 @@ export async function POST(request: Request) {
 			to: email,
 			subject: "Confirmação de Recebimento do Contato",
 			text: "Obrigado por entrar em contato. Recebemos sua mensagem e entraremos em contato em breve.",
-			react: EmailTemplate({ name, email, message, eventType, creatorName, date, }),
+			react: EmailTemplate({
+				name,
+				email,
+				message,
+				eventType,
+				creatorName,
+				date,
+			}),
 		});
 
 		// Enviar e-mail para o destinatário
 		await resend.emails.send({
 			from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
-			to: [`${process.env.MY_EMAIL}`],
+			to: [`${creatorEmail}`],
 			subject: "Nova mensagem de contato recebida",
 			text: `Você recebeu uma nova mensagem de contato de ${name} (${email}): ${message}`,
 			react: EmailRecipient({
@@ -69,7 +86,7 @@ export type ContactForm = {
 	message: string;
 	phone: string;
 	eventType: string;
+	creatorEmail: string;
 	creatorName: string;
 	date: string;
-
 };

@@ -113,6 +113,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				phone: formData.phone,
 				message: formData.message,
 				creatorName: data.creator.name,
+				creatorEmail: data.creator.email,
 				eventType: data.name,
 				date: newDate,
 			};
