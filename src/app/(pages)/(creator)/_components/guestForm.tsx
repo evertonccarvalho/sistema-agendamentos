@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -14,23 +14,31 @@ import {
 } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { maskPhone, onlyNumbers } from "../../../../utils/masks";
 
 const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 const phoneRegex = /^\(?([0-9]{2})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{4})$/;
 
 const guestStoreSchema = z.object({
-	name: z.string().min(2, { message: "O nome deve ter no mínimo 2 caracteres" }),
-	email: z.string().email({ message: "Insira um endereço de e-mail válido" })
-	.refine(value => emailRegex.test(value), {
-		message: "Insira um endereço de e-mail válido",
-	}),
-	phone: z.string().min(8, { message: "O telefone deve ter no mínimo 8 dígitos" })
-	.refine(value => phoneRegex.test(value), {
-		message: "Insira um número de telefone válido",
-	}),
-	message: z.string().min(10, { message: "A mensagem deve ter no mínimo 10 caracteres" }),
+	name: z
+		.string()
+		.min(2, { message: "O nome deve ter no mínimo 2 caracteres" }),
+	email: z
+		.string()
+		.email({ message: "Insira um endereço de e-mail válido" })
+		.refine((value) => emailRegex.test(value), {
+			message: "Insira um endereço de e-mail válido",
+		}),
+	phone: z
+		.string()
+		.min(8, { message: "O telefone deve ter no mínimo 8 dígitos" })
+		.refine((value) => phoneRegex.test(value), {
+			message: "Insira um número de telefone válido",
+		}),
+	message: z
+		.string()
+		.min(10, { message: "A mensagem deve ter no mínimo 10 caracteres" }),
 });
-
 
 export type GuestFormValues = z.infer<typeof guestStoreSchema>;
 
@@ -48,6 +56,7 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 
 	const handleFormSubmit = async (data: GuestFormValues) => {
 		setLoading(true);
+
 		try {
 			await onSubmit(data);
 			onClose();
@@ -98,7 +107,11 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 							<FormItem>
 								<label>Telefone</label>
 								<FormControl>
-									<Input placeholder="Telefone" {...field} />
+									<Input
+										placeholder="Telefone"
+										{...field}
+										onChange={(e) => field.onChange(maskPhone(e.target.value))}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -121,10 +134,17 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
 
 				<div className="flex gap-5">
 					<Button type="submit" className="text-white" disabled={loading}>
-						{loading && (<Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />)}
+						{loading && (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
+						)}
 						Confirmar
 					</Button>
-					<Button type="button" variant="outline" onClick={() => onClose()} disabled={loading}>
+					<Button
+						type="button"
+						variant="outline"
+						onClick={() => onClose()}
+						disabled={loading}
+					>
 						Cancelar
 					</Button>
 				</div>
