@@ -7,77 +7,75 @@ import type { Adapter } from "next-auth/adapters";
 import authConfig from "@/lib/auth.config";
 
 export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-  unstable_update,
+	handlers: { GET, POST },
+	auth,
+	signIn,
+	signOut,
+	unstable_update,
 } = NextAuth({
-  pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
-  },
-  events: {
-    async linkAccount({ user }) {
-      await db.user.update({
-        where: { id: user.id },
-        data: { emailVerified: new Date() },
-      });
-    },
-  },
-  callbacks: {
-    async signIn({ user, account }) {
-      // Allow OAuth without email verification
+	secret: process.env.NEXT_AUTH_SECRET,
 
-      if (account?.provider !== "credentials") return true;
+	pages: {
+		signIn: "/auth/login",
+		error: "/auth/error",
+	},
+	events: {
+		async linkAccount({ user }) {
+			await db.user.update({
+				where: { id: user.id },
+				data: { emailVerified: new Date() },
+			});
+		},
+	},
+	callbacks: {
+		async signIn({ user, account }) {
+			// Allow OAuth without email verification
 
-      if (typeof user.id !== 'string') {
-        throw new Error('User ID is not defined or not a string');
-      }
+			if (account?.provider !== "credentials") return true;
 
-      const existingUser = await getUserById(user.id);
+			if (typeof user.id !== "string") {
+				throw new Error("User ID is not defined or not a string");
+			}
 
+			const existingUser = await getUserById(user.id);
 
-      // Prevent sign in without email verification
-      if (!existingUser?.emailVerified) return false;
+			// Prevent sign in without email verification
+			if (!existingUser?.emailVerified) return false;
 
-      return true;
-    },
-    // biome-ignore lint/suspicious/useAwait: <explanation>
-    async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
+			return true;
+		},
+		// biome-ignore lint/suspicious/useAwait: <explanation>
+		async session({ token, session }) {
+			if (token.sub && session.user) {
+				session.user.id = token.sub;
+			}
 
+			if (session.user) {
+				session.user.name = token.name ?? session.user.name;
+				session.user.email = token.email ?? session.user.email;
+				session.user.isOAuth = token.isOAuth as boolean;
+			}
 
+			return session;
+		},
+		async jwt({ token }) {
+			if (!token.sub) return token;
 
-      if (session.user) {
-        session.user.name = token.name ?? session.user.name;
-        session.user.email = token.email ?? session.user.email;
-        session.user.isOAuth = token.isOAuth as boolean;
-      }
+			const existingUser = await getUserById(token.sub);
 
-      return session;
-    },
-    async jwt({ token }) {
-      if (!token.sub) return token;
+			if (!existingUser) return token;
 
-      const existingUser = await getUserById(token.sub);
+			const existingAccount = await getAccountByUserId(existingUser.id);
 
-      if (!existingUser) return token;
+			token.isOAuth = !!existingAccount;
+			token.name = existingUser.name;
+			token.email = existingUser.email;
 
-      const existingAccount = await getAccountByUserId(existingUser.id);
+			return token;
+		},
+	},
 
-      token.isOAuth = !!existingAccount;
-      token.name = existingUser.name;
-      token.email = existingUser.email;
-
-      return token;
-    },
-  },
-  secret: process.env.AUTH_SECRET,
-
-  adapter: PrismaAdapter(db) as Adapter,
-  session: { strategy: "jwt" },
-  ...authConfig,
+	adapter: PrismaAdapter(db) as Adapter,
+	session: { strategy: "jwt" },
+	...authConfig,
 });
