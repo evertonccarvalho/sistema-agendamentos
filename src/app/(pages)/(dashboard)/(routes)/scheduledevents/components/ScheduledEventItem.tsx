@@ -93,26 +93,26 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 					<div className="flex gap-1.5   p-4 bg-muted/10 rounded-t-md  flex-col justify-start">
 						<div className="flex items-center gap-2">
 							<div
-								className={`w-6 h-6 rounded-full ${
-									scheduling.status === "PENDING"
-										? "bg-yellow-600"
-										: scheduling.status === "ACCEPTED"
+								className={`w-6 h-6 rounded-full ${scheduling.status === "PENDING"
+									? "bg-yellow-600"
+									: scheduling.status === "ACCEPTED"
 										? "bg-green-600"
 										: scheduling.status === "REJECTED"
-										? "bg-red-600"
-										: ""
-								}`}
+											? "bg-red-600"
+											: ""
+									}`}
 							/>
-							<h1 className=" font-semibold">
+							<h1 className=" text-sm font-semibold">
 								{format(new Date(scheduling.date ?? ""), "dd/MM/yyyy")}
+							</h1>
+							<h1 className="text-sm">
+								{format(new Date(scheduling.date ?? ""), "HH:mm")} às{" "}
+								{format(endDate, "HH:mm")}
 							</h1>
 						</div>
 					</div>
-					<div className="flex text-sm  items-center  justify-between gap-1.5 p-4     ">
-						<h1 className="">
-							{format(new Date(scheduling.date ?? ""), "HH:mm")} às{" "}
-							{format(endDate, "HH:mm")}
-						</h1>
+					<div className="flex text-sm  items-center  justify-between gap-1.5 px-4 py-2    ">
+
 						<div className="flex flex-col gap-1">
 							<h1 className="font-semibold">{scheduling.name}</h1>
 							<h1>
@@ -128,8 +128,8 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 						</AccordionTrigger>
 					</div>
 					<AccordionContent className="border-t-[1px] ">
-						<div className="gap-2  flex grid-cols-2  w-full   p-4">
-							<div className="w-fit flex-col items-center gap-4 px-5 pt-5 flex">
+						<div className="gap-4  flex flex-col md:flex-row  w-full   p-4">
+							<div className="flex-col items-center gap-3 flex">
 								<div className="flex gap-2 ">
 									{scheduling.status !== "ACCEPTED" && (
 										<Button
@@ -148,7 +148,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 											variant="outline"
 										>
 											<Trash2Icon size={20} />
-											Cancelar
+											Deletar
 										</Button>
 									)}
 								</div>

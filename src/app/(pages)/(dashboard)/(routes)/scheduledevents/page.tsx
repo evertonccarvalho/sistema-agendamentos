@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { auth } from "../../../../../lib/auth";
 
 const ScheduledEvents = async () => {
-	const breadcrumbItems = [{ title: "Eventos agendados", link: "/dashboard" }];
+	const breadcrumbItems = [{ title: "Agendamentos", link: "/dashboard" }];
 	const session = await auth();
 
 	if (!session?.user || !session.user.id) {
