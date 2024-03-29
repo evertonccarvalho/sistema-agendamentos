@@ -10,7 +10,7 @@ interface ContainerWrapperProps {
 const ContainerWrapper = ({ title, subtitle, children }: ContainerWrapperProps) => {
   return (
     <div className="h-full min-h-dvh bg-muted/50 flex items-center justify-center space-y-4 md:p-8 pt-6">
-      <Card className=" border  flex flex-wrap items-center justify-center p-2  h-[31rem] overflow-y-auto scrollbar-thin scrollbar-track-background scrollbar-thumb-primary">
+      <Card className=" border  flex flex-wrap items-center justify-center p-2  min-h-[31rem] h-full overflow-y-auto scrollbar-thin scrollbar-track-background scrollbar-thumb-primary">
         <div className="flex flex-col w-full items-center h-full rounded-md max-w-[1200px] md:min-w-[900px]">
           {(title || subtitle) && (
             <CardHeader>

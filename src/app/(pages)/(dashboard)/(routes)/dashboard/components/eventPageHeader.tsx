@@ -60,9 +60,9 @@ const EventPageHeader = () => {
 									size="sm"
 									className="flex items-center gap-1"
 								>
-									<Copy size={16}>
-										<p className="sr-only">Copiar</p>
-									</Copy>
+									<Copy size={16} />
+									<p className="sr-only">Copiar</p>
+
 								</Button>
 							</div>
 							<Link
