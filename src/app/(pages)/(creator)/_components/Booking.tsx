@@ -128,12 +128,22 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				const responseData = await response.json();
 				console.log("Email response:", responseData);
 				if (responseData.status === "OK") {
-					toast.success(
-						`${dataForEmail.name} seu formulário enviado com sucesso!`,
-					);
+					toast.success("Agendamento realizado com sucesso!", {
+						description: format(
+							newDate,
+							"'Para' dd 'de' MMMM 'às' HH':'mm'.'",
+							{
+								locale: ptBR,
+							}
+						),
+						action: {
+							label: "Visualizar",
+							onClick: () => alert("OK"),
+						},
+					});
 				} else {
 					toast.error(
-						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
+						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
 					);
 				}
 			} catch (error) {
@@ -143,15 +153,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
 			setHour(undefined);
 			setSelectedDate(undefined);
-			toast("Reserva realizada com sucesso!", {
-				description: format(newDate, "'Para' dd 'de' MMMM 'às' HH':'mm'.'", {
-					locale: ptBR,
-				}),
-				action: {
-					label: "Visualizar",
-					onClick: () => alert("OK"),
-				},
-			});
 
 			const queryParams = new URLSearchParams({
 				name: formData.name,
@@ -163,7 +164,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
 			const username = data.creator.email?.substring(
 				0,
-				data.creator.email.indexOf("@"),
+				data.creator.email.indexOf("@")
 			);
 			router.push(`${`/${username}/success`}?${queryParams}`);
 		} catch (error) {
