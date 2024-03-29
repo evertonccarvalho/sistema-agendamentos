@@ -6,13 +6,19 @@ import { absoluteUrl } from "@/lib/utils";
 import { Copy, Link2Icon, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { hasAvailability } from "@/actions/availability/hasavailability";
+import { AlertModal } from "@/components/alert-modal";
+import { useState } from "react";
 
 const EventPageHeader = () => {
 	const { data } = useSession();
-
+	const router = useRouter();
 	if (!data?.user) {
 		return null;
 	}
+	const [openNewEvent, setNewEvent] = useState(false)
+	const [loading, setLoading] = useState(false);
 
 	const username = data.user.email?.substring(0, data.user.email.indexOf("@"));
 	const eventUrl = absoluteUrl(`/${username}`);
@@ -28,8 +34,33 @@ const EventPageHeader = () => {
 			});
 	};
 
+	const handleNewEvent = async () => {
+		const response = await hasAvailability(data.user.id || "");
+		console.log(response);
+		if (response === true) {
+			router.push("/dashboard/new");
+		} else if (response === false) {
+			setNewEvent(true)
+		} else {
+			console.error("Resposta inválida recebida da função hasAvailability:", response);
+		}
+	};
+
+
+
+
 	return (
 		<>
+			<AlertModal
+				buttonVariant="default"
+				title="Você não disponibilidade ativas"
+				description="Para criar um evento é necessário definir disponibilidades"
+				loading={loading}
+				isOpen={openNewEvent}
+				onClose={() => setNewEvent(false)}
+				onConfirm={() => router.push("/availability")}
+			/>
+
 			<section className="flex w-full justify-between">
 				<div className="flex w-full gap-3 items-center">
 					<Avatar className="h-10 w-10 ">
@@ -65,22 +96,22 @@ const EventPageHeader = () => {
 
 								</Button>
 							</div>
-							<Link
-								href="/dashboard/new"
-								className=" text-sm text-primary  underline-offset-4 hover:underline items-center flex gap-1"
-
+							<Button
+								variant="link"
+								onClick={handleNewEvent}
 							>
 								<Plus size={18} />{" "}
 								<p className="sr-only  md:not-sr-only">
 									<span className="truncate">Criar Evento</span>
 								</p>
-							</Link>
+							</Button>
+
 						</div>
 					</div>
 				</div>
 			</section>
 		</>
 	);
-};
+}
 
 export default EventPageHeader;

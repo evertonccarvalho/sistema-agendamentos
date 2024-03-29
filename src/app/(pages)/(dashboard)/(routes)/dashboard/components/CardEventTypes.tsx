@@ -43,7 +43,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			if (
 				res &&
 				res.error ===
-					"Este tipo de evento tem reservas associadas e não pode ser excluído."
+				"Este tipo de evento tem reservas associadas e não pode ser excluído."
 			) {
 				toast.error(
 					"Não é possível remover o evento, pois já foi realizado um agendamento."
@@ -97,18 +97,17 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	return (
 		<Card
 			className={`relative max-w-sm w-full md:break-inside-avoid overflow-hidden border drop-shadow-md hover:drop-shadow-xl
-		${
-			eventType.active
-				? "border-t-4  border-t-primary"
-				: "border-t-4  border-t-muted-foreground opacity-80"
-		}`}
+		${eventType.active
+					? "border-t-4  border-t-primary"
+					: "border-t-4  border-t-muted-foreground opacity-80"
+				}`}
 		>
 			<CardHeader className="flex p-3 md:p-6 flex-row items- justify-between ">
 				<div className="flex gap-1 w-full flex-col">
 					<CardTitle className="text-balance text-base capitalize mr-2">
 						{eventType.name}
 					</CardTitle>
-					<CardDescription className="flex items-start flex-col gap-1 ">
+					<div className="flex items-start flex-col gap-1 ">
 						<h1 className="flex items-center gap-1">
 							<Timer size={16} />
 							{eventType.duration} Min{" "}
@@ -118,7 +117,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 							<Users size={16} />
 							{eventType.capacity}
 						</h1>
-					</CardDescription>
+					</div>
 					<CardDescription>{eventType.description}</CardDescription>
 					<Link href={eventUrl} className="text-sm pt-1 text-blue-600">
 						Ver página de reserva
@@ -148,6 +147,9 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			</CardContent>
 
 			<AlertModal
+				buttonVariant="descructive"
+				title="Tem certeza"
+				description="Essa ação não pode ser desfeita."
 				isOpen={openDelete}
 				onClose={() => setOpenDelete(false)}
 				onConfirm={handleDelete}
