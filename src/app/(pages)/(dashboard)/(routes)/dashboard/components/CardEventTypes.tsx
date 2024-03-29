@@ -1,7 +1,7 @@
 "use client";
 import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
-import { Copy, Timer } from "lucide-react";
+import { Copy, Timer, Users } from "lucide-react";
 import { useState } from "react";
 import { EventSettings } from "../../../components/eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
@@ -104,9 +104,10 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			<CardHeader className="flex p-3 md:p-6 flex-row items- justify-between ">
 				<div className="flex gap-1 w-full flex-col">
 					<CardTitle className="text-balance text-base capitalize mr-2">{eventType.name}</CardTitle>
-					<CardDescription className="flex items-center">
-						<Timer size={16} />
-						{eventType.duration} Min
+					<CardDescription className="flex items-start flex-col gap-1 ">
+
+						<div className="flex items-center gap-1"><Timer size={16} />{eventType.duration} MIn </div>
+						<div className="flex items-center gap-1">	<Users size={16} />{eventType.capacity}</div>
 					</CardDescription>
 					<CardDescription>{eventType.description}</CardDescription>
 					<Link href={eventUrl} className="text-sm pt-1 text-blue-600">
