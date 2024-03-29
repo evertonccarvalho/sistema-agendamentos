@@ -1,5 +1,5 @@
 "use server"
-import { auth } from "../../../auth";
+import { auth } from "../../lib/auth";
 import { db } from "../../lib/prisma";
 
 

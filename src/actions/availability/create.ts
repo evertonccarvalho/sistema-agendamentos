@@ -1,7 +1,7 @@
 // No seu arquivo de actions.js ou onde desejar organizar suas ações:
 "use server";
 import { db } from "@/lib/prisma";
-import { auth } from "../../../auth";
+import { auth } from "../../lib/auth";
 export interface CreateAvailabilityParams {
 	weekDay: number;
 	startTime: number;

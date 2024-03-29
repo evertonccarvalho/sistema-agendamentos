@@ -4,7 +4,7 @@ import { getBookings } from "@/actions/scheduling/getBookings";
 import TabsComponent from "./components/tabsBookingItems";
 import { getFinishedBookings } from "@/actions/scheduling/getFinishedBookings";
 import { Card } from "@/components/ui/card";
-import { auth } from "../../../../../../auth";
+import { auth } from "../../../../../lib/auth";
 
 const ScheduledEvents = async () => {
 	const breadcrumbItems = [{ title: "Eventos agendados", link: "/dashboard" }];

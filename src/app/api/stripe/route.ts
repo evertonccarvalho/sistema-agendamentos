@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import { absoluteUrl } from '@/lib/utils';
 import { db } from '@/lib/prisma';
-import { auth } from '../../../../auth';
+import { auth } from '../../../lib/auth';
 
 const settingsUrl = absoluteUrl('/user/myaccount');
 

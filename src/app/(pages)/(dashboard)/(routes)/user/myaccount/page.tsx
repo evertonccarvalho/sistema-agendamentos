@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { MailIcon } from "lucide-react";
-import { auth } from "../../../../../../../auth";
+import { auth } from "../../../../../../lib/auth";
 import { SubscriptionButton } from "../_components/subscription-button";
 import { checkSubscription } from "@/actions/subscription/subscription";
 import { ModeToggle } from "@/components/theme-toggle";

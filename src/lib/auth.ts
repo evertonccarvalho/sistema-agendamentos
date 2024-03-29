@@ -1,10 +1,10 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import authConfig from "./auth.config";
 import { db } from "@/lib/prisma";
 import { getUserById } from "@/services/user";
 import { getAccountByUserId } from "@/services/account";
 import type { Adapter } from "next-auth/adapters";
+import authConfig from "@/lib/auth.config";
 
 export const {
   handlers: { GET, POST },
@@ -28,9 +28,15 @@ export const {
   callbacks: {
     async signIn({ user, account }) {
       // Allow OAuth without email verification
+
       if (account?.provider !== "credentials") return true;
 
+      if (typeof user.id !== 'string') {
+        throw new Error('User ID is not defined or not a string');
+      }
+
       const existingUser = await getUserById(user.id);
+
 
       // Prevent sign in without email verification
       if (!existingUser?.emailVerified) return false;
@@ -43,9 +49,11 @@ export const {
         session.user.id = token.sub;
       }
 
+
+
       if (session.user) {
-        session.user.name = token.name;
-        session.user.email = token.email;
+        session.user.name = token.name ?? session.user.name;
+        session.user.email = token.email ?? session.user.email;
         session.user.isOAuth = token.isOAuth as boolean;
       }
 
@@ -67,7 +75,7 @@ export const {
       return token;
     },
   },
-  secret: process.env.NEXT_AUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
 
   adapter: PrismaAdapter(db) as Adapter,
   session: { strategy: "jwt" },

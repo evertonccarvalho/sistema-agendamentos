@@ -4,10 +4,10 @@ import type * as z from "zod";
 import { sendVerificationEmail } from "@/actions/email/mail";
 import { generateVerificationToken } from "@/actions/users/tokens";
 import { getUserByEmail } from "@/services/user";
-import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
+import { DEFAULT_LOGIN_REDIRECT } from "../../lib/routes";
 import { LoginSchema } from "@/lib/schemas";
 import { AuthError } from "next-auth";
-import { signIn } from "../../../auth";
+import { signIn } from "../../lib/auth";
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,

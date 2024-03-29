@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getEventsByCreatorId } from "@/actions/eventType/getEvent";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { auth } from "../../../../../../auth";
+import { auth } from "../../../../../lib/auth";
 import CardEventTypes from "../../components/CardEventTypes";
 import Image from "next/image";
 

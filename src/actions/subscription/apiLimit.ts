@@ -2,7 +2,7 @@
 
 import { MAX_FREE_COUNTS } from "@/lib/const";
 import { db } from "@/lib/prisma";
-import { auth } from "../../../auth";
+import { auth } from "../../lib/auth";
 
 
 export const checkEventTypeLimit = async () => {

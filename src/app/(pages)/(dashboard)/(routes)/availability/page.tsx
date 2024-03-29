@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { getAvailabilitys } from "@/actions/availability/getAvailabilitys";
 import TabsAvailabilityComponent from "./_components/tabsBookingItems";
-import { auth } from "../../../../../../auth";
+import { auth } from "../../../../../lib/auth";
 
 const AvailabilityPage = async () => {
 	const breadcrumbItems = [{ title: "Disponibilidade", link: "/dashboard" }];

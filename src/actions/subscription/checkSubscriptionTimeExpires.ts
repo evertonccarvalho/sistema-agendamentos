@@ -1,5 +1,5 @@
 import { db } from "@/lib/prisma";
-import { auth } from "../../../auth";
+import { auth } from "../../lib/auth";
 import type { UserSubscription } from "@prisma/client";
 
 export const checkSubscriptionTimeExpires =
