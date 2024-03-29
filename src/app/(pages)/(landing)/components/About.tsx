@@ -7,10 +7,10 @@ export const About = () => {
       <div className="bg-muted/50 border rounded-lg py-12">
         <div className="px-6 flex flex-col-reverse md:flex-row gap-8 md:gap-12">
           <Image
-            src="/ico.png"
+            src="/LOGO-ICONE.png"
             alt=""
-            width={100}
-            height={100}
+            width={1000}
+            height={1000}
             className="max-w-[250px] lg:flex hidden w-full object-contain rounded-lg"
           />
           <div className="bg-green-0 flex flex-col text-center md:text-left justify-between">
@@ -19,7 +19,7 @@ export const About = () => {
                 <span className="text-primary">
                   Sobre{" "}
                 </span>
-                AgendaÊ
+                Agendaê
               </h2>
               <p className="text-sm  md:text-lg  text-muted-foreground mt-4">
                 A Agendaê é uma plataforma inovadora de agendamentos para indivíduos e empresas. Nosso objetivo é simplificar o processo de agendamento, oferecendo uma experiência fácil e confiável. Com uma comunidade crescente de usuários, estamos deixando uma marca significativa no cenário de sistemas de agendamento. Na Agendaê, acreditamos que um sistema de agendamento eficaz pode fazer toda a diferença na organização pessoal e empresarial. Junte-se a nós nesta jornada para simplificar o agendamento na era digital.

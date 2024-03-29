@@ -32,14 +32,14 @@ export const Hero = () => {
 							<span className="inline bg-gradient-to-r from-[#F596D3]  to-[#D247BF] text-transparent bg-clip-text">
 								Agendamento
 							</span>{" "}
-							facil
+							fácil
 						</h1>{" "}
 						e{" "}
 						<h2 className="inline ">
 							<span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] text-transparent bg-clip-text">
 								rápido
 							</span>{" "}
-							para você
+							para você.
 						</h2>
 					</main>
 				)}
@@ -59,7 +59,7 @@ export const Hero = () => {
 						<>
 							<Link
 								href="/auth/register"
-								className={`w-full md:w-1/3 ${buttonVariants({
+								className={`w-full md:w-1/3 text-white/80 ${buttonVariants({
 									variant: "default",
 								})}`}
 							>

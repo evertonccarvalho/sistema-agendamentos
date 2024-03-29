@@ -71,7 +71,7 @@ const PricingCard = ({ pricing }: CardProps) => {
         ) : (
           <Link
             href="/auth/register"
-            className={`w-full  ${buttonVariants({
+            className={`w-full text-white  ${buttonVariants({
               variant: "default",
             })}`}
           >
