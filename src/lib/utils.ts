@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 const baseUrl = process.env.VERCEL_URL
 	? `https://${process.env.VERCEL_URL}`
-	: process.env.NEXT_PUBLIC_BASEUR;
+	: process.env.NEXT_PUBLIC_APP_URL;
 
 export function absoluteUrl(path: string) {
 	return `${baseUrl}${path}`;
