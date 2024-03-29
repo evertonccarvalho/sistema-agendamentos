@@ -44,20 +44,10 @@ enum Locations {
 const saveNewEventSchema = z.object({
 	// id: z.string().optional(),
 	// creatorId: z.string(),
-	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
-	description: z
+	name: z
 		.string()
-		.min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
-	duration: z.coerce.number().default(30),
-	active: z.boolean().default(true),
-	locationType: z.enum(["ZOOM", "PHONE_CALL", "PRESENCIAL"]).nullable(),
-	address: z.string().nullable(),
-
-	capacity: z.coerce.number().nullable().default(1),
-	arrivalInfo: z.string().nullable(),
-});
-const updateEventSchema = z.object({
-	name: z.string().min(5, "Nome do evento deve ter no mínimo 5 caracteres."),
+		.min(5, "Nome do evento deve ter no mínimo 5 caracteres.")
+		.max(40, "Nome do evento deve ter no máximo 40 caracteres."),
 	description: z
 		.string()
 		.min(5, "Descrição do evento deve ter no mínimo 5 caracteres."),
@@ -120,7 +110,6 @@ export function NewEventForm({
 	const onSubmit = async (data: SaveNewEvent) => {
 		setIsSubmitting(true);
 		const FORM_DATA = saveNewEventSchema.parse(data);
-		console.log("valores recebidos do form", data);
 
 		const create = {
 			name: data.name,
@@ -153,7 +142,6 @@ export function NewEventForm({
 				} else {
 					form.reset();
 					res && toast.success("Evento criado com sucesso!");
-					console.log("dados do formulario", create);
 					router.push("/dashboard");
 				}
 			}
@@ -228,31 +216,35 @@ export function NewEventForm({
 						</label>
 						<label>
 							<span>Local.</span>
-							<FormField control={form.control} name="locationType" render={({field})=>(
-								<Select
-								onValueChange={(ev) => {
-									field.onChange(ev);
-									if (ev !== "PRESENCIAL") {
-										setEventLocation(ev);
-										setIsActive(false);
-									} else {
-										setIsActive(true);
-									}
-								}}
-								defaultValue={field.value?.toString()}
-							>
-								<SelectTrigger className="w-full">
-									<SelectValue placeholder="30 min" />
-								</SelectTrigger>
-								<SelectContent>
-									{Object.values(Locations).map((location) => (
-										<SelectItem key={location} value={location}>
-											{location}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							)}/>
+							<FormField
+								control={form.control}
+								name="locationType"
+								render={({ field }) => (
+									<Select
+										onValueChange={(ev) => {
+											field.onChange(ev);
+											if (ev !== "PRESENCIAL") {
+												setEventLocation(ev);
+												setIsActive(false);
+											} else {
+												setIsActive(true);
+											}
+										}}
+										defaultValue={field.value?.toString()}
+									>
+										<SelectTrigger className="w-full">
+											<SelectValue placeholder="30 min" />
+										</SelectTrigger>
+										<SelectContent>
+											{Object.values(Locations).map((location) => (
+												<SelectItem key={location} value={location}>
+													{location}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								)}
+							/>
 						</label>
 						{isActive && (
 							<>

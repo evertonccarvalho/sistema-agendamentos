@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import type { EventType } from "@prisma/client";
+import { Card } from "@/components/ui/card";
 
 interface EventDetailsProps {
 	params: {
@@ -19,11 +20,11 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 	const [eventName, setEventName] = useState<string | undefined>(undefined);
 	const [eventDuration, setEventDuration] = useState<string | undefined>("30");
 	const [eventLocation, setEventLocation] = useState<string | undefined>(
-		undefined,
-		);
-		
+		undefined
+	);
+
 	const [initialData, setInititalData] = useState<EventType | null>(null);
-		
+
 	const getData = useCallback(async () => {
 		if (!params?.id) {
 			return redirect("/dashboard");
@@ -41,30 +42,28 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 
 	useEffect(() => {
 		getData();
-	},[getData]);
+	}, [getData]);
 
 	const userName = data?.user.name || "";
 	const userId = data?.user.id || "";
 	const breadcrumbItems = [{ title: "Editar Evento", link: "/new" }];
 
 	return (
-		<main className="flex-1 gap-5 space-y-4 bg-card/80 p-4 md:p-8 pt-6">
+		<main className="flex-1 space-y-4  md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
 			{initialData && (
-				<section className="flex w-full items-start justify-center gap-3 flex-wrap">
+				<Card className="drop-shadow-lg bg-muted/50 border  md:p-6 rou p-2 flex-col md:flex-row  flex w-full  items-center md:items-start justify-center gap-3 ">
 					<NewEventForm
 						setEventName={setEventName}
 						setEventDuration={setEventDuration}
 						setEventLocation={setEventLocation}
 						initialData={initialData}
 					/>
-					<section className="w-[37rem] h-[30rem] rounded-md max-w-[1200px] border-[1px] border-zinc-700 flex flex-col max-[1135px]:w-full md:flex-row">
-						<SchedulingItem
-							userId={userId}
-							eventData={{ userName, eventName, eventDuration, eventLocation }}
-						/>
-					</section>
-				</section>
+					<SchedulingItem
+						userId={userId}
+						eventData={{ userName, eventName, eventDuration, eventLocation }}
+					/>
+				</Card>
 			)}
 		</main>
 	);
