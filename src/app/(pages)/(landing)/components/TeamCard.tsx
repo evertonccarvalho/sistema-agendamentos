@@ -64,7 +64,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
 						<p>{team.description}</p>
 					</CardContent>
 
-					<CardFooter className="flex items-end h-8 p-0 flex-1">
+					<CardFooter className="flex items-end h-8 p-0 mb-1 flex-1">
 						{team.socialNetworks.map(({ name, url }: SociaNetworkslProps) => (
 							<div key={name}>
 								<Link

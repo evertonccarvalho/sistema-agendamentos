@@ -91,7 +91,7 @@ export const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Senha</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -106,7 +106,7 @@ export const LoginForm = () => {
                     asChild
                     className="px-0 font-normal"
                   >
-                    <Link href="/auth/reset">Forgot password?</Link>
+                    <Link href="/auth/reset">Esqueceu sua senha?</Link>
                   </Button>
                   <FormMessage />
                 </FormItem>
@@ -116,7 +116,7 @@ export const LoginForm = () => {
         </div>
         <FormError message={error || urlError} />
         <FormSuccess message={success} />
-        <Button disabled={isPending} type="submit" className="w-full">
+        <Button disabled={isPending} type="submit" className="w-full text-white">
           Login
         </Button>
       </form>
