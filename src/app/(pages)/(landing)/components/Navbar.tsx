@@ -77,7 +77,7 @@ export const Navbar = () => {
               <SheetContent side={"left"}>
                 <SheetHeader>
                   <SheetTitle className="font-bold text-xl">
-                    Shadcn/React
+                  <Image alt="logo" src="/logo.png" className="w-28" width={100} height={100}/>
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col justify-center items-center gap-2 mt-4">
@@ -93,12 +93,12 @@ export const Navbar = () => {
                   ))}
                   <Link
                     href="/auth/login"
-                    className={`w-[110px] border ${buttonVariants({
+                    className={`w-[110px] border text-white ${buttonVariants({
                       variant: "secondary",
                     })}`}
                     rel="noreferrer"
                   >
-                    <LogInIcon className="mr-2 w-5 h-5" />
+                    <LogInIcon className="mr-2 w-5 h-5 " />
                     Entrar
                   </Link>
                 </nav>
@@ -128,7 +128,7 @@ export const Navbar = () => {
                 Minha Conta
               </Link>
             ) : (
-              <Link href="/auth/login" className={`border ${buttonVariants({ variant: "default" })}`}>
+              <Link href="/auth/login" className={`border text-white ${buttonVariants({ variant: "default" })}`}>
                 <LogIn className="mr-2 w-5 h-5" />
                 Entrar
               </Link>
