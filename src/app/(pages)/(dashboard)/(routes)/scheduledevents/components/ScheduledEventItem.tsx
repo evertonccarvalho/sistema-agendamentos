@@ -124,7 +124,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 						</div>
 
 						<AccordionTrigger className="font-semibold  w-full justify-end text-primary gap-1">
-							Detalhes
+							<p className="hidden md:block">Detalhes</p>
 						</AccordionTrigger>
 					</div>
 					<AccordionContent className="border-t-[1px] ">
