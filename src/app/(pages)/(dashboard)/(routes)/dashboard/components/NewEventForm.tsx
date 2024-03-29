@@ -111,17 +111,6 @@ export function NewEventForm({
 		setIsSubmitting(true);
 		const FORM_DATA = saveNewEventSchema.parse(data);
 
-		const create = {
-			name: data.name,
-			description: data.description,
-			duration: Number(data.duration),
-			locationType: data.locationType,
-			address: data.address,
-			capacity: Number(data.capacity),
-			arrivalInfo: data.arrivalInfo,
-			active: true,
-		};
-
 		try {
 			if (initialData) {
 				const res = await editEvent(
@@ -132,7 +121,7 @@ export function NewEventForm({
 				res && toast.success("Evento editado com sucesso!");
 				res && router.push("/dashboard");
 			} else {
-				const res = await createEvent(create, USER_ID as string);
+				const res = await createEvent(FORM_DATA, USER_ID as string);
 				if (
 					res &&
 					"error" in res &&

@@ -31,7 +31,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 
 	const username = eventType.creator.email?.substring(
 		0,
-		eventType.creator.email.indexOf("@"),
+		eventType.creator.email.indexOf("@")
 	);
 
 	const eventUrl = absoluteUrl(`/${username}/${eventType.id}`);
@@ -43,10 +43,10 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			if (
 				res &&
 				res.error ===
-				"Este tipo de evento tem reservas associadas e não pode ser excluído."
+					"Este tipo de evento tem reservas associadas e não pode ser excluído."
 			) {
 				toast.error(
-					"Não é possível remover o evento, pois já foi realizado um agendamento.",
+					"Não é possível remover o evento, pois já foi realizado um agendamento."
 				);
 			} else {
 				console.log(res);
@@ -73,7 +73,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			.catch((error) => {
 				console.error(
 					"Erro ao copiar link do evento para a área de transferência:",
-					error,
+					error
 				);
 			});
 	};
@@ -84,7 +84,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			await toggleEventTypeActive(
 				eventType.creatorId,
 				eventType.id,
-				!eventType.active,
+				!eventType.active
 			);
 			console.log("Estado do evento alterado com sucesso.");
 		} catch (error) {
@@ -95,33 +95,41 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	};
 
 	return (
-		<Card className={`relative max-w-sm w-full md:break-inside-avoid overflow-hidden border drop-shadow-md hover:drop-shadow-xl
-		${eventType.active
+		<Card
+			className={`relative max-w-sm w-full md:break-inside-avoid overflow-hidden border drop-shadow-md hover:drop-shadow-xl
+		${
+			eventType.active
 				? "border-t-4  border-t-primary"
 				: "border-t-4  border-t-muted-foreground opacity-80"
-			}`}
+		}`}
 		>
 			<CardHeader className="flex p-3 md:p-6 flex-row items- justify-between ">
 				<div className="flex gap-1 w-full flex-col">
-					<CardTitle className="text-balance text-base capitalize mr-2">{eventType.name}</CardTitle>
+					<CardTitle className="text-balance text-base capitalize mr-2">
+						{eventType.name}
+					</CardTitle>
 					<CardDescription className="flex items-start flex-col gap-1 ">
-
-						<div className="flex items-center gap-1"><Timer size={16} />{eventType.duration} MIn </div>
-						<div className="flex items-center gap-1">	<Users size={16} />{eventType.capacity}</div>
+						<h1 className="flex items-center gap-1">
+							<Timer size={16} />
+							{eventType.duration} Min{" "}
+						</h1>
+						<h1 className="flex items-center gap-1">
+							{" "}
+							<Users size={16} />
+							{eventType.capacity}
+						</h1>
 					</CardDescription>
 					<CardDescription>{eventType.description}</CardDescription>
 					<Link href={eventUrl} className="text-sm pt-1 text-blue-600">
 						Ver página de reserva
 					</Link>
 				</div>
-				{/* <div className="text-primary justify-end bg-red-900 h-full flex right-0 m-4 top-0"> */}
 				<EventSettings
 					onDelete={() => setOpenDelete(true)}
 					onEdit={handleEdit}
 					onToggleActive={handleToggleActive}
 					isActive={eventType.active}
 				/>
-				{/* </div> */}
 			</CardHeader>
 
 			<Separator />
@@ -136,15 +144,6 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 						<Copy size={16} />
 						Copiar
 					</Button>
-					{/* <Button
-						onClick={handleShare}
-						variant="outline"
-						size="sm"
-						className="bg-transparent text-primary flex items-center gap-1"
-					>
-						Compartilhar
-						<Share2Icon size={16} />
-					</Button> */}
 				</div>
 			</CardContent>
 
