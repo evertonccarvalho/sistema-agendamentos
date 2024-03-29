@@ -15,7 +15,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState, useEffect, useCallback } from "react";
 import { createEvent } from "@/actions/eventType/saveEvent";
 import { useRouter } from "next/navigation";
 import { editEvent } from "@/actions/eventType/editEvent";
@@ -84,7 +84,15 @@ export function NewEventForm({
 	const { data } = useSession();
 	const USER_ID = data?.user?.id;
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isActive, setIsActive] = useState<boolean>(false);
 
+	const setActiveDefaultValue = useCallback(() => {
+		initialData?.locationType === "PRESENCIAL" && setIsActive(true);
+	}, [initialData?.locationType]);
+
+	useEffect(() => {
+		setActiveDefaultValue();
+	}, [setActiveDefaultValue]);
 	const defaultValues = initialData
 		? initialData
 		: {
@@ -103,7 +111,6 @@ export function NewEventForm({
 		defaultValues,
 	});
 
-	const [isActive, setIsActive] = useState<boolean>(false);
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 
