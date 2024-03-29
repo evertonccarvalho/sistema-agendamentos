@@ -5,7 +5,7 @@ import type { z } from "zod";
 import { sendVerificationEmail } from "@/actions/email/mail";
 import { generateVerificationToken } from "@/actions/users/tokens";
 import { db } from "@/lib/prisma";
-import { getUserByEmail } from "@/services/user";
+import { getUserByEmail } from "@/actions/users/user";
 import { RegisterSchema } from "@/lib/schemas";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {

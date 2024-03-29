@@ -3,7 +3,7 @@
 import type * as z from "zod";
 import { sendVerificationEmail } from "@/actions/email/mail";
 import { generateVerificationToken } from "@/actions/users/tokens";
-import { getUserByEmail } from "@/services/user";
+import { getUserByEmail } from "@/actions/users/user";
 import { DEFAULT_LOGIN_REDIRECT } from "../../lib/routes";
 import { LoginSchema } from "@/lib/schemas";
 import { AuthError } from "next-auth";
