@@ -2,10 +2,10 @@
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { absoluteUrl } from "@/lib/utils";
-import { Copy, Plus } from "lucide-react";
+import { Copy, Link2Icon, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const EventPageHeader = () => {
 	const { data } = useSession();
@@ -30,7 +30,7 @@ const EventPageHeader = () => {
 
 	return (
 		<>
-			<section className="flex w-full">
+			<section className="flex w-full justify-between">
 				<div className="flex w-full gap-3 items-center">
 					<Avatar className="h-10 w-10 ">
 						<AvatarImage
@@ -41,34 +41,43 @@ const EventPageHeader = () => {
 							{data.user?.name ? data.user.name[0] : ""}
 						</AvatarFallback>
 					</Avatar>
-					<div className="flex flex-col gap-2">
-						<h1 className="text-base font-semibold ">{data.user.name}</h1>
-						<div className="flex items-center gap-2 flex-wrap">
-							<Link className="text-base font-light text-blue-500 hover:underline"
-								href={eventUrl}>
-								{eventUrl}
-							</Link>
-							<Button
-								onClick={handleShare}
-								variant="link"
-								size="sm"
-								className="flex items-center gap-1"
+					<div className="flex flex-col justify-start w-full gap-1">
+						<h1 className=" capitalize text-base font-semibold ">{data.user.name}</h1>
+						<div className="flex justify-start md:justify-between   items-center">
+							<div className="flex items-center justify-start">
+								<Link
+									className=" text-sm text-primary underline-offset-4 hover:underline items-center flex gap-1"
+									href={eventUrl}
+								>
+									<Link2Icon size={18} />{" "}
+									<p className="sr-only  md:not-sr-only">
+										<span className="truncate">{eventUrl} </span>
+									</p>
+								</Link>
+								<Button
+									onClick={handleShare}
+									variant="link"
+									size="sm"
+									className="flex items-center gap-1"
+								>
+									<Copy size={16} />
+									<p className="sr-only">Copiar</p>
+
+								</Button>
+							</div>
+							<Link
+								href="/dashboard/new"
+								className=" text-sm text-primary  underline-offset-4 hover:underline items-center flex gap-1"
+
 							>
-								<Copy size={16} />
-								Copiar
-							</Button>
+								<Plus size={18} />{" "}
+								<p className="sr-only  md:not-sr-only">
+									<span className="truncate">Criar Evento</span>
+								</p>
+							</Link>
 						</div>
 					</div>
-
 				</div>
-				<Link href={"/dashboard/new"}>
-					<Button
-						variant="outline"
-						className="bg-transparent rounded-full flex items-center gap-1"
-					>
-						<Plus size={18} /> <p className="md:flex hidden">Criar Evento</p>
-					</Button>
-				</Link>
 			</section>
 		</>
 	);

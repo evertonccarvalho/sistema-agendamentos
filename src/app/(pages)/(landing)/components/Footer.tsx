@@ -102,14 +102,14 @@ export const Footer = () => {
 
       <section className="container pb-14 text-center">
         <h3>
-          &copy; 2024 Éverton Carvalho{" "}
-          <Link
+          &copy; All rights reserved - Designed by Agendaê group - 2024 {" "}
+          {/* <Link
             target="_blank"
             href="https://github.com/everton-c-carvalho"
             className="text-primary transition-all border-primary hover:border-b-2"
           >
             Éverton Carlho
-          </Link>
+          </Link> */}
         </h3>
       </section>
     </footer>

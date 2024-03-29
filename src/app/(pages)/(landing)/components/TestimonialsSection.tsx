@@ -10,7 +10,7 @@ export const TestimonialsSection = () => {
 					{" "}
 					as Pessoas Amam{" "}
 				</span>
-				o AgendaÊ
+				o Agendaê
 			</h2>
 
 			<p className="text-xl text-muted-foreground pt-4 pb-8">

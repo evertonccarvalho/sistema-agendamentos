@@ -1,9 +1,9 @@
 "use client";
 import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
-import { Share2Icon, Timer } from "lucide-react";
+import { Copy, Timer } from "lucide-react";
 import { useState } from "react";
-import { EventSettings } from "./eventSetting";
+import { EventSettings } from "../../../components/eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
 import { useRouter } from "next/navigation";
 import {
@@ -40,9 +40,14 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			setLoading(true);
 			setOpenDelete(true);
 			const res = await deleteEvent(eventType.id);
-			if (res && res.error === "Este tipo de evento tem reservas associadas e não pode ser excluído."
+			if (
+				res &&
+				res.error ===
+				"Este tipo de evento tem reservas associadas e não pode ser excluído."
 			) {
-				toast.error("Não é possível remover o evento, pois já foi realizado um agendamento.",);
+				toast.error(
+					"Não é possível remover o evento, pois já foi realizado um agendamento.",
+				);
 			} else {
 				console.log(res);
 				toast.success("Evento removido com sucesso!");
@@ -90,18 +95,15 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 	};
 
 	return (
-		<Card
-			className={`
-			relative max-w-xs w-full md:break-inside-avoid overflow-hidden
-		border drop-shadow-md hover:drop-shadow-xl
+		<Card className={`relative max-w-sm w-full md:break-inside-avoid overflow-hidden border drop-shadow-md hover:drop-shadow-xl
 		${eventType.active
-					? "border-t-4  border-t-green-800"
-					: "border-t-4  border-t-zinc-700 opacity-80"
-				}`}
+				? "border-t-4  border-t-primary"
+				: "border-t-4  border-t-muted-foreground opacity-80"
+			}`}
 		>
-			<CardHeader className="flex flex-row items-center gap-4 ">
-				<div className="flex gap-1 flex-col">
-					<CardTitle className="text-lg">{eventType.name}</CardTitle>
+			<CardHeader className="flex p-3 md:p-6 flex-row items- justify-between ">
+				<div className="flex gap-1 w-full flex-col">
+					<CardTitle className="text-balance text-base capitalize mr-2">{eventType.name}</CardTitle>
 					<CardDescription className="flex items-center">
 						<Timer size={16} />
 						{eventType.duration} Min
@@ -111,20 +113,20 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 						Ver página de reserva
 					</Link>
 				</div>
-				<div className="text-primary absolute right-0 m-4 top-0">
-					<EventSettings
-						onDelete={() => setOpenDelete(true)}
-						onEdit={handleEdit}
-						onToggleActive={handleToggleActive}
-						isActive={eventType.active}
-					/>
-				</div>
+				{/* <div className="text-primary justify-end bg-red-900 h-full flex right-0 m-4 top-0"> */}
+				<EventSettings
+					onDelete={() => setOpenDelete(true)}
+					onEdit={handleEdit}
+					onToggleActive={handleToggleActive}
+					isActive={eventType.active}
+				/>
+				{/* </div> */}
 			</CardHeader>
 
 			<Separator />
 			<CardContent className="flex gap-2 p-2 items-center justify-center">
 				<div className="w-full flex justify-end">
-					{/* <Button
+					<Button
 						onClick={handleShare}
 						variant="link"
 						size="sm"
@@ -132,8 +134,8 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 					>
 						<Copy size={16} />
 						Copiar
-					</Button> */}
-					<Button
+					</Button>
+					{/* <Button
 						onClick={handleShare}
 						variant="outline"
 						size="sm"
@@ -141,7 +143,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 					>
 						Compartilhar
 						<Share2Icon size={16} />
-					</Button>
+					</Button> */}
 				</div>
 			</CardContent>
 

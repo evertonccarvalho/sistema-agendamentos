@@ -12,9 +12,9 @@ export const pricingList: Pricing[] = [
     description: "Para iniciantes com agendamentos básicos.",
     buttonText: "Comece Grátis",
     benefitList: [
-      "Um tipo de evento com reuniões ilimitadas",
-      "Conecte um calendário e integrações básicas",
-      "Personalize sua página de agendamento",
+      "3 tipos de eventos com reuniões ilimitadas.",
+      "Conecte um calendário e integrações básicas.",
+      "Personalize sua página de agendamento.",
     ],
   },
   {
@@ -53,44 +53,44 @@ export const teamList: Team[] = [
   {
     imageUrl: "/everton.jpeg",
     name: "Éverton Carvalho",
-    position: "Full Stack Developer",
-    description: "Desenvolvedor Full Stack com experiência em construção de aplicativos web e móveis.",
+    position: "CEO / Full Stack Developer",
+    description: "Fundador e Desenvolvedor Full Stack com experiência em construção de aplicativos web e móveis.",
     socialNetworks: [
       { name: "Linkedin", url: "http://linkedin.com/in/everton-c-carvalho" },
       { name: "Github", url: "https://github.com/evertonccarvalho" },
     ],
   },
   {
-    imageUrl: "https://i.pravatar.cc/150?img=35",
-    name: "Emma Smith",
-    position: "Product Manager",
-    description: "Gerente de Produto com experiência em liderança de equipes multifuncionais.",
+    imageUrl: "/jonatas.png",
+    name: "Jonatas Silva",
+    position: "CTO / Full Stack Developer",
+    description: "Co-fundador e desenvolvedor Full Stack.",
     socialNetworks: [
-      { name: "Linkedin", url: "http://linkedin.com/in/everton-c-carvalho" },
-      { name: "Github", url: "https://github.com/evertonccarvalho" },
-      { name: "Instagram", url: "https://www.instagram.com/" },
+      { name: "Linkedin", url: "https://www.linkedin.com/in/jscodedevelopment/" },
+      { name: "Github", url: "https://github.com/JsCodeDevlopment" },
+      { name: "Instagram", url: "https://www.instagram.com/jonatasilva14" },
     ],
   },
   {
-    imageUrl: "https://i.pravatar.cc/150?img=36",
-    name: "Ashley Ross",
+    imageUrl: "/douglas.png",
+    name: "Douglas Trindade",
     position: "Frontend Developer",
     description: "Desenvolvedor Frontend apaixonado por criar interfaces de usuário intuitivas.",
     socialNetworks: [
-      { name: "Linkedin", url: "http://linkedin.com/in/everton-c-carvalho" },
-      { name: "Instagram", url: "https://www.instagram.com/" },
+      { name: "Linkedin", url: "https://www.linkedin.com/in/douglastrindade1/" },
+      { name: "Github", url: "https://github.com/DouglasTrindade" },
     ],
   },
-  {
-    imageUrl: "https://i.pravatar.cc/150?img=17",
-    name: "Bruce Rogers",
-    position: "Backend Developer",
-    description: "Desenvolvedor Backend com experiência em construção e manutenção de sistemas robustos.",
-    socialNetworks: [
-      { name: "Linkedin", url: "http://linkedin.com/in/everton-c-carvalho" },
-      { name: "Github", url: "https://github.com/evertonccarvalho" },
-    ],
-  },
+  // {
+  //   imageUrl: "https://i.pravatar.cc/150?img=17",
+  //   name: "Bruce Rogers",
+  //   position: "Backend Developer",
+  //   description: "Desenvolvedor Backend com experiência em construção e manutenção de sistemas robustos.",
+  //   socialNetworks: [
+  //     { name: "Linkedin", url: "http://linkedin.com/in/everton-c-carvalho" },
+  //     { name: "Github", url: "https://github.com/evertonccarvalho" },
+  //   ],
+  // },
 ];
 
 
