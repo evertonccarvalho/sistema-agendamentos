@@ -5,7 +5,7 @@ import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/compone
 import { getEventsById } from "@/actions/eventType/getEventById";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { EventType } from "@prisma/client";
 
 interface EventDetailsProps {
@@ -20,11 +20,11 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 	const [eventDuration, setEventDuration] = useState<string | undefined>("30");
 	const [eventLocation, setEventLocation] = useState<string | undefined>(
 		undefined,
-	);
-
+		);
+		
 	const [initialData, setInititalData] = useState<EventType | null>(null);
-
-	const getData = async () => {
+		
+	const getData = useCallback(async () => {
 		if (!params?.id) {
 			return redirect("/dashboard");
 		}
@@ -33,12 +33,15 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 
 		if (event !== undefined) {
 			setInititalData(event);
+			setEventName(event?.name);
+			setEventDuration(event?.duration.toString());
+			setEventLocation(event?.locationType?.toString());
 		}
-	};
+	}, [params?.id]);
 
 	useEffect(() => {
 		getData();
-	});
+	},[getData]);
 
 	const userName = data?.user.name || "";
 	const userId = data?.user.id || "";
