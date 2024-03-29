@@ -9,15 +9,11 @@ import { toast } from "sonner";
 
 const EventPageHeader = () => {
 	const { data } = useSession();
-	const eventUserName = data?.user?.email?.substring(
-		0,
-		data?.user?.email?.indexOf("@"),
-	);
-	const baseUrl = process.env.NEXT_PUBLIC_BASEURL;
 
 	if (!data?.user) {
 		return null;
 	}
+
 	const username = data.user.email?.substring(0, data.user.email.indexOf("@"));
 	const eventUrl = absoluteUrl(`/${username}`);
 
