@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/lib/prisma";
 
-export const hasAvailability = async (userId: string) => {
+export const HasAvailability = async (userId: string) => {
   try {
     const hasAvailability = await db.availability.findFirst({
       where: {

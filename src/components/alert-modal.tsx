@@ -9,7 +9,7 @@ interface AlertModalProps {
 	loading: boolean;
 	title: string;
 	description: string;
-	buttonVariant: keyof typeof buttonVariants;
+	buttonVariant?: keyof typeof buttonVariants;
 }
 
 export const AlertModal: React.FC<AlertModalProps> = ({
