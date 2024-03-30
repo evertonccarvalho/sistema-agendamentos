@@ -34,13 +34,13 @@ interface FormSubmitData {
 }
 
 const defaultAvailability = [
-	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: false },
+	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 1, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 2, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 3, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 4, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 5, startTime: "08:00", endTime: "18:00", enabled: true },
-	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: false },
+	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: true },
 ];
 
 interface AvailabilityFormProps {
@@ -55,12 +55,12 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		);
 		return existingDay
 			? {
-					id: existingDay.id,
-					weekDay: existingDay.weekDay,
-					startTime: convertMinutesToTimeString(existingDay.startTime),
-					endTime: convertMinutesToTimeString(existingDay.endTime),
-					enabled: existingDay.enabled,
-			  }
+				id: existingDay.id,
+				weekDay: existingDay.weekDay,
+				startTime: convertMinutesToTimeString(existingDay.startTime),
+				endTime: convertMinutesToTimeString(existingDay.endTime),
+				enabled: existingDay.enabled,
+			}
 			: defaultDay;
 	});
 
@@ -79,6 +79,10 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		let res: { success: boolean; message: string } | null = null;
 		try {
 			for (const day of data.availability) {
+				// Atualize o valor de `enabled` no objeto `availability` no formulário
+				form.setValue(`availability.${day.weekDay}.enabled`, day.enabled);
+				console.log(`Dia da semana: ${weekDays[day.weekDay]}, enabled: ${day.enabled}`);
+
 				const availabilityData: CreateAvailabilityParams = {
 					weekDay: day.weekDay,
 					startTime: convertTimeStringToNumber(day.startTime),
@@ -86,19 +90,18 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 					enabled: day.enabled,
 				};
 
-				if (day.enabled) {
-					res = await createAvailability(availabilityData);
-					if (res !== null) {
-						console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
-						if (!res.success) {
-							console.error(
-								`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
-								res.message
-							);
-						}
-					} else {
-						console.error("Resposta nula recebida do servidor.");
+				// Envie os dados da disponibilidade para o backend
+				res = await createAvailability(availabilityData);
+				if (res !== null) {
+					console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
+					if (!res.success) {
+						console.error(
+							`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
+							res.message
+						);
 					}
+				} else {
+					console.error("Resposta nula recebida do servidor.");
 				}
 			}
 			console.log("Todas as disponibilidades foram processadas com sucesso!");
@@ -111,6 +114,9 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 			res?.success && toast.success(res.message);
 		}
 	};
+
+
+
 
 	return (
 		<Form {...form}>
