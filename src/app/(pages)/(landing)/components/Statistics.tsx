@@ -23,9 +23,9 @@ export const Statistics = () => {
         if (entry.isIntersecting) {
           setIsVisible(true);
         }
-        // else {
-        //   setIsVisible(false);
-        // }
+        else {
+          setIsVisible(false);
+        }
       },
       { threshold: 1 }
     );
