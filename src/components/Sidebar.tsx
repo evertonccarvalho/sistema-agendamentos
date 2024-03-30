@@ -35,7 +35,7 @@ const MainSideBar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
   return (
     <>
       <aside
-        className={`relative z-40 gap-5  px-4 hidden md:block border-r-[1px]  duration-500  bg-background dark:border-r-slate-700  ${sidebarOpen ? "w-72" : "md:w-16"
+        className={`relative z-40 gap-5 grid-cols-1 px-4  border-r-[1px]  duration-500  bg-background dark:border-r-slate-700  ${sidebarOpen ? "w-72" : "md:w-16"
           }`}
       >
         <Logos isOpen={sidebarOpen} />
