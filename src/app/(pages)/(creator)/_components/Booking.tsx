@@ -174,6 +174,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 		}
 	};
 
+
 	return (
 		<>
 			<section className="w-full h-full  flex flex-col md:flex-row ">
@@ -186,7 +187,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 						<DateSelector
 							date={selectedDate}
 							handleDateClick={handleDateClick}
-						/>
+							userId={data.creatorId} />
 						<AvailabilityList
 							availability={availability}
 							handleSelectTime={handleSelectTime}

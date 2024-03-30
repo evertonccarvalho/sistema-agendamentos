@@ -28,7 +28,6 @@ const AvailabilityList: React.FC<AvailabilityListProps> = ({
     "vertical",
   );
 
-  // Função para determinar a orientação com base no tamanho da tela
   const determineOrientation = () => {
     if (window.innerWidth >= 767 && window.innerHeight < window.innerWidth) {
       setOrientation("vertical");
@@ -37,17 +36,15 @@ const AvailabilityList: React.FC<AvailabilityListProps> = ({
     }
   };
 
-  // Determinar a orientação inicial ao montar o componente
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     determineOrientation();
-    // Adicionar listener de redimensionamento para atualizar a orientação quando a tela for redimensionada
     window.addEventListener("resize", determineOrientation);
     return () => {
-      // Remover o listener quando o componente for desmontado
       window.removeEventListener("resize", determineOrientation);
     };
   }, []);
+
 
   return (
     <>

@@ -110,6 +110,8 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 							<DateSelector
 								date={selectedDate}
 								handleDateClick={setSelectedDate}
+								userId={userId}
+
 							/>
 							<AvailabilityList
 								availability={availability}
