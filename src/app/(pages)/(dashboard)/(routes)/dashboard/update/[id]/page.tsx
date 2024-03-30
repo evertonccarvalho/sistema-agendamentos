@@ -53,6 +53,7 @@ const UpdateEvent = ({ params }: EventDetailsProps) => {
 			<BreadCrumb items={breadcrumbItems} />
 			{initialData && (
 				<Card className="drop-shadow-lg bg-muted/50 border  md:p-6 rou p-2 flex-col md:flex-row  flex w-full  items-center md:items-start justify-center gap-3 ">
+
 					<NewEventForm
 						setEventName={setEventName}
 						setEventDuration={setEventDuration}
