@@ -31,12 +31,18 @@ export async function POST(request: Request) {
 			date,
 		}: ContactForm = await request.json();
 
-		// Enviar e-mail para o remetente
+		// Assunto para o e-mail do cliente
+		const clientSubject = `${name}, seu agendamento no AgendaÊ foi confirmado`;
+
+		// Assunto para o e-mail do criador
+		const creatorSubject = `Novo agendamento: ${eventType} em ${date}`;
+
+		// Enviar e-mail para o cliente
 		await resend.emails.send({
 			from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
 			to: email,
-			subject: "Confirmação de Recebimento do Contato",
-			text: "Obrigado por entrar em contato. Recebemos sua mensagem e entraremos em contato em breve.",
+			subject: clientSubject,
+			text: "Seu agendamento foi realizado com sucesso.",
 			react: EmailToClient({
 				name,
 				email,
@@ -47,12 +53,12 @@ export async function POST(request: Request) {
 			}),
 		});
 
-		// Enviar e-mail para o destinatário
+		// Enviar e-mail para o criador
 		await resend.emails.send({
 			from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
 			to: [`${creatorEmail}`],
-			subject: "Nova mensagem de contato recebida",
-			text: `Você recebeu uma nova mensagem de contato de ${name} (${email}): ${message}`,
+			subject: creatorSubject,
+			text: `Você recebeu um novo agendamento de ${name} (${email}) para o evento ${eventType} em ${date}`,
 			react: EmailToCreator({
 				name,
 				creatorName,

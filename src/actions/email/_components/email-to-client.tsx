@@ -55,7 +55,7 @@ export const EmailToClient = ({
               />
             </Section>
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-              Novo Contato de {name}
+              {name} Agendamento Realizado!
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
               Olá, {creatorName},

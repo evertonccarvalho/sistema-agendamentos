@@ -137,8 +137,10 @@ const BookingItem = ({ data }: BookingItemProps) => {
 							}
 						),
 						action: {
-							label: "Visualizar",
-							onClick: () => alert("OK"),
+							label: "Voltar Para inicio",
+							onClick: () => {
+								window.history.go(-2);
+							},
 						},
 					});
 				} else {
