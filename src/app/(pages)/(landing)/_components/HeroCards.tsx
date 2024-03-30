@@ -18,7 +18,7 @@ export const HeroCards = () => {
 				<TestimonialCard testmonial={testimonialsList[0]} />
 			</div>
 			{/* Team */}
-			<div className="absolute right-[10px] top-4 w-72 flex flex-col justify-center items-center drop-shadow-xl shadow-black/10 dark:shadow-white/10">
+			<div className="absolute right-[10px] -top-5 w-72 flex flex-col justify-center items-center drop-shadow-xl shadow-black/10 dark:shadow-white/10">
 				<TeamCard team={teamList[0]} />
 			</div>
 			{/* Pricing */}
@@ -26,7 +26,7 @@ export const HeroCards = () => {
 				<PricingCard pricing={pricingList[0]} />
 			</div>
 			{/* Service */}
-			<Card className="absolute w-[340px] -right-[5px] bottom-[-10px] drop-shadow-xl shadow-black/10 dark:shadow-white/10">
+			<Card className="absolute w-[340px] -right-[6px] bottom-[-10px] drop-shadow-xl shadow-black/10 dark:shadow-white/10">
 				<CardHeader className="space-y-1 flex md:flex-row justify-start items-start gap-4">
 					<div className="mt-1 bg-primary/20 p-4 rounded-full">
 						<CalendarIcon className="text-primary" />
