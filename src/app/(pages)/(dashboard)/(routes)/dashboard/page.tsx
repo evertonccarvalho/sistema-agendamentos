@@ -25,7 +25,7 @@ const Dashboard = async () => {
 			<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
 				<EventPageHeader />
 				<Separator className="my-4" />
-				<section className="flex flex-wrap w-full gap-5 items-center justify-center">
+				<section className="flex flex-wrap w-full gap-5 items-center justify-start">
 					{events && events.length > 0 ? (
 						events.map((event) => (
 							<CardEventTypes key={event.id} eventType={event} />
