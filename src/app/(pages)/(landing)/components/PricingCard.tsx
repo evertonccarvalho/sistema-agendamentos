@@ -37,7 +37,7 @@ const PricingCard = ({ pricing }: CardProps) => {
       key={pricing.title}
       className={
         pricing.popular === PopularPlanType.YES
-          ? "drop-shadow-xl shadow-black/10 dark:shadow-white/10"
+          ? "drop-shadow-xl  shadow-black/10 dark:shadow-white/10"
           : ""
       }
     >

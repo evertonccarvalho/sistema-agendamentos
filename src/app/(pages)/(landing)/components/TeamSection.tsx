@@ -10,7 +10,7 @@ import TeamCard from "./TeamCard";
 
 export const TeamSection = () => {
   return (
-    <section id="team" className="container py-24 sm:py-32">
+    <section id="team" className="container py-12 sm:py-20">
       <h2 className="text-3xl md:text-4xl font-bold">
         <span className="text-primary">Nossa equipe </span>
         Dedicada.
@@ -21,20 +21,20 @@ export const TeamSection = () => {
         como você gerencia seus agendamentos.
       </p>
 
-      <div className="flex gap-6 flex-wrap items-center justify-evenly">
+      <div className="flex  gap-6 flex-wrap items-center justify-center">
         <Carousel
           opts={{
             align: "center",
             breakpoints: {
-              '(min-width: 920px)': { align: 'start', active: false }
-            }
+              "(min-width: 920px)": { align: "start", active: false },
+            },
           }}
-          className=" w-full flex items-center justify-center"
+          className=" w-full  max-w-[1152px]"
         >
           <CarouselContent>
             {teamList?.map((team) => (
-              <CarouselItem key={team.name} className="basis-72 pt-4 ">
-                <div className="p-1 flex gap-4">
+              <CarouselItem className="basis-72 md:basis-96  pt-4 ">
+                <div className="flex h-full flex-col ">
                   <TeamCard team={team} />
                 </div>
               </CarouselItem>
@@ -43,7 +43,6 @@ export const TeamSection = () => {
           <CarouselPrevious className="-left-7 md:hidden" />
           <CarouselNext className="-right-7 md:hidden" />
         </Carousel>
-
       </div>
     </section>
   );

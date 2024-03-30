@@ -10,7 +10,7 @@ import TestimonialCard, { type Testimonial } from "./TestimonialsCard";
 
 export const TestimonialsSection = () => {
 	return (
-		<section id="testimonials" className="container py-24 sm:py-32">
+		<section id="testimonials" className="container py-12 sm:py-32">
 			<h2 className="text-3xl md:text-4xl font-bold">
 				Por que
 				<span className="text-primary"> as Pessoas Amam </span>o Agendaê

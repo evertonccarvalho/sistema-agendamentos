@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 export const Hero = () => {
 	const { data } = useSession();
 	return (
-		<section className="container h-full min-h-dvh  flex-col md:flex-row place-items-center justify-center flex py-20 md:py-24 gap-10">
+		<section className="container h-full min-h-dvh  flex-col md:flex-row place-items-center justify-center flex py-4 md:py-24 gap-10">
 			<div className="text-center w-full h-full md:pb-40  lg:text-start space-y-6">
 				{data?.user ? (
 					<main className="text-4xl md:text-6xl font-bold">
