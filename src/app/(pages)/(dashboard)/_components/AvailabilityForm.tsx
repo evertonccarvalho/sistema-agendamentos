@@ -120,18 +120,17 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
+			<form className="flex items-center flex-col w-full" onSubmit={form.handleSubmit(onSubmit)}>
 				{fields.map((field, index) => (
-					<div
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-						key={index}
-						className="flex w-96 items-center pt-3 justify-between gap-2"
-					>
+					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+					<div key={index} className="flex flex-col md:flex-row justify-start md:items-center w-full gap-1  pt-2 ">
 						<FormField
 							control={form.control}
 							name={`availability.${index}.enabled`}
 							render={({ field }) => (
-								<FormItem className="flex justify-start gap-2 items-center">
+								<FormItem
+									className="flex flex-row w-full items-start  text-nowrap space-x-1 space-y-0"
+								>
 									<FormControl>
 										<Checkbox
 											checked={field.value}
@@ -142,34 +141,30 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 											aria-readonly
 										/>
 									</FormControl>
-									<FormLabel className="truncate p-0 m-0 text-xs">
-										{weekDays[index]}
-									</FormLabel>
+									<FormLabel className="text-xs font-light">
+										{weekDays[index]}</FormLabel>
 								</FormItem>
 							)}
 						/>
+
 						<div className="flex gap-1 items-center">
-							<div className="flex flex-col items-start gap-2">
-								<Input
-									className="w-32"
-									disabled={
-										form.getValues(`availability.${index}.enabled`) === false
-									}
-									{...form.register(`availability.${index}.startTime`, {})}
-									type="time"
-								/>
-							</div>
+							<Input
+								className="w-full px-1 py-1 gap-1"
+								disabled={
+									form.getValues(`availability.${index}.enabled`) === false
+								}
+								{...form.register(`availability.${index}.startTime`, {})}
+								type="time"
+							/>
 							<span>-</span>
-							<div className="flex flex-col items-start gap-2">
-								<Input
-									className="w-32"
-									disabled={
-										form.getValues(`availability.${index}.enabled`) === false
-									}
-									{...form.register(`availability.${index}.endTime`, {})}
-									type="time"
-								/>
-							</div>
+							<Input
+								className="w-full px-1 py-1 gap-1"
+								disabled={
+									form.getValues(`availability.${index}.enabled`) === false
+								}
+								{...form.register(`availability.${index}.endTime`, {})}
+								type="time"
+							/>
 						</div>
 					</div>
 				))}
