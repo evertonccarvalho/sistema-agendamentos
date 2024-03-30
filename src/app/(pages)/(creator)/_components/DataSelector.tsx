@@ -51,6 +51,7 @@ const DateSelector = ({ date, handleDateClick, userId }: DateSelectorProps) => {
       onSelect={handleDateClick}
       className="w-full h-full"
       locale={ptBR}
+
       numberOfMonths={1}
       fromDate={new Date()}
       disabled={isDayDisabled}
@@ -58,6 +59,7 @@ const DateSelector = ({ date, handleDateClick, userId }: DateSelectorProps) => {
         caption: { textTransform: "capitalize" },
         cell: { width: "100%", height: "40px" },
         button: { width: "100%", height: "100%" },
+        day: { backgroundAttachment: "#3838" },
         nav_button_previous: { width: "32px", height: "32px" },
         nav_button_next: { width: "32px", height: "32px" },
       }}
