@@ -1,7 +1,7 @@
 "use client";
 import BreadCrumb from "@/components/breadcrumb";
-import { NewEventForm } from "../../components/NewEventForm";
-import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/components/schedulingItem";
+import { NewEventForm } from "../../_components/NewEventForm";
+import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/_components/schedulingItem";
 import { getEventsById } from "@/actions/eventType/getEventById";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";

@@ -2,9 +2,9 @@
 
 import BreadCrumb from "@/components/breadcrumb";
 import { useState } from "react";
-import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/components/schedulingItem";
+import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/_components/schedulingItem";
 import { useSession } from "next-auth/react";
-import { NewEventForm } from "../components/NewEventForm";
+import { NewEventForm } from "../_components/NewEventForm";
 import { Card } from "@/components/ui/card";
 
 const NewEvent = () => {

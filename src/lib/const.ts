@@ -1,6 +1,6 @@
-import type { Pricing } from "../app/(pages)/(landing)/components/PricingCard";
-import type { Team } from "../app/(pages)/(landing)/components/TeamCard";
-import type { Testimonial } from "../app/(pages)/(landing)/components/TestimonialsCard";
+import type { Pricing } from "../app/(pages)/(landing)/_components/PricingCard";
+import type { Team } from "../app/(pages)/(landing)/_components/TeamCard";
+import type { Testimonial } from "../app/(pages)/(landing)/_components/TestimonialsCard";
 
 export const MAX_FREE_COUNTS = 3;
 

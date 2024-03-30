@@ -23,7 +23,7 @@ const SettingsProfilePage = async () => {
 		.locale("pt-br")
 		.format("dddd, D MMMM - HH:mm");
 
-	const popularPlan = {
+	const planToFreeUser = {
 		title: "Padrão",
 		popular: 1,
 		price: 10,
@@ -38,6 +38,24 @@ const SettingsProfilePage = async () => {
 			"Mais personalização de sua página de agendamento e e-mails",
 			"Suporte por chat ao vivo 24/7",
 		],
+		isPro: false,
+	};
+	const plan = {
+		title: "Padrão",
+		popular: 1,
+		price: 10,
+		description: "Para necessidades de agendamento mais sofisticadas.",
+		buttonText: "Iniciar Teste Grátis",
+		benefitList: [
+			"Tipos de evento ilimitados com reuniões ilimitadas",
+			"Múltiplos calendários para disponibilidade e agendamento",
+			"Integrações com Hubspot, PayPal, Stripe e mais",
+			"Tipos de evento em grupo e coletivo",
+			"Lembretes, solicitações de reconfirmação e fluxos de trabalho",
+			"Mais personalização de sua página de agendamento e e-mails",
+			"Suporte por chat ao vivo 24/7",
+		],
+		isPro: true,
 	};
 
 	return (
@@ -96,14 +114,20 @@ const SettingsProfilePage = async () => {
 													E garanta todas as vantagens de ser pro.
 												</p>
 											</div>
-											<PricingCardAdd pricing={popularPlan} />
+											<PricingCardAdd pricing={planToFreeUser} />
 										</>
 									)}
 									{isPro && (
-										<h1 className="text-sm text">
-											Seu plano expira
-											<span className="capitalize"> {EXPIRATION_TIME}</span>
-										</h1>
+										<div className="flex flex-col gap-2 items-center justify-center">
+											<h1 className="text-4xl font-extrabold text-primary">
+												Seu plano atual
+											</h1>
+											<h1 className="text-sm text">
+												Expira
+												<span className="capitalize"> {EXPIRATION_TIME}</span>
+											</h1>
+											<PricingCardAdd pricing={plan} />
+										</div>
 									)}
 									<SubscriptionButton isPro={isPro} />
 								</div>

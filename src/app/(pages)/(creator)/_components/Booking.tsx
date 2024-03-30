@@ -15,7 +15,7 @@ import { getDayBookings } from "@/actions/scheduling/getDayBookings";
 import type { Scheduling } from "@prisma/client";
 import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
-import AvailabilityList from "../../(dashboard)/(routes)/dashboard/components/AvailabilityList ";
+import AvailabilityList from "../../(dashboard)/(routes)/dashboard/_components/AvailabilityList ";
 interface BookingItemProps {
 	data: IEventType;
 }

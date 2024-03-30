@@ -12,7 +12,7 @@ import { Zap } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import PricingCardSubscriber from "@/app/(pages)/(dashboard)/(routes)/dashboard/components/PricingCardSubscriber";
+import PricingCardSubscriber from "@/app/(pages)/(dashboard)/(routes)/dashboard/_components/PricingCardSubscriber";
 import { pricingList } from "@/lib/const";
 
 interface ModalProps {

@@ -3,7 +3,7 @@ import { deleteEvent } from "@/actions/eventType/deleteEvent";
 import { AlertModal } from "@/components/alert-modal";
 import { Copy, Timer, Users } from "lucide-react";
 import { useState } from "react";
-import { EventSettings } from "../../../components/eventSetting";
+import { EventSettings } from "../../../_components/eventSetting";
 import { toggleEventTypeActive } from "@/actions/eventType/toggleEventActive";
 import { useRouter } from "next/navigation";
 import {

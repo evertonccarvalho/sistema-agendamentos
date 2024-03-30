@@ -2,7 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import AvailabilityForm from "../../../components/AvailabilityForm";
+import AvailabilityForm from "../../../_components/AvailabilityForm";
 import type { Availability } from "@prisma/client";
 
 interface TabsAvailabilityComponentProps {

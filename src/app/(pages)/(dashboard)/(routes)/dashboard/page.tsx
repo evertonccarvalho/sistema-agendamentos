@@ -4,9 +4,9 @@ import { getEventsByCreatorId } from "@/actions/eventType/getEvent";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { auth } from "../../../../../lib/auth";
-import CardEventTypes from "./components/CardEventTypes";
+import CardEventTypes from "./_components/CardEventTypes";
 import Image from "next/image";
-import EventPageHeader from "./components/eventPageHeader";
+import EventPageHeader from "./_components/eventPageHeader";
 
 const Dashboard = async () => {
 	const breadcrumbItems = [{ title: "Tipos de Evento", link: "/dashboard" }];
