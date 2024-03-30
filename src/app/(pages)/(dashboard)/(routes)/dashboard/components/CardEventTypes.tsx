@@ -147,7 +147,7 @@ const CardEventTypes = ({ eventType }: CardEventProps) => {
 			</CardContent>
 
 			<AlertModal
-				buttonVariant="descructive"
+				variant="destructive"
 				title="Tem certeza"
 				description="Essa ação não pode ser desfeita."
 				isOpen={openDelete}

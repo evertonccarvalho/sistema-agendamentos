@@ -52,7 +52,7 @@ const EventPageHeader = () => {
 	return (
 		<>
 			<AlertModal
-				buttonVariant="default"
+				variant="default"
 				title="Você não disponibilidade ativas"
 				description="Para criar um evento é necessário definir disponibilidades"
 				loading={loading}
