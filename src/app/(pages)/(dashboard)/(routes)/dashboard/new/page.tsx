@@ -27,13 +27,12 @@ const NewEvent = () => {
 					setEventName={setEventName}
 					setEventDuration={setEventDuration}
 					setEventLocation={setEventLocation}
+					initialData={undefined}
 				/>
-				{/* <section className="w-[37rem] h-[26rem] rounded-md max-w-[1200px] border-[1px] flex flex-col max-[1135px]:w-full md:flex-row"> */}
 				<SchedulingItem
 					userId={userId}
 					eventData={{ userName, eventName, eventDuration, eventLocation }}
 				/>
-				{/* </section> */}
 			</Card>
 		</main>
 	);

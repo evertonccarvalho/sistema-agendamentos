@@ -1,6 +1,5 @@
 "use client"
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,13 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CheckIcon } from "lucide-react";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
 
 interface CardProps {
   pricing: Pricing;
 }
-export interface Pricing {
+interface Pricing {
   title: string;
   popular: PopularPlanType;
   price: number;
@@ -29,20 +26,19 @@ enum PopularPlanType {
   YES = 1,
 }
 
-const PricingCard = ({ pricing }: CardProps) => {
-  const { data } = useSession();
+export const PricingCardAdd = ({ pricing }: CardProps) => {
 
   return (
     <Card
       key={pricing.title}
       className={
         pricing.popular === PopularPlanType.YES
-          ? "drop-shadow-xl  shadow-black/10 dark:shadow-white/10"
+          ? "drop-shadow-xl shadow-black/10 dark:shadow-white/10 border-primary/30 border"
           : ""
       }
     >
       <CardHeader>
-        <CardTitle className="flex item-center justify-between">
+        <CardTitle className="flex item-center justify-between text-4xl font-extrabold">
           {pricing.title}
           {pricing.popular === PopularPlanType.YES ? (
             <Badge variant="secondary" className="text-sm text-primary">
@@ -51,7 +47,7 @@ const PricingCard = ({ pricing }: CardProps) => {
           ) : null}
         </CardTitle>
         <div>
-          <span className="text-3xl font-bold">R$ {pricing.price}</span>
+          <span className="text-2xl font-bold">R$ {pricing.price}</span>
           <span className="text-muted-foreground"> /Mês</span>
         </div>
 
@@ -59,25 +55,7 @@ const PricingCard = ({ pricing }: CardProps) => {
       </CardHeader>
 
       <CardContent>
-        {data?.user ? (
-          <Link
-            href="/dashboard"
-            className={`w-full  ${buttonVariants({
-              variant: "default",
-            })}`}
-          >
-            {pricing.buttonText}
-          </Link>
-        ) : (
-          <Link
-            href="/auth/register"
-            className={`w-full text-white  ${buttonVariants({
-              variant: "default",
-            })}`}
-          >
-            {pricing.buttonText}
-          </Link>
-        )}
+        <h1 className="text-2xl font-bold">Benefícios Incríveis!</h1>
       </CardContent>
 
       <hr className="w-4/5 m-auto mb-4" />
@@ -101,5 +79,3 @@ const PricingCard = ({ pricing }: CardProps) => {
     </Card>
   );
 };
-
-export default PricingCard;

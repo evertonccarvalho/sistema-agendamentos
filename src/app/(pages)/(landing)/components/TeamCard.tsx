@@ -45,7 +45,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
 		<>
 			<Card
 				key={team.name}
-				className="relative w-72 h-72 mt-8 flex flex-col justify-start items-center max-md:w-full"
+				className="relative h-72 mt-8 flex flex-col justify-start items-center max-md:w-full"
 			>
 				<CardHeader className="mt-8 flex justify-center items-center pb-2">
 					<img
@@ -64,7 +64,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
 						<p>{team.description}</p>
 					</CardContent>
 
-					<CardFooter className="flex items-end h-8 p-0 flex-1">
+					<CardFooter className="flex items-end h-8 p-4 mb-1 flex-1">
 						{team.socialNetworks.map(({ name, url }: SociaNetworkslProps) => (
 							<div key={name}>
 								<Link

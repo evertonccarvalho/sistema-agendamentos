@@ -1,13 +1,15 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Modal } from './modal';
+import { useEffect, useState } from "react";
+import { Button, type buttonVariants } from "@/components/ui/button"; // Supondo que a importação do Button e suas variantes seja assim
+import { Modal } from "./modal";
+import type { VariantProps } from "class-variance-authority";
 
-interface AlertModalProps {
+interface AlertModalProps extends VariantProps<typeof buttonVariants> {
 	isOpen: boolean;
 	onClose: () => void;
 	onConfirm: () => void;
 	loading: boolean;
+	title: string;
+	description: string;
 }
 
 export const AlertModal: React.FC<AlertModalProps> = ({
@@ -15,6 +17,9 @@ export const AlertModal: React.FC<AlertModalProps> = ({
 	onClose,
 	onConfirm,
 	loading,
+	title,
+	description,
+	variant,
 }) => {
 	const [isMounted, setIsMounted] = useState(false);
 
@@ -28,8 +33,8 @@ export const AlertModal: React.FC<AlertModalProps> = ({
 
 	return (
 		<Modal
-			title="Tem certeza?"
-			description="Essa ação não pode ser desfeita."
+			title={title}
+			description={description}
 			isOpen={isOpen}
 			onClose={onClose}
 		>
@@ -37,7 +42,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
 				<Button disabled={loading} variant="outline" onClick={onClose}>
 					Cancel
 				</Button>
-				<Button disabled={loading} variant="destructive" onClick={onConfirm}>
+				<Button disabled={loading} variant={variant} onClick={onConfirm}>
 					Continue
 				</Button>
 			</div>
