@@ -61,7 +61,7 @@ const SettingsProfilePage = async () => {
 	return (
 		<>
 			<div className="max-w-screen-2xl mx-auto p-1 md:p-4 rounded-sm bg-muted gap-4 flex flex-col w-full">
-				<section className="flex w-full items-start justify-between gap-2">
+				<section className="flex w-full items-start justify-between flex-wrap gap-2">
 					<div className="w-full flex">
 						<div className="flex gap-1 items-center p-8 h-full w-full justify-center bg-card rounded-md">
 							<div className="flex h-full flex-col md:flex-row items-center gap-4 justify-center">

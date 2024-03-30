@@ -15,7 +15,7 @@ type BreadCrumbPropsType = {
 export default function BreadCrumb({ items }: BreadCrumbPropsType) {
 	return (
 		<>
-			<div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
+			<div className="mb-4 mx-2 flex items-center space-x-1 text-sm text-muted-foreground">
 				<Link
 					href={"/dashboard"}
 					className="overflow-hidden  font-semibold text-sm md:text-base text-ellipsis whitespace-nowrap"

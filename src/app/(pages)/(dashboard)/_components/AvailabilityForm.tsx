@@ -34,13 +34,13 @@ interface FormSubmitData {
 }
 
 const defaultAvailability = [
-	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: false },
+	{ id: "", weekDay: 0, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 1, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 2, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 3, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 4, startTime: "08:00", endTime: "18:00", enabled: true },
 	{ id: "", weekDay: 5, startTime: "08:00", endTime: "18:00", enabled: true },
-	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: false },
+	{ id: "", weekDay: 6, startTime: "08:00", endTime: "18:00", enabled: true },
 ];
 
 interface AvailabilityFormProps {
@@ -55,12 +55,12 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		);
 		return existingDay
 			? {
-					id: existingDay.id,
-					weekDay: existingDay.weekDay,
-					startTime: convertMinutesToTimeString(existingDay.startTime),
-					endTime: convertMinutesToTimeString(existingDay.endTime),
-					enabled: existingDay.enabled,
-			  }
+				id: existingDay.id,
+				weekDay: existingDay.weekDay,
+				startTime: convertMinutesToTimeString(existingDay.startTime),
+				endTime: convertMinutesToTimeString(existingDay.endTime),
+				enabled: existingDay.enabled,
+			}
 			: defaultDay;
 	});
 
@@ -79,6 +79,10 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		let res: { success: boolean; message: string } | null = null;
 		try {
 			for (const day of data.availability) {
+				// Atualize o valor de `enabled` no objeto `availability` no formulário
+				form.setValue(`availability.${day.weekDay}.enabled`, day.enabled);
+				console.log(`Dia da semana: ${weekDays[day.weekDay]}, enabled: ${day.enabled}`);
+
 				const availabilityData: CreateAvailabilityParams = {
 					weekDay: day.weekDay,
 					startTime: convertTimeStringToNumber(day.startTime),
@@ -86,19 +90,18 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 					enabled: day.enabled,
 				};
 
-				if (day.enabled) {
-					res = await createAvailability(availabilityData);
-					if (res !== null) {
-						console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
-						if (!res.success) {
-							console.error(
-								`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
-								res.message
-							);
-						}
-					} else {
-						console.error("Resposta nula recebida do servidor.");
+				// Envie os dados da disponibilidade para o backend
+				res = await createAvailability(availabilityData);
+				if (res !== null) {
+					console.log(`Resposta do servidor para o dia ${day.weekDay}:`, res);
+					if (!res.success) {
+						console.error(
+							`Erro ao criar disponibilidade para o dia ${day.weekDay}:`,
+							res.message
+						);
 					}
+				} else {
+					console.error("Resposta nula recebida do servidor.");
 				}
 			}
 			console.log("Todas as disponibilidades foram processadas com sucesso!");
@@ -112,20 +115,22 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		}
 	};
 
+
+
+
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)}>
+			<form className="flex items-center flex-col w-full" onSubmit={form.handleSubmit(onSubmit)}>
 				{fields.map((field, index) => (
-					<div
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-						key={index}
-						className="flex w-96 items-center pt-3 justify-between gap-2"
-					>
+					// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+					<div key={index} className="flex flex-col md:flex-row justify-start md:items-center w-full gap-1  pt-2 ">
 						<FormField
 							control={form.control}
 							name={`availability.${index}.enabled`}
 							render={({ field }) => (
-								<FormItem className="flex justify-start gap-2 items-center">
+								<FormItem
+									className="flex flex-row w-full items-start  text-nowrap space-x-1 space-y-0"
+								>
 									<FormControl>
 										<Checkbox
 											checked={field.value}
@@ -136,34 +141,30 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 											aria-readonly
 										/>
 									</FormControl>
-									<FormLabel className="truncate p-0 m-0 text-xs">
-										{weekDays[index]}
-									</FormLabel>
+									<FormLabel className="text-xs font-light">
+										{weekDays[index]}</FormLabel>
 								</FormItem>
 							)}
 						/>
+
 						<div className="flex gap-1 items-center">
-							<div className="flex flex-col items-start gap-2">
-								<Input
-									className="w-32"
-									disabled={
-										form.getValues(`availability.${index}.enabled`) === false
-									}
-									{...form.register(`availability.${index}.startTime`, {})}
-									type="time"
-								/>
-							</div>
+							<Input
+								className="w-full px-1 py-1 gap-1"
+								disabled={
+									form.getValues(`availability.${index}.enabled`) === false
+								}
+								{...form.register(`availability.${index}.startTime`, {})}
+								type="time"
+							/>
 							<span>-</span>
-							<div className="flex flex-col items-start gap-2">
-								<Input
-									className="w-32"
-									disabled={
-										form.getValues(`availability.${index}.enabled`) === false
-									}
-									{...form.register(`availability.${index}.endTime`, {})}
-									type="time"
-								/>
-							</div>
+							<Input
+								className="w-full px-1 py-1 gap-1"
+								disabled={
+									form.getValues(`availability.${index}.enabled`) === false
+								}
+								{...form.register(`availability.${index}.endTime`, {})}
+								type="time"
+							/>
 						</div>
 					</div>
 				))}

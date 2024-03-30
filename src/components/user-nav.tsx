@@ -57,14 +57,14 @@ export function UserNav() {
 					<DropdownMenuSeparator />
 					<DropdownMenuGroup>
 						<Link href="/user/myaccount">
-							<DropdownMenuItem>
+							<DropdownMenuItem className="cursor-pointer">
 								Minha Conta
 								<DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
 							</DropdownMenuItem>
 						</Link>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
+					<DropdownMenuItem className="cursor-pointer" onClick={() => signOut({ callbackUrl: "/" })}>
 						Sair
 						<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
 					</DropdownMenuItem>

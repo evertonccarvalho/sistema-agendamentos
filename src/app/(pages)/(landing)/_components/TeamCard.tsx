@@ -45,7 +45,7 @@ const TeamCard = ({ team }: TeamCardProps) => {
 		<>
 			<Card
 				key={team.name}
-				className="relative h-72 mt-8 flex flex-col justify-start items-center max-md:w-full"
+				className="relative h-full mt-8 flex flex-col justify-start items-center max-md:w-full"
 			>
 				<CardHeader className="mt-8 flex justify-center items-center pb-2">
 					<img

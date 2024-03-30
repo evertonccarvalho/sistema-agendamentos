@@ -174,9 +174,10 @@ const BookingItem = ({ data }: BookingItemProps) => {
 		}
 	};
 
+
 	return (
 		<>
-			<div className=" w-full h-full p-4 flex flex-col md:flex-row ">
+			<section className="w-full h-full  flex flex-col md:flex-row ">
 				<EventInfor data={data} />
 				<Separator orientation="horizontal" className="md:hidden" />
 				<Separator orientation="vertical" className="max-md:hidden" />
@@ -186,7 +187,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 						<DateSelector
 							date={selectedDate}
 							handleDateClick={handleDateClick}
-						/>
+							userId={data.creatorId} />
 						<AvailabilityList
 							availability={availability}
 							handleSelectTime={handleSelectTime}
@@ -207,7 +208,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 						onSubmit={handleBookingSubmit}
 					/>
 				</FormModal>
-			</div>
+			</section>
 		</>
 	);
 };

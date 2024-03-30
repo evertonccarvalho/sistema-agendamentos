@@ -1,9 +1,9 @@
 "use client";
 import type React from "react";
-import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import dayjs from "dayjs";
 
 interface AvailabilityListProps {
   isDateSelected: boolean;
@@ -28,7 +28,6 @@ const AvailabilityList: React.FC<AvailabilityListProps> = ({
     "vertical",
   );
 
-  // Função para determinar a orientação com base no tamanho da tela
   const determineOrientation = () => {
     if (window.innerWidth >= 767 && window.innerHeight < window.innerWidth) {
       setOrientation("vertical");
@@ -37,17 +36,15 @@ const AvailabilityList: React.FC<AvailabilityListProps> = ({
     }
   };
 
-  // Determinar a orientação inicial ao montar o componente
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     determineOrientation();
-    // Adicionar listener de redimensionamento para atualizar a orientação quando a tela for redimensionada
     window.addEventListener("resize", determineOrientation);
     return () => {
-      // Remover o listener quando o componente for desmontado
       window.removeEventListener("resize", determineOrientation);
     };
   }, []);
+
 
   return (
     <>
@@ -55,15 +52,15 @@ const AvailabilityList: React.FC<AvailabilityListProps> = ({
         availability &&
         availability.availableTimes &&
         availability.availableTimes.length > 0 && (
-          <div className="max-h-[23rem] justify-center  p-2 flex flex-col gap-2 items-center">
-            <h1 className="text-sm font-semibold capitalize truncate text-center mx-2 md:py-4">
+          <div className="max-h-[22rem] justify-center   flex flex-col gap-1 items-center">
+            <h1 className="text-sm font-semibold capitalize truncate text-center md:py-4">
               {selectedDate
                 ? dayjs(selectedDate).locale("pt-br").format("dddd, D MMMM")
                 : null}
             </h1>
 
-            <ScrollArea className="w-64 md:w-32 p-2 ">
-              <div className="flex items-center md:pr-2 pb-2 gap-2 flex-row md:flex-col h-full w-full ">
+            <ScrollArea className="w-full ">
+              <div className="flex items-center pb-3 md:pb-0 md:pr-3  gap-2 flex-row md:flex-col h-full w-full ">
                 {availability?.possibleTimes.map((hour) => {
                   return (
                     <Button
@@ -80,7 +77,6 @@ const AvailabilityList: React.FC<AvailabilityListProps> = ({
               </div>
               <ScrollBar orientation={orientation} />
             </ScrollArea>
-
           </div>
         )}
     </>
