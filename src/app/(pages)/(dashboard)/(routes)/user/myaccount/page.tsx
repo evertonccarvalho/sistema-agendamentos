@@ -49,9 +49,9 @@ const SettingsProfilePage = async () => {
 							<div className="flex h-full flex-col md:flex-row items-center gap-4 justify-center">
 								<Button
 									variant="ghost"
-									className=" h-14 w-14 md:h-20 md:w-1h-20 rounded-full cursor-default"
+									className=" h-14 w-14 md:h-20 md:w-20 rounded-full cursor-default"
 								>
-									<Avatar className="h-14 w-14 md:h-20 md:w-1h-20">
+									<Avatar className="h-14 w-14 md:h-20 md:w-20">
 										<AvatarImage
 											src={session.user.image ?? ""}
 											alt={session.user.name ?? ""}
