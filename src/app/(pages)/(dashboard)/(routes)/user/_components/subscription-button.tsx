@@ -18,7 +18,8 @@ export const SubscriptionButton = ({ isPro = false }: SubscriptionButtonProps) =
 			setLoading(true);
 
 			const response = await axios.get('/api/stripe');
-			console.log(response);
+			// const url = response.data.url;
+			// window.open(url, '_blank');
 			window.location.href = response.data.url;
 		} catch (error) {
 			toast.error('Something went wrong');
@@ -34,7 +35,7 @@ export const SubscriptionButton = ({ isPro = false }: SubscriptionButtonProps) =
 			onClick={onClick}
 		>
 			{isPro ? 'Gerenciar assinatura' : 'Atualizar'}
-			{!isPro && <Zap className="w-4 h-4 ml-2 fill-white" />}
+			{!isPro && <Zap className="w-4 h-4 ml-2 fill-white " />}
 		</Button>
 	);
 };
