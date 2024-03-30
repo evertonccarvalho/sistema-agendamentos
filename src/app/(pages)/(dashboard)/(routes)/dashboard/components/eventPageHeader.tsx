@@ -7,9 +7,9 @@ import { Copy, Link2Icon, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { hasAvailability } from "@/actions/availability/hasavailability";
 import { AlertModal } from "@/components/alert-modal";
 import { useState } from "react";
+import { HasAvailability } from "@/actions/availability/hasAvailability";
 
 const EventPageHeader = () => {
 	const { data } = useSession();
@@ -35,7 +35,7 @@ const EventPageHeader = () => {
 	};
 
 	const handleNewEvent = async () => {
-		const response = await hasAvailability(data.user.id || "");
+		const response = await HasAvailability(data.user.id || "");
 		console.log(response);
 		if (response === true) {
 			router.push("/dashboard/new");
