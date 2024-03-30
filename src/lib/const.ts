@@ -26,9 +26,7 @@ export const pricingList: Pricing[] = [
     benefitList: [
       "Tipos de evento ilimitados com reuniões ilimitadas",
       "Múltiplos calendários para disponibilidade e agendamento",
-      "Integrações com Hubspot, PayPal, Stripe e mais",
       "Tipos de evento em grupo e coletivo",
-      "Lembretes, solicitações de reconfirmação e fluxos de trabalho",
       "Mais personalização de sua página de agendamento e e-mails",
       "Suporte por chat ao vivo 24/7",
     ],

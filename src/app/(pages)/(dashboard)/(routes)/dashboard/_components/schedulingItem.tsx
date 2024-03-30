@@ -69,11 +69,11 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 	return (
 		<>
 			<Card className="w-full h-full flex flex-col ">
-				<h1 className="bg-foreground/80 text-sm p-1 rounded-t-md text-background text-center  w-full">
+				<header className="bg-foreground/80 text-sm p-1 rounded-t-md text-background text-center  w-full">
 					Esta é uma prévia. Para reservar um evento, compartilhe o link com
 					seus convidados.
-				</h1>
-				<div className="w-full h-full p-4 flex flex-col md:flex-row ">
+				</header>
+				<section className="w-full h-full  flex flex-col md:flex-row ">
 					<section className="w-full h-full md:max-w-[25%]  ">
 						<div className="p-3 flex gap-2 flex-col w-full items-center justify-center md:items-start">
 							<h2 className="font-semibold text-sm text-muted-foreground">
@@ -119,7 +119,7 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 							/>
 						</div>
 					</div>
-				</div>
+				</section>
 			</Card>
 		</>
 	);

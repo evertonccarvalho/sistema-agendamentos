@@ -19,7 +19,7 @@ const DateSelector = ({ date, handleDateClick }: DateSelectorProps) => {
       // disabled={!availability?.has(dayjs(date).format("YYYY-MM-DD"))}
 
       onSelect={handleDateClick}
-      className="w-full h-fit "
+      className="w-full h-full "
       locale={ptBR}
       numberOfMonths={1}
       fromDate={new Date()}
