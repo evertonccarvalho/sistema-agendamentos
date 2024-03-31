@@ -1,6 +1,7 @@
 import EmailToClient from "@/actions/email/_components/email-to-client";
 import EmailToCreator from "@/actions/email/_components/email-to-creator";
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
 		const clientSubject = `${name}, seu agendamento no AgendaÊ foi confirmado`;
 
 		// Assunto para o e-mail do criador
-		const creatorSubject = `Novo agendamento: ${eventType} em ${format(new Date(date ?? ""), "dd/MM/yyyy HH:mm")}`;
+		const creatorSubject = `Novo agendamento: ${eventType} em ${format(new Date(date ?? ""), "dd/MM/yyyy HH:mm", { locale: ptBR })}`;
 
 		// Enviar e-mail para o cliente
 		await resend.emails.send({
@@ -61,7 +62,7 @@ export async function POST(request: Request) {
 			from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
 			to: [`${creatorEmail}`],
 			subject: creatorSubject,
-			text: `Você recebeu um novo agendamento de ${name} (${email}) para o evento ${eventType} em  ${format(new Date(date ?? ""), "dd/MM/yyyy HH:mm")}`,
+			text: `Você recebeu um novo agendamento de ${name} (${email}) para o evento ${eventType} em  ${format(new Date(date ?? ""), "dd/MM/yyyy HH:mm", { locale: ptBR })}`,
 			react: EmailToCreator({
 				name,
 				creatorName,

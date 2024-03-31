@@ -14,6 +14,7 @@ import {
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface EmailToClientProps {
   name?: string;
@@ -69,7 +70,7 @@ export const EmailToClient = ({
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               <strong>Data/Hora do evento:{" "}</strong>
-              {format(new Date(date ?? ""), "dd/MM/yyyy HH:mm")}
+              {format(new Date(date ?? ""), "dd/MM/yyyy HH:mm", { locale: ptBR })}
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               <strong>E-mail:</strong>{" "}
