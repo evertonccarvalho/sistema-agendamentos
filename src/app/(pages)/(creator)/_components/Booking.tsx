@@ -2,7 +2,7 @@
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createBooking } from "@/actions/scheduling/createBooking";
 import type { IEventType } from "@/actions/eventType/interface";
 import { toast } from "sonner";
@@ -11,11 +11,10 @@ import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
 import { useRouter } from "next/navigation";
-import { getDayBookings } from "@/actions/scheduling/getDayBookings";
-import type { Scheduling } from "@prisma/client";
 import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
 import AvailabilityList from "../../(dashboard)/(routes)/dashboard/_components/AvailabilityList ";
+import { useQuery } from "@tanstack/react-query";
 interface BookingItemProps {
 	data: IEventType;
 }
@@ -29,32 +28,26 @@ const BookingItem = ({ data }: BookingItemProps) => {
 	const [open, setOpen] = useState(false);
 	const router = useRouter();
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-	const [availability, setAvailability] = useState<Availability>();
 	const [hour, setHour] = useState<number | undefined>();
 	const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
 	const isDateSelected = !!selectedDate;
 	const userId = data.creatorId;
-	const [dayBookings, setDayBookings] = useState<Scheduling[]>([]);
+	// const [availability, setAvailability] = useState<Availability>();
+	// const [dayBookings, setDayBookings] = useState<Scheduling[]>([]);
 
 	const selectedDateWithoutTime = selectedDate
 		? dayjs(selectedDate).format("YYYY-MM-DD")
 		: null;
 
-	useEffect(() => {
-		const fetchAvailability = async () => {
-			try {
-				if (selectedDateWithoutTime) {
-					const res = await getTimePerDate(userId, selectedDateWithoutTime);
-					setAvailability(res);
-				}
-			} catch (error) {
-				console.error("Error fetching availability:", error);
+	const { data: availability } = useQuery({
+		queryKey: ["availability", userId, selectedDateWithoutTime],
+		queryFn: async () => {
+			if (selectedDateWithoutTime) {
+				return await getTimePerDate(userId, selectedDateWithoutTime);
 			}
-		};
-		if (selectedDateWithoutTime) {
-			fetchAvailability();
-		}
-	}, [userId, selectedDateWithoutTime]);
+		},
+		enabled: !!selectedDateWithoutTime, // Só ativa a consulta quando selectedDateWithoutTime está definido
+	});
 
 	function handleSelectTime(hour: number) {
 		const dateWithTime = dayjs(selectedDate)
@@ -66,18 +59,18 @@ const BookingItem = ({ data }: BookingItemProps) => {
 	}
 
 	//
-	useEffect(() => {
-		if (!selectedDate) {
-			return;
-		}
+	// useEffect(() => {
+	// 	if (!selectedDate) {
+	// 		return;
+	// 	}
 
-		const refreshAvailableHours = async () => {
-			const _dayBookings = await getDayBookings(data.creatorId, selectedDate);
-			setDayBookings(_dayBookings);
-		};
+	// 	const refreshAvailableHours = async () => {
+	// 		const _dayBookings = await getDayBookings(data.creatorId, selectedDate);
+	// 		setDayBookings(_dayBookings);
+	// 	};
 
-		refreshAvailableHours();
-	}, [selectedDate, data.creatorId]);
+	// 	refreshAvailableHours();
+	// }, [selectedDate, data.creatorId]);
 
 	const handleDateClick = (date: Date | undefined) => {
 		setSelectedDate(date);
@@ -93,7 +86,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				return;
 			}
 			const newDate = selectedDateTime;
-			console.log("New date:", newDate);
+			// console.log("New date:", newDate);
 			await createBooking({
 				name: formData.name,
 				email: formData.email,
@@ -104,7 +97,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				date: newDate,
 			});
 
-			console.log("Booking created successfully.");
+			// console.log("Booking created successfully.");
 
 			// Prepare data for email sending
 			const dataForEmail = {
@@ -134,7 +127,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 							"'Para' dd 'de' MMMM 'às' HH':'mm'.'",
 							{
 								locale: ptBR,
-							}
+							},
 						),
 						action: {
 							label: "Voltar Para inicio",
@@ -145,7 +138,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 					});
 				} else {
 					toast.error(
-						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
+						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
 					);
 				}
 			} catch (error) {
@@ -166,7 +159,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
 			const username = data.creator.email?.substring(
 				0,
-				data.creator.email.indexOf("@")
+				data.creator.email.indexOf("@"),
 			);
 			router.push(`${`/${username}/success`}?${queryParams}`);
 		} catch (error) {
@@ -175,7 +168,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
 			setSubmitIsLoading(false);
 		}
 	};
-
 
 	return (
 		<>
@@ -189,7 +181,8 @@ const BookingItem = ({ data }: BookingItemProps) => {
 						<DateSelector
 							date={selectedDate}
 							handleDateClick={handleDateClick}
-							userId={data.creatorId} />
+							userId={data.creatorId}
+						/>
 						<AvailabilityList
 							availability={availability}
 							handleSelectTime={handleSelectTime}

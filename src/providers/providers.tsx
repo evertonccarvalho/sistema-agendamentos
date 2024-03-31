@@ -2,6 +2,7 @@ import type React from "react";
 import ThemeProvider from "./theme-provider";
 import { Toaster } from "sonner";
 import AuthProvider from "./auth";
+import QueryProvider from "./QueryProvide";
 export default function Providers({
 	// session,
 	children,
@@ -18,7 +19,9 @@ export default function Providers({
 				disableTransitionOnChange
 			>
 				<Toaster />
-				<AuthProvider>{children}</AuthProvider>
+				<QueryProvider>
+					<AuthProvider>{children}</AuthProvider>
+				</QueryProvider>
 			</ThemeProvider>
 		</>
 	);

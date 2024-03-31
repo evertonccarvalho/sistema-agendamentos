@@ -1,7 +1,7 @@
 import { getWeekDaysAvailability } from "@/actions/availability/getWeekDays";
 import { Calendar } from "@/components/ui/calendar";
+import { useQuery } from "@tanstack/react-query";
 import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
 
 interface DateSelectorProps {
   date: Date | undefined;
@@ -10,37 +10,27 @@ interface DateSelectorProps {
 }
 
 const DateSelector = ({ date, handleDateClick, userId }: DateSelectorProps) => {
-  const [weekDays, setWeekDays] = useState<number[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const weekDaysData = await getWeekDaysAvailability(userId);
-        setWeekDays(weekDaysData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching availability:", error);
-        setError("Error fetching availability data.");
-        setLoading(false);
-      }
-    };
+  const {
+    data: weekDays,
+    isError,
+    isLoading,
+  } = useQuery<number[]>({
+    queryKey: ["weekDays"],
+    queryFn: () => getWeekDaysAvailability(userId),
+  });
 
-    fetchData();
-  }, [userId]); // Dependência userId garante que o efeito seja chamado quando o userId mudar
-
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>{error}</div>;
+  if (isError) {
+    return <div>Error...</div>;
   }
 
   const isDayDisabled = (day: Date): boolean => {
     const weekDay = day.getDay();
-    return !weekDays.includes(weekDay);
+    return !weekDays?.includes(weekDay);
   };
 
   return (
@@ -51,7 +41,6 @@ const DateSelector = ({ date, handleDateClick, userId }: DateSelectorProps) => {
       onSelect={handleDateClick}
       className="w-full h-full"
       locale={ptBR}
-
       numberOfMonths={1}
       fromDate={new Date()}
       disabled={isDayDisabled}

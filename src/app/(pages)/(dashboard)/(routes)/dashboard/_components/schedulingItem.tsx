@@ -3,13 +3,14 @@ import { Separator } from "@/components/ui/separator";
 
 import { MapPin, Timer } from "lucide-react";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DateSelector from "@/app/(pages)/(creator)/_components/DataSelector";
 import { Card } from "../../../../../../components/ui/card";
 import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
 import "dayjs/locale/pt-br"; // import locale
 import AvailabilityList from "./AvailabilityList ";
+import { useQuery } from "@tanstack/react-query";
 
 interface SchedulingItemProps {
 	eventData: {
@@ -20,14 +21,9 @@ interface SchedulingItemProps {
 	};
 	userId: string;
 }
-interface Availability {
-	possibleTimes: number[];
-	availableTimes: number[];
-}
+
 const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-	const [availability, setAvailability] = useState<Availability>();
-
 	const isDateSelected = !!selectedDate;
 
 	const selectedDateWithoutTime = selectedDate
@@ -38,25 +34,15 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 		setSelectedDate(date);
 	};
 
-	useEffect(() => {
-		const fetchAvailability = async () => {
-			try {
-				if (selectedDateWithoutTime) {
-					const res = await getTimePerDate(
-						userId || "",
-						selectedDateWithoutTime,
-					);
-					setAvailability(res);
-				}
-			} catch (error) {
-				console.error("Error fetching availability:", error);
+	const { data: availability } = useQuery({
+		queryKey: ["availability", userId, selectedDateWithoutTime],
+		queryFn: async () => {
+			if (selectedDateWithoutTime) {
+				return await getTimePerDate(userId, selectedDateWithoutTime);
 			}
-		};
-		if (selectedDateWithoutTime) {
-			fetchAvailability();
-		}
-	}, [userId, selectedDateWithoutTime]);
-
+		},
+		enabled: !!selectedDateWithoutTime, // Só ativa a consulta quando selectedDateWithoutTime está definido
+	});
 	function handleSelectTime(hour: number) {
 		const dateWithTime = dayjs(selectedDate)
 			.set("hour", hour)
@@ -111,7 +97,6 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 								date={selectedDate}
 								handleDateClick={setSelectedDate}
 								userId={userId}
-
 							/>
 							<AvailabilityList
 								availability={availability}
