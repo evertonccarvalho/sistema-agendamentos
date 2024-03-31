@@ -57,7 +57,5 @@ Sistema de agendamentos onde profissionais poderão cadastrar seus serviços e d
 | Foto                                                       | Nome                                                 | Cargo                                                       |
 | ---------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
 | <img src="https://avatars.githubusercontent.com/u/100796752?s=400&u=ae99bd456c6b274cd934d85a374a44340140e222&v=4" width="100"> | [Jonatas Silva](https://github.com/JsCodeDevlopment) | FullStack Developer |
-| ---------------------------------------------------------- | ---------------------------------------------------- |
 | <img src="https://avatars.githubusercontent.com/u/15680854?v=4" width="100"> | [Éverton Carvalho](https://github.com/evertonccarvalho) | FullStack Developer |
-| ---------------------------------------------------------- | ---------------------------------------------------- |
 | <img src="https://avatars.githubusercontent.com/u/91023162?v=4" width="100"> | [Douglas Trindade](https://github.com/DouglasTrindade) | Front-End Developer |
