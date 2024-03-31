@@ -10,7 +10,7 @@ import type { IScheduling } from "../interface/interface";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowUpRight, Trash2Icon } from "lucide-react";
+import { ArrowUpRight, Check, Trash2Icon, X } from "lucide-react";
 import { cancelBooking } from "@/actions/scheduling/cancelBooking";
 import { useState } from "react";
 import { AlertModal } from "@/components/alert-modal";
@@ -24,6 +24,7 @@ interface ScheduledEvent {
 const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
+	const [openReject, setOpenReject] = useState(false);
 
 	const endDate = addMinutes(
 		new Date(scheduling.date ?? ""),
@@ -44,10 +45,10 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 		}
 	};
 
-	const handleCancel = async () => {
+	const handleReject = async () => {
 		try {
 			setLoading(true);
-			setOpenDelete(true);
+			setOpenReject(true);
 			await toggleBookingStatus(scheduling.id, scheduling.userId, "REJECTED");
 			toast.success(
 				`O Agendamento para ${scheduling.eventType.name} às ${format(
@@ -59,7 +60,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 			toast.error("Error ao deletar:");
 		} finally {
 			setLoading(false);
-			setOpenDelete(false);
+			setOpenReject(false);
 		}
 	};
 
@@ -88,6 +89,15 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 				isOpen={openDelete}
 				onClose={() => setOpenDelete(false)}
 				onConfirm={handleDelete}
+				loading={loading}
+			/>
+			<AlertModal
+				variant="destructive"
+				title="Tem certeza"
+				description="Que deseja rejeitar o agendamento"
+				isOpen={openReject}
+				onClose={() => setOpenReject(false)}
+				onConfirm={handleReject}
 				loading={loading}
 			/>
 
@@ -140,11 +150,13 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 											className="rounded-full gap-1 disabled"
 											variant="outline"
 										>
-											<ArrowUpRight size={20} />
+											<Check size={20} />
 											Aceitar
 										</Button>
 									)}
-									{scheduling.status !== "REJECTED" && (
+
+									{scheduling.status === "REJECTED" && (
+
 										<Button
 											onClick={() => setOpenDelete(true)}
 											className="rounded-full gap-1 "
@@ -152,6 +164,17 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 										>
 											<Trash2Icon size={20} />
 											Deletar
+										</Button>
+									)}
+
+									{scheduling.status !== "REJECTED" && (
+										<Button
+											onClick={() => setOpenReject(true)}
+											className="rounded-full gap-1 "
+											variant="outline"
+										>
+											<X size={20} />
+											Rejeitar
 										</Button>
 									)}
 								</div>
