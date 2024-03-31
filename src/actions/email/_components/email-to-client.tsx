@@ -13,8 +13,7 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
+import { format } from "date-fns";
 
 interface EmailToClientProps {
   name?: string;
@@ -25,7 +24,7 @@ interface EmailToClientProps {
   date: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
 export const EmailToClient = ({
   name,
@@ -37,7 +36,6 @@ export const EmailToClient = ({
 }: EmailToClientProps) => {
   const USER_URL_NAME = creatorEmail?.substring(0, creatorEmail.indexOf("@"));
   const CREATO_URL = absoluteUrl(`/${USER_URL_NAME}`);
-  const DATE_EVENT = dayjs(date).locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
 
   return (
     <Html>
@@ -58,7 +56,7 @@ export const EmailToClient = ({
               {name} Agendamento Realizado!
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
-              Olá, {creatorName},
+              Olá, {name},
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               Seu agendamento foi realizado com sucesso.
@@ -70,7 +68,8 @@ export const EmailToClient = ({
               <strong>Anfitrião:</strong> {creatorName}
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
-              <strong>Data/Hora do evento:</strong> {DATE_EVENT}
+              <strong>Data/Hora do evento:{" "}</strong>
+              {format(new Date(date ?? ""), "dd/MM/yyyy HH:mm")}
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               <strong>E-mail:</strong>{" "}
@@ -94,10 +93,7 @@ export const EmailToClient = ({
             </Section>
             <Text className="text-black text-[14px] leading-[24px]">
               Ou copie e cole este URL em seu navegador:{" "}
-              <Link
-                href={CREATO_URL}
-                className="text-blue-600 no-underline"
-              >
+              <Link href={CREATO_URL} className="text-blue-600 no-underline">
                 {CREATO_URL}
               </Link>
             </Text>
@@ -114,7 +110,7 @@ EmailToClient.PreviewProps = {
   email: "mariajoség@example.com",
   creatorEmail: "evertonsnkaeg@example.com",
   date: "2024-03-29T13:00:00.000Z",
-  eventType: "Evento TIPO"
+  eventType: "Evento TIPO",
 } as EmailToClientProps;
 
 export default EmailToClient;

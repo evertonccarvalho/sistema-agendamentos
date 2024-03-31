@@ -10,8 +10,7 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
+import { format } from "date-fns";
 
 interface StatusUpdateEmailProps {
   name: string;
@@ -30,10 +29,6 @@ const StatusUpdateEmail = ({
   eventType,
   newStatus,
 }: StatusUpdateEmailProps) => {
-  const formattedDate = dayjs(date)
-    .locale("pt-br")
-    .format("dddd, D [de] MMMM - HH:mm");
-
 
   let statusMessage: string
   switch (newStatus) {
@@ -79,7 +74,9 @@ const StatusUpdateEmail = ({
               <strong>{statusMessage}</strong>.
             </Text>
             <Text className="text-black text-center text-[14px] leading-[24px]">
-              <strong>Data/Hora do evento:</strong> {formattedDate}
+              <strong>Data/Hora do evento:</strong>
+              {format(new Date(date ?? ""), "dd/MM/yyyy HH:mm")}
+
             </Text>
             <Text className="text-black text-center text-[14px] leading-[24px]">
               <strong>Tipo do Evento:</strong> {eventType}

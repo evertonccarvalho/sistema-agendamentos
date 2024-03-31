@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -11,3 +12,7 @@ export function absoluteUrl(path: string) {
 	return `${process.env.NEXT_PUBLIC_APP_URL}${path}`;
 }
 
+
+export function formatDate(date: Date) {
+	return dayjs(date).locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
+}

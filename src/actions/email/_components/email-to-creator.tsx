@@ -13,8 +13,7 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
+import { format } from "date-fns";
 
 interface EmailToCreatorProps {
   name?: string;
@@ -39,7 +38,6 @@ export const EmailToCreator = ({
 }: EmailToCreatorProps) => {
   const USER_URL_NAME = creatorEmail?.substring(0, creatorEmail.indexOf("@"));
   const CREATO_URL = absoluteUrl(`/${USER_URL_NAME}`);
-  const DATE_EVENT = dayjs(date).locale("pt-br").format("dddd, D MMMM - HH:mm");
 
   return (
     <Html>
@@ -74,7 +72,7 @@ export const EmailToCreator = ({
             </Text>
             <Text className="text-black text-[14px] capitalize leading-[24px]">
               <strong>Data/Hora do evento: </strong>
-              {DATE_EVENT}
+              {format(new Date(date ?? ""), "dd/MM/yyyy HH:mm")}
             </Text>
             <Text className="text-black text-[14px] capitalize leading-[24px]">
               <strong>Tefefone: </strong>

@@ -122,13 +122,13 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 					<div className="flex gap-1.5   p-4 bg-muted/10 rounded-t-md  flex-col justify-start">
 						<div className="flex items-center gap-2">
 							<div className={`w-6 h-6 rounded-full ${scheduling.status === "PENDING"
-									? "bg-yellow-600"
-									: scheduling.status === "ACCEPTED"
-										? "bg-green-600" : scheduling.status === "REJECTED"
-											? "bg-red-600"
-											: scheduling.status === "FINISHED"
-												? "bg-gray-600"
-												: ""
+								? "bg-yellow-600"
+								: scheduling.status === "ACCEPTED"
+									? "bg-green-600" : scheduling.status === "REJECTED"
+										? "bg-red-600"
+										: scheduling.status === "FINISHED"
+											? "bg-gray-600"
+											: ""
 								}`}
 							/>
 
@@ -269,7 +269,8 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 									{format(
 										new Date(scheduling.created_at ?? ""),
 										"dd/MM/yyyy HH:mm"
-									)}{" "}
+									)}
+									{" "}
 									por: <span className="font-semibold">{scheduling.name}</span>
 								</p>
 							</div>
