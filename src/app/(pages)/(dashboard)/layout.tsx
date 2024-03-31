@@ -19,7 +19,7 @@ const DashboardLayout = async ({ children }: SettingsLayoutProps) => {
 				<div className="flex flex-1 h-full overflow-hidden">
 					<MainSideBar isPro={isPro} apiLimitCount={apiLimitCount} />
 
-					<div className="w-ful p-0 md:p-2 mb-0 rounded-sm  container mt-[80px]  overflow-y-auto scrollbar-thin scrollbar-track-background scrollbar-thumb-primary">
+					<div className="w-ful p-0 md:p-2 mb-0 rounded-sm container mt-[80px]  overflow-y-auto scrollbar-thin scrollbar-track-background scrollbar-thumb-primary">
 						<HeaderDashboard />
 						{children}
 					</div>
