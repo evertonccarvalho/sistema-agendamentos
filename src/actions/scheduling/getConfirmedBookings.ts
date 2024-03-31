@@ -8,6 +8,9 @@ export const getConfirmedBookings = async (userId: string,) => {
 			userId: userId,
 			date: {
 				gte: new Date()
+			},
+			NOT: {
+				status: "FINISHED"
 			}
 		},
 		include: {

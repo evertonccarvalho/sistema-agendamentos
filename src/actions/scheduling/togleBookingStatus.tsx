@@ -2,11 +2,16 @@
 import { db } from "@/lib/prisma";
 import type { SchedulingStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { sendStatusUpdateEmail } from "../email/mail";
 
 export const toggleBookingStatus = async (
   bookingId: string,
   userId: string,
   newStatus: SchedulingStatus,
+  email: string,
+  name: string,
+  date: Date,
+  eventType: string,
 ) => {
   const scheduling = await db.scheduling.findUnique({
     where: {
@@ -26,7 +31,9 @@ export const toggleBookingStatus = async (
     },
   });
 
-  // revalidatePath("/");
-  revalidatePath(`/scheduledevent/${bookingId}`); // Redireciona para a página do evento agendado após a alteração do status
+  const dateString: string = date.toISOString(); // Convertendo a data para string
 
+  await sendStatusUpdateEmail(email, newStatus, name, dateString, eventType);
+
+  revalidatePath(`/scheduledevent/${bookingId}`);
 };

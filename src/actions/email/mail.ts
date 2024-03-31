@@ -1,5 +1,7 @@
 import { Resend } from "resend";
 import EmailVerification from "./_components/email-verification";
+import type { SchedulingStatus } from "@prisma/client";
+import StatusUpdateEmail from "./_components/email-change-status-to-client";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -33,6 +35,26 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 		subject: "Confirm your email",
 		react: EmailVerification({
 			confirmLink: confirmLink,
-		})
+		}),
+	});
+};
+
+export const sendStatusUpdateEmail = async (
+	email: string,
+	newStatus: SchedulingStatus,
+	name: string,
+	date: string,
+	eventType: string,
+) => {
+	await resend.emails.send({
+		from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
+		to: email,
+		subject: "Atualização de Status do Agendamento",
+		react: StatusUpdateEmail({
+			name: name,
+			date: date,
+			eventType: eventType,
+			newStatus: newStatus,
+		}),
 	});
 };

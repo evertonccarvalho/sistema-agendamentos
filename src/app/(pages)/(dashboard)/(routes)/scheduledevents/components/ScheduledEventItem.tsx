@@ -25,6 +25,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 	const [loading, setLoading] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
 	const [openReject, setOpenReject] = useState(false);
+	const [openFinished, setOpenFinished] = useState(false);
 
 	const endDate = addMinutes(
 		new Date(scheduling.date ?? ""),
@@ -48,44 +49,50 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 	const handleReject = async () => {
 		try {
 			setLoading(true);
-			setOpenReject(true);
-			await toggleBookingStatus(scheduling.id, scheduling.userId, "REJECTED");
-			toast.success(
-				`O Agendamento para ${scheduling.eventType.name} às ${format(
-					new Date(scheduling.date ?? ""),
-					"dd/MM/yyyy às HH:mm"
-				)}foi Rejeitado`
-			);
+			await toggleBookingStatus(scheduling.id, scheduling.userId, "REJECTED", scheduling.email, scheduling.name, scheduling.date, scheduling.eventType.name);
+			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${format(new Date(scheduling.date ?? ""), "dd/MM/yyyy - HH:mm")} foi rejeitado.`);
 		} catch (error) {
-			toast.error("Error ao deletar:");
+			toast.error("Erro ao rejeitar o agendamento.");
 		} finally {
 			setLoading(false);
 			setOpenReject(false);
+
+		}
+	};
+
+	const handleFinished = async () => {
+		try {
+			setLoading(true);
+			await toggleBookingStatus(scheduling.id, scheduling.userId, "FINISHED", scheduling.email, scheduling.name, scheduling.date, scheduling.eventType.name);
+			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${format(new Date(scheduling.date ?? ""), "dd/MM/yyyy - HH:mm")} foi finalizado.`);
+		} catch (error) {
+			toast.error("Erro ao finalizar o agendamento.");
+		} finally {
+			setLoading(false);
+			setOpenFinished(false);
+
 		}
 	};
 
 	const handleAccept = async () => {
 		try {
 			setLoading(true);
-			await toggleBookingStatus(scheduling.id, scheduling.userId, "ACCEPTED");
+			await toggleBookingStatus(scheduling.id, scheduling.userId, "ACCEPTED", scheduling.email, scheduling.name, scheduling.date, scheduling.eventType.name);
+			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${format(new Date(scheduling.date ?? ""), "dd/MM/yyyy - HH:mm")} foi aceito.`);
 		} catch (error) {
-			toast.error("Error ao deletar:");
+			toast.error("Erro ao aceitar o agendamento.");
 		} finally {
-			toast.success(
-				`O Agendamento para ${scheduling.eventType.name} às ${format(
-					new Date(scheduling.date ?? ""),
-					"dd/MM/yyyy - HH:mm"
-				)} foi Aceito.`
-			);
 			setLoading(false);
 		}
 	};
+
+
 	return (
 		<>
 			<AlertModal
 				variant="destructive"
 				title="Tem certeza"
-				description="Essa ação não pode ser desfeita."
+				description="Que deseja deletar? essa ação não pode ser desfeita."
 				isOpen={openDelete}
 				onClose={() => setOpenDelete(false)}
 				onConfirm={handleDelete}
@@ -100,21 +107,31 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 				onConfirm={handleReject}
 				loading={loading}
 			/>
+			<AlertModal
+				variant="destructive"
+				title="Tem certeza"
+				description="Que deseja finalizar o agendamento"
+				isOpen={openFinished}
+				onClose={() => setOpenFinished(false)}
+				onConfirm={handleFinished}
+				loading={loading}
+			/>
 
 			<Accordion className="bg-card rounded-md mb-2" type="single" collapsible>
 				<AccordionItem className="border-none" value="item-1">
 					<div className="flex gap-1.5   p-4 bg-muted/10 rounded-t-md  flex-col justify-start">
 						<div className="flex items-center gap-2">
-							<div
-								className={`w-6 h-6 rounded-full ${scheduling.status === "PENDING"
+							<div className={`w-6 h-6 rounded-full ${scheduling.status === "PENDING"
 									? "bg-yellow-600"
 									: scheduling.status === "ACCEPTED"
-										? "bg-green-600"
-										: scheduling.status === "REJECTED"
+										? "bg-green-600" : scheduling.status === "REJECTED"
 											? "bg-red-600"
-											: ""
-									}`}
+											: scheduling.status === "FINISHED"
+												? "bg-gray-600"
+												: ""
+								}`}
 							/>
+
 							<h1 className=" text-sm font-semibold">
 								{format(new Date(scheduling.date ?? ""), "dd/MM/yyyy")}
 							</h1>
@@ -156,7 +173,6 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 									)}
 
 									{scheduling.status === "REJECTED" && (
-
 										<Button
 											onClick={() => setOpenDelete(true)}
 											className="rounded-full gap-1 "
@@ -177,6 +193,16 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 											Rejeitar
 										</Button>
 									)}
+
+									<Button
+										onClick={() => setOpenFinished(true)}
+										className="rounded-full gap-1 "
+										variant="outline"
+									>
+										<X size={20} />
+										Finalizar
+									</Button>
+
 								</div>
 
 								<Link

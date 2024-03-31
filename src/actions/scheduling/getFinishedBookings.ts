@@ -6,9 +6,16 @@ export const getFinishedBookings = async (userId: string,) => {
 	const schedulings = await db.scheduling.findMany({
 		where: {
 			userId: userId,
-			date: {
-				lt: new Date()
-			}
+			OR: [
+				{
+					status: "FINISHED",
+				},
+				{
+					date: {
+						lt: new Date(),
+					},
+				},
+			],
 		},
 		include: {
 			eventType: true,
