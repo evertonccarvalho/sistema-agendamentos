@@ -35,7 +35,7 @@ export const TeamSection = () => {
             {teamList?.map((team) => (
               <CarouselItem className="basis-72 md:basis-96  pt-4 ">
                 <div className="flex h-full flex-col ">
-                  <TeamCard team={team} />
+                  <TeamCard key={team.name} team={team} />
                 </div>
               </CarouselItem>
             ))}

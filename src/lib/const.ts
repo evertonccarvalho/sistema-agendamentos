@@ -62,7 +62,7 @@ export const teamList: Team[] = [
     imageUrl: "/jonatas.png",
     name: "Jonatas Silva",
     position: "CTO / Full Stack Developer",
-    description: "Co-fundador e desenvolvedor Full Stack.",
+    description: "Co-fundador, Desenvolvedor Full Stack e Designer Gráfico e de Interfaces.",
     socialNetworks: [
       { name: "Linkedin", url: "https://www.linkedin.com/in/jscodedevelopment/" },
       { name: "Github", url: "https://github.com/JsCodeDevlopment" },
