@@ -12,8 +12,8 @@ export const TeamSection = () => {
   return (
     <section id="team" className="container py-12 sm:py-20">
       <h2 className="text-3xl md:text-4xl font-bold">
-        <span className="text-primary">Nossa equipe </span>
-        Dedicada.
+        <span className="text-primary">Nossa{" "}</span>
+        equipe.
       </h2>
 
       <p className="mt-4 mb-10 text-xl text-muted-foreground">
