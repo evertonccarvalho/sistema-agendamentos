@@ -95,43 +95,43 @@ export const teamList: Team[] = [
 
 export const testimonialsList: Testimonial[] = [
   {
-    image: "https://github.com/shadcn.png",
-    name: "Paulo Oliveira",
-    userName: "@paulo_oliveira",
+    image: "/jonatas.png",
+    name: "Jonatas Silva",
+    userName: "@jonatas_silva",
     comment:
       "Nunca mais perdi uma reunião importante!",
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "Maria da Silva",
-    userName: "@maria_silva",
+    image: "/douglas.png",
+    name: "Douglas Trindade",
+    userName: "@douglas_trindade",
     comment:
       "Este sistema de agendamentos simplificou minha vida! Finalmente, consigo gerenciar meus compromissos de forma eficiente.",
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "José Santos",
-    userName: "@jose_santos",
+    image: "/everton.jpeg",
+    name: "Éverton Carvalho",
+    userName: "@everton_carvalho",
     comment:
       "Estou muito impressionado com a facilidade de uso deste sistema de agendamentos. Agora posso organizar minha agenda com apenas alguns cliques!",
   },
 
   {
-    image: "https://github.com/shadcn.png",
-    name: "Ana Oliveira",
-    userName: "@ana_oliveira",
+    image: "https://i.pravatar.cc/150?img=17",
+    name: "José Oliveira",
+    userName: "@José_oliveira",
     comment:
       "Este sistema de agendamentos superou minhas expectativas! Nunca foi tão simples marcar compromissos e nunca mais perdi uma reunião importante.",
   },
   {
-    image: "https://github.com/shadcn.png",
+    image: "https://i.pravatar.cc/150?img=60",
     name: "Carlos Souza",
     userName: "@carlos_souza",
     comment:
       "Estou muito satisfeito com a eficiência deste sistema de agendamentos. Agora posso gerenciar meu tempo de forma mais produtiva e focar nas tarefas importantes.",
   },
   {
-    image: "https://github.com/shadcn.png",
+    image: "https://i.pravatar.cc/150?img=36",
     name: "Fernanda Lima",
     userName: "@fernanda_lima",
     comment:

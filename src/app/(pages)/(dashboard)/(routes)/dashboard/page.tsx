@@ -20,17 +20,19 @@ const Dashboard = async () => {
 		? await getEventsByCreatorId(session.user.id)
 		: [];
 	return (
-		<main className="flex-1 space-y-4  md:p-8 pt-6">
+		<main className="flex-1 space-y-4 md:p-8 pt-6">
 			<BreadCrumb items={breadcrumbItems} />
 			<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
 				<EventPageHeader />
 				<Separator className="my-4" />
-				<section className="flex flex-wrap w-full gap-5 items-center justify-start">
-					{events && events.length > 0 ? (
-						events.map((event) => (
+				{events && events.length > 0 ? (
+					<section className="flex flex-wrap w-full gap-5 items-center justify-start">
+						{events.map((event) => (
 							<CardEventTypes key={event.id} eventType={event} />
-						))
-					) : (
+						))}
+					</section>
+				) : (
+					<section className="flex flex-wrap w-full gap-5 items-center justify-center">
 						<div className="py-10 flex w-9/12 gap-2 items-center flex-col justify-center">
 							<Image
 								src="/Zero_Events.svg"
@@ -46,10 +48,11 @@ const Dashboard = async () => {
 								comercial.
 							</p>
 						</div>
-					)}
-				</section>
+					</section>
+				)}
 			</Card>
 		</main>
+
 	);
 };
 
