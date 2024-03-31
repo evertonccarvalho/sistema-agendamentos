@@ -1,6 +1,6 @@
 import BreadCrumb from "@/components/breadcrumb";
 import { redirect } from "next/navigation";
-import { getBookings } from "@/actions/scheduling/getBookings";
+import { getConfirmedBookings } from "@/actions/scheduling/getConfirmedBookings";
 import TabsComponent from "./components/tabsBookingItems";
 import { getFinishedBookings } from "@/actions/scheduling/getFinishedBookings";
 import { Card } from "@/components/ui/card";
@@ -14,7 +14,7 @@ const ScheduledEvents = async () => {
 		return redirect("/");
 	}
 
-	const confirmedBookings = await getBookings(session.user.id);
+	const confirmedBookings = await getConfirmedBookings(session.user.id);
 	const finishedBookings = await getFinishedBookings(session.user.id);
 
 	return (

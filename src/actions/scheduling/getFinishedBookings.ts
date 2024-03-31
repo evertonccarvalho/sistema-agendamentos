@@ -19,6 +19,9 @@ export const getFinishedBookings = async (userId: string,) => {
 					image: true,
 				}
 			}
+		},
+		orderBy: {
+			date: 'desc'
 		}
 	});
 
