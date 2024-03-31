@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
 	title: "Agendaê",
 	description: "Agendamento rápido e fácil para você e sua empresa.",
+	icons: {
+		icon: '/'
+	}
 };
 
 export default function RootLayout({
