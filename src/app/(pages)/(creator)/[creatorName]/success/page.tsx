@@ -1,7 +1,6 @@
 "use client";
 import ContainerWrapper from "@/components/containerWrapper";
 import { Calendar, User } from "lucide-react";
-import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -10,6 +9,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import utc from "dayjs/plugin/utc";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+
+dayjs.extend(utc);
 
 interface SuccesPageProps {
 	searchParams: {
@@ -43,9 +47,13 @@ const SuccessPage = ({ searchParams }: SuccesPageProps) => {
 							</div>
 						</CardHeader>
 						<CardContent className="flex gap-2 items-center flex-col justify-center">
-							<h1 className="items-center flex gap-2">
-								<Calendar size={22} className="text-primary" />
-								{format(new Date(searchParams.date ?? ""), "dd/MM/yyyy 'às' HH:mm",)}
+							<h1 className="items-center capitalize flex gap-2">
+								<Calendar size={22} className="text-primary " />
+								{dayjs(searchParams.date ?? "")
+									.utc()
+									.locale("pt-br")
+									.format("dddd, D MMMM [às] HH:mm")}
+								;
 							</h1>
 							<Button onClick={handleback} className="text-white">
 								Voltar ao início

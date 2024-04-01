@@ -43,6 +43,7 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 		},
 		enabled: !!selectedDateWithoutTime, // Só ativa a consulta quando selectedDateWithoutTime está definido
 	});
+
 	function handleSelectTime(hour: number) {
 		const dateWithTime = dayjs(selectedDate)
 			.set("hour", hour)

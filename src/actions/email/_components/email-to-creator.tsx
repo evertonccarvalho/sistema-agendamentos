@@ -13,8 +13,11 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import utc from "dayjs/plugin/utc";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+
+dayjs.extend(utc);
 
 interface EmailToCreatorProps {
   name?: string;
@@ -26,7 +29,7 @@ interface EmailToCreatorProps {
   eventType: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
 export const EmailToCreator = ({
   name,
@@ -39,7 +42,7 @@ export const EmailToCreator = ({
 }: EmailToCreatorProps) => {
   const USER_URL_NAME = creatorEmail?.substring(0, creatorEmail.indexOf("@"));
   const CREATO_URL = absoluteUrl(`/${USER_URL_NAME}`);
-
+  const DATE_EVENT = dayjs(date).utc().locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
   return (
     <Html>
       <Head />
@@ -73,8 +76,7 @@ export const EmailToCreator = ({
             </Text>
             <Text className="text-black text-[14px] capitalize leading-[24px]">
               <strong>Data/Hora do evento: </strong>
-              {format(new Date(date ?? ""), "dd/MM/yyyy HH:mm", { locale: ptBR })}
-
+              {DATE_EVENT}
             </Text>
             <Text className="text-black text-[14px] capitalize leading-[24px]">
               <strong>Tefefone: </strong>
@@ -123,7 +125,7 @@ EmailToCreator.PreviewProps = {
   creatorEmail: "evertonsnkaeg@example.com",
   date: "2024-03-29T13:00:00.000Z",
   phone: "88999082170",
-  eventType: "vento"
+  eventType: "vento",
 } as EmailToCreatorProps;
 
 export default EmailToCreator;

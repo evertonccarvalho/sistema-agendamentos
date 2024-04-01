@@ -1,7 +1,5 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 import { createBooking } from "@/actions/scheduling/createBooking";
 import type { IEventType } from "@/actions/eventType/interface";
@@ -11,10 +9,16 @@ import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
 import AvailabilityList from "../../(dashboard)/(routes)/dashboard/_components/AvailabilityList ";
 import { useQuery } from "@tanstack/react-query";
+
+import utc from "dayjs/plugin/utc";
+
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+
+dayjs.extend(utc);
 interface BookingItemProps {
 	data: IEventType;
 }
@@ -32,12 +36,12 @@ const BookingItem = ({ data }: BookingItemProps) => {
 	const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
 	const isDateSelected = !!selectedDate;
 	const userId = data.creatorId;
-	// const [availability, setAvailability] = useState<Availability>();
-	// const [dayBookings, setDayBookings] = useState<Scheduling[]>([]);
+
 
 	const selectedDateWithoutTime = selectedDate
 		? dayjs(selectedDate).format("YYYY-MM-DD")
 		: null;
+
 
 	const { data: availability } = useQuery({
 		queryKey: ["availability", userId, selectedDateWithoutTime],
@@ -51,26 +55,13 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
 	function handleSelectTime(hour: number) {
 		const dateWithTime = dayjs(selectedDate)
+			.utc()
 			.set("hour", hour)
 			.startOf("hour")
 			.toDate();
 		setSelectedDateTime(dateWithTime);
 		setOpen(true);
 	}
-
-	//
-	// useEffect(() => {
-	// 	if (!selectedDate) {
-	// 		return;
-	// 	}
-
-	// 	const refreshAvailableHours = async () => {
-	// 		const _dayBookings = await getDayBookings(data.creatorId, selectedDate);
-	// 		setDayBookings(_dayBookings);
-	// 	};
-
-	// 	refreshAvailableHours();
-	// }, [selectedDate, data.creatorId]);
 
 	const handleDateClick = (date: Date | undefined) => {
 		setSelectedDate(date);
@@ -86,7 +77,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				return;
 			}
 			const newDate = selectedDateTime;
-			// console.log("New date:", newDate);
 			await createBooking({
 				name: formData.name,
 				email: formData.email,
@@ -97,7 +87,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				date: newDate,
 			});
 
-			// console.log("Booking created successfully.");
 
 			// Prepare data for email sending
 			const dataForEmail = {
@@ -119,16 +108,9 @@ const BookingItem = ({ data }: BookingItemProps) => {
 					body: JSON.stringify(dataForEmail),
 				});
 				const responseData = await response.json();
-				console.log("Email response:", responseData);
 				if (responseData.status === "OK") {
 					toast.success("Agendamento realizado com sucesso!", {
-						description: format(
-							newDate,
-							"'Para' dd 'de' MMMM 'às' HH':'mm'.'",
-							{
-								locale: ptBR,
-							},
-						),
+						description: dayjs(newDate).utc().format("YYYY-MM-DD HH:mm"),
 						action: {
 							label: "Voltar Para inicio",
 							onClick: () => {

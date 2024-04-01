@@ -5,7 +5,12 @@ import "./styles/index.css";
 import Providers from "@/providers/providers";
 
 const inter = Inter({ subsets: ["latin"] });
+import "dayjs/locale/pt-br";
 
+import utc from "dayjs/plugin/utc";
+import dayjs from "dayjs";
+
+dayjs.extend(utc);
 export const metadata: Metadata = {
 	title: "Agendaê",
 	description: "Agendamento rápido e fácil para você e sua empresa.",

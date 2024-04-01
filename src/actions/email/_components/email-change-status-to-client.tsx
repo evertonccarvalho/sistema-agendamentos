@@ -10,17 +10,17 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import utc from "dayjs/plugin/utc";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
 
+dayjs.extend(utc);
 interface StatusUpdateEmailProps {
   name: string;
   date: string;
   eventType: string;
   newStatus: string;
 }
-
-
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
@@ -30,8 +30,7 @@ const StatusUpdateEmail = ({
   eventType,
   newStatus,
 }: StatusUpdateEmailProps) => {
-
-  let statusMessage: string
+  let statusMessage: string;
   switch (newStatus) {
     case SchedulingStatus.PENDING:
       statusMessage = "Seu agendamento está pendente de confirmação.";
@@ -49,6 +48,8 @@ const StatusUpdateEmail = ({
       statusMessage = "Seu agendamento foi atualizado.";
       break;
   }
+  const DATE_EVENT = dayjs(date).utc().locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
+
 
   return (
     <Html>
@@ -76,8 +77,7 @@ const StatusUpdateEmail = ({
             </Text>
             <Text className="text-black text-center text-[14px] leading-[24px]">
               <strong>Data/Hora do evento:</strong>
-              {format(new Date(date ?? ""), "dd/MM/yyyy HH:mm", { locale: ptBR })}
-
+              {DATE_EVENT}
             </Text>
             <Text className="text-black text-center text-[14px] leading-[24px]">
               <strong>Tipo do Evento:</strong> {eventType}

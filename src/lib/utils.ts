@@ -14,5 +14,5 @@ export function absoluteUrl(path: string) {
 
 
 export function formatDate(date: Date) {
-	return dayjs(date).locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
+	return dayjs(date).utc().locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
 }

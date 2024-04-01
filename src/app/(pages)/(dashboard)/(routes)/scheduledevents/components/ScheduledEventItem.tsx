@@ -16,6 +16,11 @@ import { useState } from "react";
 import { AlertModal } from "@/components/alert-modal";
 import { toggleBookingStatus } from "@/actions/scheduling/togleBookingStatus";
 import { toast } from "sonner";
+import utc from "dayjs/plugin/utc";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+
+dayjs.extend(utc);
 
 interface ScheduledEvent {
 	scheduling: IScheduling;
@@ -50,7 +55,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 		try {
 			setLoading(true);
 			await toggleBookingStatus(scheduling.id, scheduling.userId, "REJECTED", scheduling.email, scheduling.name, scheduling.date, scheduling.eventType.name);
-			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${format(new Date(scheduling.date ?? ""), "dd/MM/yyyy - HH:mm")} foi rejeitado.`);
+			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${dayjs(scheduling.date ?? "").utc().locale("pt-br").format("dddd, D MMMM  - HH:mm")} foi rejeitado.`);
 		} catch (error) {
 			toast.error("Erro ao rejeitar o agendamento.");
 		} finally {
@@ -64,7 +69,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 		try {
 			setLoading(true);
 			await toggleBookingStatus(scheduling.id, scheduling.userId, "FINISHED", scheduling.email, scheduling.name, scheduling.date, scheduling.eventType.name);
-			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${format(new Date(scheduling.date ?? ""), "dd/MM/yyyy - HH:mm")} foi finalizado.`);
+			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${dayjs(scheduling.date ?? "").utc().locale("pt-br").format("dddd, D MMMM - HH:mm")} foi finalizado.`);
 		} catch (error) {
 			toast.error("Erro ao finalizar o agendamento.");
 		} finally {
@@ -78,7 +83,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 		try {
 			setLoading(true);
 			await toggleBookingStatus(scheduling.id, scheduling.userId, "ACCEPTED", scheduling.email, scheduling.name, scheduling.date, scheduling.eventType.name);
-			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${format(new Date(scheduling.date ?? ""), "dd/MM/yyyy - HH:mm")} foi aceito.`);
+			toast.success(`O Agendamento para ${scheduling.eventType.name} às ${dayjs(scheduling.date ?? "").utc().locale("pt-br").format("dddd, D MMMM  - HH:mm")} foi aceito.`);
 		} catch (error) {
 			toast.error("Erro ao aceitar o agendamento.");
 		} finally {
@@ -86,6 +91,7 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 		}
 	};
 
+	const formattedStartTime = dayjs.utc(scheduling.date ?? '').format('HH:mm');
 
 	return (
 		<>
@@ -133,11 +139,10 @@ const ScheduledEventItem = ({ scheduling }: ScheduledEvent) => {
 							/>
 
 							<h1 className=" text-sm font-semibold">
-								{format(new Date(scheduling.date ?? ""), "dd/MM/yyyy")}
+								{dayjs(scheduling.date ?? '').format('DD/MM/YYYY')}
 							</h1>
 							<h1 className="text-sm">
-								{format(new Date(scheduling.date ?? ""), "HH:mm")} às{" "}
-								{format(endDate, "HH:mm")}
+								{formattedStartTime} às {dayjs.utc(endDate).format('HH:mm')}
 							</h1>
 						</div>
 					</div>
