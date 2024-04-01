@@ -9,3 +9,4 @@ export default function ThemeProvider({
 }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }
+

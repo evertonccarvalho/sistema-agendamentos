@@ -34,7 +34,7 @@ const AuthSide = ({ description }: AuthSideProps) => {
             <h1 className="mb-4 text-2xl text-center font-extrabold text-gray-900 dark:text-white md:text-3xl lg:text-5xl">
               Estamos{" "}
               <span className="inline bg-gradient-to-r from-[#F596D3]  to-[#D247BF] text-transparent bg-clip-text">
-                anciosos
+                ansiosos
               </span>
               <br />
               por{" "}
