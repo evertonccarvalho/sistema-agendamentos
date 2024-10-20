@@ -1,4 +1,5 @@
 "use client";
+import { createAvailabilityInterval } from "@/actions/availability/availabilityInterval/create";
 import {
 	createAvailability,
 	type CreateAvailabilityParams,
@@ -6,16 +7,23 @@ import {
 import { AvailabilityModel } from "@/actions/availability/getAvailabilitys";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
 import {
 	convertMinutesToTimeString,
 	convertTimeStringToNumber,
 } from "@/utils/convertTimeStringToNumber";
 import { getWeekDays } from "@/utils/getWeekDay";
+import { Plus } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { defaultAvailability } from "../(routes)/availability/_components/const";
-import TimeIntervals from "./TimeIntervals";
+import TimeIntervalComponent from "./TimeIntervals";
 
 interface FormSubmitData {
 	availability: {
@@ -60,7 +68,6 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 			intervals: defaultDay.intervals || [], // Garantir que sempre tenha 'intervals'
 		};
 	});
-	console.log(availability);
 
 	const form = useForm({
 		defaultValues: {
@@ -102,31 +109,79 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 		}
 	};
 
+	const addNewInterval = async (index: number) => {
+		try {
+			const availabilityId = form.getValues(`availability.${index}.id`);
+			const newInterval = {
+				startTime: convertTimeStringToNumber("08:00"), // O horário inicial padrão
+				endTime: convertTimeStringToNumber("09:00"), // O horário final padrão
+				availabilityId, // Passando o ID da disponibilidade
+			};
+
+			const res = await createAvailabilityInterval(newInterval);
+
+			if (res && res.success) {
+				toast.success("Intervalo adicionado com sucesso!");
+			} else {
+				console.error(`Erro ao criar novo intervalo: ${res.message}`);
+			}
+		} catch (error) {
+			console.error("Erro ao adicionar novo intervalo:", error);
+		}
+	};
+
 	return (
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-col items-center"
+				className="flex flex-col gap-2 items-center"
 			>
 				{availabilityFields.map((field, index) => (
-					<div key={field.id} className="w-full mb-4">
-						<FormField
-							control={form.control}
-							name={`availability.${index}.enabled`}
-							render={({ field: formField }) => (
-								<FormItem className="flex items-center">
-									<Checkbox
-										checked={formField.value}
-										onCheckedChange={formField.onChange}
-									/>
-									<FormLabel className="ml-2">
-										{weekDays[form.getValues(`availability.${index}.weekDay`)]}
-									</FormLabel>
-								</FormItem>
-							)}
+					<div
+						key={index}
+						className="flex bg flex-col  md:flex-row justify-between md:items-center w-full gap-2 py-1 "
+					>
+						<div className="flex items-center justify-between ">
+							<FormField
+								control={form.control}
+								name={`availability.${index}.enabled`}
+								render={({ field }) => (
+									<FormItem className="flex flex-row  w-28 items-start text-nowrap space-x-1 space-y-0">
+										<FormControl>
+											<Checkbox
+												checked={field.value}
+												onCheckedChange={(checked: boolean) => {
+													field.onChange(checked);
+													form.setValue(
+														`availability.${index}.enabled`,
+														checked
+													);
+												}}
+												aria-readonly
+											/>
+										</FormControl>
+										<FormLabel className="text-xs font-light">
+											{weekDays[index]}
+										</FormLabel>
+									</FormItem>
+								)}
+							/>
+							<Button
+								size={"icon"}
+								variant="ghost"
+								type="button"
+								onClick={() => addNewInterval(index)}
+							>
+								<Plus size={18} className="text-primary" />
+							</Button>
+						</div>
+						<TimeIntervalComponent
+							intervals={form.getValues(`availability.${index}.intervals`)} // Passa os intervalos
+							dayIndex={index}
+							disabled={
+								form.getValues(`availability.${index}.enabled`) === false
+							}
 						/>
-
-						<TimeIntervals form={form} index={index} />
 					</div>
 				))}
 				<Button type="submit">Salvar</Button>

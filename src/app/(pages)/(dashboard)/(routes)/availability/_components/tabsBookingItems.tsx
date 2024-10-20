@@ -22,9 +22,7 @@ const TabsAvailabilityComponent = ({
 			<TabsContent value="listView">
 				<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
 					<Separator className="my-4" />
-					<div className="flex max-w-[300px] w-full">
-						<AvailabilityForm availability={availability} />
-					</div>
+					<AvailabilityForm availability={availability} />
 				</Card>
 			</TabsContent>
 		</Tabs>
