@@ -2,65 +2,79 @@ import { db } from "@/lib/prisma";
 import dayjs from "dayjs";
 
 export const getALLAvailabilitysPerDay = async (userId: string) => {
-  const currentDate = dayjs();
+	const currentDate = dayjs();
 
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+	const user = await db.user.findUnique({
+		where: {
+			id: userId,
+		},
+	});
 
-  if (!user) {
-    return { possibleTimes: [], availableTimes: [] };
-  }
+	if (!user) {
+		return { possibleTimes: [], availableTimes: [] };
+	}
 
-  const referenceDate = dayjs(currentDate);
-  const isPastDate = referenceDate.endOf("day").isBefore(new Date());
+	const referenceDate = currentDate; // Manter a data atual
+	const isPastDate = referenceDate.endOf("day").isBefore(new Date());
 
-  if (isPastDate) {
-    return { possibleTimes: [], availableTimes: [] };
-  }
+	if (isPastDate) {
+		return { possibleTimes: [], availableTimes: [] };
+	}
 
-  const userAvailability = await db.availability.findFirst({
-    where: {
-      userId: user.id,
-      weekDay: referenceDate.get("day"),
-    },
-  });
+	const userAvailability = await db.availability.findFirst({
+		where: {
+			userId: user.id,
+			weekDay: referenceDate.get("day"),
+		},
+		include: {
+			intervals: true, // Incluindo os intervalos de disponibilidade
+		},
+	});
 
-  if (!userAvailability) {
-    return { possibleTimes: [], availableTimes: [] };
-  }
+	if (!userAvailability) {
+		return { possibleTimes: [], availableTimes: [] };
+	}
 
-  const { startTime, endTime } = userAvailability;
+	// Variável para armazenar os horários possíveis
+	let possibleTimes: number[] = [];
+	let blockedTimes: { date: Date }[] = [];
 
-  const startHour = startTime / 60;
-  const endHour = endTime / 60;
+	// Iterar sobre os intervalos de disponibilidade
+	for (const interval of userAvailability.intervals) {
+		const startHour = Math.floor(interval.startTime / 60); // Convertendo para horas
+		const endHour = Math.floor(interval.endTime / 60);
 
-  const possibleTimes = Array.from({ length: endHour - startHour }).map((_, i) => {
-    return startHour + i;
-  });
+		// Criando os possíveis horários
+		const times = Array.from(
+			{ length: endHour - startHour },
+			(_, i) => startHour + i
+		);
+		possibleTimes = possibleTimes.concat(times);
+	}
 
-  const blockedTimes = await db.scheduling.findMany({
-    select: {
-      date: true,
-    },
-    where: {
-      userId: user.id,
-      date: {
-        gte: referenceDate.set("hour", startHour).toDate(),
-        lte: referenceDate.set("hour", endHour).toDate(),
-      },
-    },
-  });
+	// Consultando os horários bloqueados
+	blockedTimes = await db.scheduling.findMany({
+		select: {
+			date: true,
+		},
+		where: {
+			userId: user.id,
+			date: {
+				gte: referenceDate.startOf("day").toDate(),
+				lte: referenceDate.endOf("day").toDate(),
+			},
+		},
+	});
 
-  const availableTimes = possibleTimes.filter((time) => {
-    const isTimeBlocked = blockedTimes.some((blockedTime) => blockedTime.date.getHours() === time);
+	const availableTimes = possibleTimes.filter((time) => {
+		const isTimeBlocked = blockedTimes.some(
+			(blockedTime) => blockedTime.date.getHours() === time
+		);
 
-    const isTimeInPast = referenceDate.set("hour", time).isBefore(new Date());
+		const isTimeInPast = referenceDate.set("hour", time).isBefore(new Date());
 
-    return !isTimeBlocked && !isTimeInPast;
-  });
+		return !isTimeBlocked && !isTimeInPast;
+	});
 
-  return { possibleTimes, availableTimes };
+	return { possibleTimes, availableTimes };
 };
