@@ -35,10 +35,10 @@ export const getAvailabilitysPerDay = async (
 	const userAvailability = await db.availability.findFirst({
 		where: {
 			userId: user.id,
-			weekDay: referenceDate.day(), // Corrigido para .day() em vez de .get("day")
+			weekDay: referenceDate.day(),
 		},
 		include: {
-			intervals: true, // Incluir os intervalos de disponibilidade
+			intervals: true,
 		},
 	});
 
@@ -46,22 +46,21 @@ export const getAvailabilitysPerDay = async (
 		return { possibleTimes: [], availableTimes: [] };
 	}
 
-	// Obter os intervalos disponíveis
 	const availableIntervals = userAvailability.intervals;
 
 	if (availableIntervals.length === 0) {
 		return { possibleTimes: [], availableTimes: [] };
 	}
 
-	const possibleTimes: number[] = [];
+	const possibleTimes: Set<string> = new Set(); // Usar Set para evitar duplicatas
 
-	// Preencher possibleTimes com base nos intervalos disponíveis
 	availableIntervals.forEach((interval) => {
-		const startHour = Math.floor(interval.startTime / 60); // Hora de início
-		const endHour = Math.floor(interval.endTime / 60); // Hora de término
+		const startHour = Math.floor(interval.startTime / 60);
+		const endHour = Math.floor(interval.endTime / 60);
 
-		for (let hour = startHour; hour < endHour; hour++) {
-			possibleTimes.push(hour);
+		// Incluindo endHour para garantir que ele seja adicionado
+		for (let hour = startHour; hour <= endHour; hour++) {
+			possibleTimes.add(convertMinutesToTimeString(hour * 60)); // Converte para "HH:mm"
 		}
 	});
 
@@ -72,21 +71,28 @@ export const getAvailabilitysPerDay = async (
 		where: {
 			userId: user.id,
 			date: {
-				gte: referenceDate.startOf("day").toDate(), // Começo do dia
-				lte: referenceDate.endOf("day").toDate(), // Fim do dia
+				gte: referenceDate.startOf("day").toDate(),
+				lte: referenceDate.endOf("day").toDate(),
 			},
 		},
 	});
 
-	const availableTimes = possibleTimes.filter((time) => {
+	const availableTimes = [...possibleTimes].filter((time) => {
+		const hour = parseInt(time.split(":")[0]);
 		const isTimeBlocked = blockedTimes.some(
-			(blockedTime) => dayjs(blockedTime.date).utc().hour() === time
+			(blockedTime) => dayjs(blockedTime.date).utc().hour() === hour
 		);
 
-		const isTimeInPast = referenceDate.set("hour", time).isBefore(new Date());
+		const isTimeInPast = referenceDate.set("hour", hour).isBefore(new Date());
 
 		return !isTimeBlocked && !isTimeInPast;
 	});
 
-	return { possibleTimes, availableTimes };
+	return { possibleTimes: [...possibleTimes], availableTimes };
+};
+
+const convertMinutesToTimeString = (minutes: number): string => {
+	const hours = Math.floor(minutes / 60);
+	const mins = minutes % 60;
+	return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
 };
