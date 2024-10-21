@@ -7,6 +7,7 @@ import {
 export async function getTimePerDate(params: GetAvailabilityPerDayParams) {
 	try {
 		const res = await getAvailabilitysPerDay(params);
+
 		return res;
 	} catch (error) {
 		console.error("Error:", error);

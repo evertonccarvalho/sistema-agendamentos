@@ -61,10 +61,6 @@ export const getAvailabilitysPerDay = async (
 		return { possibleTimes: [], availableTimes: [] };
 	}
 
-	// Intervalo mínimo baseado na duração do evento (exemplo: 15 minutos)
-	const minSlotDuration = Math.min(eventDuration, intervalDuration); // Pode ser ajustado dinamicamente
-
-	// Converte intervalos disponíveis para horários dinâmicos com base na duração do evento
 	const possibleTimes: Set<string> = new Set();
 
 	availableIntervals.forEach((interval) => {
@@ -72,7 +68,7 @@ export const getAvailabilitysPerDay = async (
 
 		while (currentTime + eventDuration <= interval.endTime) {
 			possibleTimes.add(convertMinutesToTimeString(currentTime));
-			currentTime += minSlotDuration; // Avança dinamicamente com base na duração mínima
+			currentTime += intervalDuration; // Incrementa conforme o intervalo
 		}
 	});
 
@@ -81,7 +77,7 @@ export const getAvailabilitysPerDay = async (
 			date: true,
 			eventType: {
 				select: {
-					duration: true, // Obtém a duração de cada evento
+					duration: true,
 				},
 			},
 		},
@@ -97,30 +93,32 @@ export const getAvailabilitysPerDay = async (
 	// Filtra horários disponíveis com base nos horários bloqueados
 	const availableTimes = [...possibleTimes].filter((time) => {
 		const [hour, minute] = time.split(":").map(Number);
+		const currentTime = referenceDate.set("hour", hour).set("minute", minute);
 
 		const isTimeBlocked = blockedTimes.some((blockedTime) => {
 			const blockedStart = dayjs(blockedTime.date).utc();
 			const blockedEnd = blockedStart.add(
 				blockedTime.eventType.duration,
 				"minute"
-			); // Bloquear o intervalo completo do evento
-
-			const currentTime = referenceDate.set("hour", hour).set("minute", minute);
+			);
 
 			return currentTime.isBetween(blockedStart, blockedEnd, null, "[)");
 		});
 
-		const isTimeInPast = referenceDate
-			.set("hour", hour)
-			.set("minute", minute)
-			.isBefore(new Date());
+		const isTimeInPast = currentTime.isBefore(new Date());
 
-		return !isTimeBlocked && !isTimeInPast;
+		// Verifica se o evento cabe no horário atual
+		const eventEndTime = currentTime.add(eventDuration, "minute");
+
+		return (
+			!isTimeBlocked &&
+			!isTimeInPast &&
+			eventEndTime.isBefore(referenceDate.endOf("day"))
+		);
 	});
 
 	return { possibleTimes: [...possibleTimes], availableTimes };
 };
-
 const convertMinutesToTimeString = (minutes: number): string => {
 	const hours = Math.floor(minutes / 60);
 	const mins = minutes % 60;
