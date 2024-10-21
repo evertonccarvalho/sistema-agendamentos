@@ -1,5 +1,4 @@
-// No seu arquivo de actions.js ou onde desejar organizar suas ações:
-"use server"
+"use server";
 import { db } from "@/lib/prisma";
 import type { SchedulingStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -16,18 +15,24 @@ interface CreateBookingParams {
 }
 
 export const createBooking = async (params: CreateBookingParams) => {
-
-	await db.scheduling.create({
-		data: {
-			name: params.name,
-			email: params.email,
-			phone: params.phone,
-			message: params.message,
-			status: 'PENDING',
-			userId: params.userId,
-			eventId: params.eventId,
-			date: params.date,
-		},
-	});
-	revalidatePath("/dashboard");
+	console.log("params", params);
+	try {
+		await db.scheduling.create({
+			data: {
+				name: params.name,
+				email: params.email,
+				phone: params.phone,
+				message: params.message,
+				status: params.status || "PENDING", // Se o status for fornecido, use-o; caso contrário, "PENDING"
+				userId: params.userId,
+				eventId: params.eventId,
+				date: params.date,
+			},
+		});
+		console.log(params);
+		revalidatePath("/dashboard");
+	} catch (error) {
+		console.error("Error creating booking:", error);
+		throw new Error("Failed to create booking");
+	}
 };

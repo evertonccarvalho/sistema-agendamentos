@@ -1,17 +1,17 @@
 "use client";
-import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
-import { createBooking } from "@/actions/scheduling/createBooking";
 import type { IEventType } from "@/actions/eventType/interface";
+import { createBooking } from "@/actions/scheduling/createBooking";
+import { Separator } from "@/components/ui/separator";
+import { getTimePerDate } from "@/helpers/hours";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
+import AvailabilityList from "../../(dashboard)/(routes)/dashboard/_components/AvailabilityList ";
 import DateSelector from "./DataSelector";
 import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
-import { useRouter } from "next/navigation";
-import { getTimePerDate } from "@/helpers/hours";
-import AvailabilityList from "../../(dashboard)/(routes)/dashboard/_components/AvailabilityList ";
-import { useQuery } from "@tanstack/react-query";
 
 import utc from "dayjs/plugin/utc";
 
@@ -36,12 +36,9 @@ const BookingItem = ({ data }: BookingItemProps) => {
 	const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
 	const isDateSelected = !!selectedDate;
 	const userId = data.creatorId;
-
-
 	const selectedDateWithoutTime = selectedDate
 		? dayjs(selectedDate).format("YYYY-MM-DD")
 		: null;
-
 
 	const { data: availability } = useQuery({
 		queryKey: ["availability", userId, selectedDateWithoutTime],
@@ -53,10 +50,10 @@ const BookingItem = ({ data }: BookingItemProps) => {
 		enabled: !!selectedDateWithoutTime, // Só ativa a consulta quando selectedDateWithoutTime está definido
 	});
 
-	function handleSelectTime(hour: number) {
+	function handleSelectTime(hour: string) {
 		const dateWithTime = dayjs(selectedDate)
 			.utc()
-			.set("hour", hour)
+			.set("hour", parseInt(hour))
 			.startOf("hour")
 			.toDate();
 		setSelectedDateTime(dateWithTime);
@@ -83,10 +80,9 @@ const BookingItem = ({ data }: BookingItemProps) => {
 				phone: formData.phone,
 				message: formData.message,
 				eventId: data.id,
-				userId: data.creatorId,
+				userId: userId,
 				date: newDate,
 			});
-
 
 			// Prepare data for email sending
 			const dataForEmail = {
@@ -120,7 +116,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 					});
 				} else {
 					toast.error(
-						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos.",
+						"Ocorreu um erro ao enviar o formulário. Por favor, verifique os campos."
 					);
 				}
 			} catch (error) {
@@ -141,7 +137,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
 			const username = data.creator.email?.substring(
 				0,
-				data.creator.email.indexOf("@"),
+				data.creator.email.indexOf("@")
 			);
 			router.push(`${`/${username}/success`}?${queryParams}`);
 		} catch (error) {

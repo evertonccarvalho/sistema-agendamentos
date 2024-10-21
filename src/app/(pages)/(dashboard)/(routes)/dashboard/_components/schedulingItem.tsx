@@ -3,14 +3,14 @@ import { Separator } from "@/components/ui/separator";
 
 import { MapPin, Timer } from "lucide-react";
 
-import { useState } from "react";
 import DateSelector from "@/app/(pages)/(creator)/_components/DataSelector";
-import { Card } from "../../../../../../components/ui/card";
-import dayjs from "dayjs";
 import { getTimePerDate } from "@/helpers/hours";
-import "dayjs/locale/pt-br"; // import locale
-import AvailabilityList from "./AvailabilityList ";
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br"; // import locale
+import { useState } from "react";
+import { Card } from "../../../../../../components/ui/card";
+import AvailabilityList from "./AvailabilityList ";
 
 interface SchedulingItemProps {
 	eventData: {
@@ -44,9 +44,9 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 		enabled: !!selectedDateWithoutTime, // Só ativa a consulta quando selectedDateWithoutTime está definido
 	});
 
-	function handleSelectTime(hour: number) {
+	function handleSelectTime(hour: string) {
 		const dateWithTime = dayjs(selectedDate)
-			.set("hour", hour)
+			.set("hour", parseInt(hour))
 			.startOf("hour")
 			.toDate();
 
