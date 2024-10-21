@@ -12,22 +12,16 @@ import DateSelector from "./DataSelector";
 import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
-
 import utc from "dayjs/plugin/utc";
-
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-
 dayjs.extend(utc);
 interface BookingItemProps {
 	data: IEventType;
 }
 
-interface Availability {
-	possibleTimes: number[];
-	availableTimes: number[];
-}
 const BookingItem = ({ data }: BookingItemProps) => {
+	const userId = data.creatorId;
 	const [submitIsLoading, setSubmitIsLoading] = useState(false);
 	const [open, setOpen] = useState(false);
 	const router = useRouter();
@@ -35,7 +29,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
 	const [hour, setHour] = useState<number | undefined>();
 	const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
 	const isDateSelected = !!selectedDate;
-	const userId = data.creatorId;
 	const selectedDateWithoutTime = selectedDate
 		? dayjs(selectedDate).format("YYYY-MM-DD")
 		: null;

@@ -92,6 +92,7 @@ export const getAvailabilitysPerDay = async (
 		},
 	});
 
+	console.log("blockedTimes", blockedTimes);
 	// Aqui você pode definir a duração do agendamento
 	const appointmentDuration = 45; // em minutos
 

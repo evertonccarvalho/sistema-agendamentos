@@ -6,11 +6,15 @@ import { MapPin, Timer } from "lucide-react";
 import DateSelector from "@/app/(pages)/(creator)/_components/DataSelector";
 import { getTimePerDate } from "@/helpers/hours";
 import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br"; // import locale
 import { useState } from "react";
 import { Card } from "../../../../../../components/ui/card";
 import AvailabilityList from "./AvailabilityList ";
+
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 interface SchedulingItemProps {
 	eventData: {
@@ -24,6 +28,8 @@ interface SchedulingItemProps {
 
 const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+	const [hour, setHour] = useState<number | undefined>();
+	const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
 	const isDateSelected = !!selectedDate;
 
 	const selectedDateWithoutTime = selectedDate
@@ -46,12 +52,18 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 
 	function handleSelectTime(hour: string) {
 		const dateWithTime = dayjs(selectedDate)
+			.utc()
 			.set("hour", parseInt(hour))
 			.startOf("hour")
 			.toDate();
-
-		onSelectDateTime(dateWithTime);
+		setSelectedDateTime(dateWithTime);
+		console.log("dateWithTime", dateWithTime);
 	}
+
+	const handleDateClick = (date: Date | undefined) => {
+		setSelectedDate(date);
+		setHour(undefined);
+	};
 
 	return (
 		<>
@@ -96,7 +108,7 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 						<div className=" w-full h-full flex flex-col md:flex-row gap-2 ">
 							<DateSelector
 								date={selectedDate}
-								handleDateClick={setSelectedDate}
+								handleDateClick={handleDateClick}
 								userId={userId}
 							/>
 							<AvailabilityList
