@@ -36,10 +36,6 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 		? dayjs(selectedDate).format("YYYY-MM-DD")
 		: null;
 
-	const onSelectDateTime = (date: Date | undefined) => {
-		setSelectedDate(date);
-	};
-
 	const { data: availability } = useQuery({
 		queryKey: ["availability", userId, selectedDateWithoutTime],
 		queryFn: async () => {
@@ -57,7 +53,6 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 			.startOf("hour")
 			.toDate();
 		setSelectedDateTime(dateWithTime);
-		console.log("dateWithTime", dateWithTime);
 	}
 
 	const handleDateClick = (date: Date | undefined) => {
