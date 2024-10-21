@@ -40,7 +40,12 @@ const SchedulingItem = ({ eventData, userId }: SchedulingItemProps) => {
 		queryKey: ["availability", userId, selectedDateWithoutTime],
 		queryFn: async () => {
 			if (selectedDateWithoutTime) {
-				return await getTimePerDate(userId, selectedDateWithoutTime);
+				return await getTimePerDate({
+					userId,
+					date: selectedDateWithoutTime,
+					eventDuration: Number(eventData.eventDuration),
+					intervalDuration: 15,
+				});
 			}
 		},
 		enabled: !!selectedDateWithoutTime, // Só ativa a consulta quando selectedDateWithoutTime está definido

@@ -1,9 +1,12 @@
 import { getALLAvailabilitysPerDay } from "@/actions/availability/getALl";
-import { getAvailabilitysPerDay } from "@/actions/availability/getAvailabilitysPerDay";
+import {
+	GetAvailabilityPerDayParams,
+	getAvailabilitysPerDay,
+} from "@/actions/availability/getAvailabilitysPerDay";
 
-export async function getTimePerDate(userId: string, date: string) {
+export async function getTimePerDate(params: GetAvailabilityPerDayParams) {
 	try {
-		const res = await getAvailabilitysPerDay(userId, date);
+		const res = await getAvailabilitysPerDay(params);
 		return res;
 	} catch (error) {
 		console.error("Error:", error);

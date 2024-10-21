@@ -4,6 +4,9 @@ import { createBooking } from "@/actions/scheduling/createBooking";
 import { Separator } from "@/components/ui/separator";
 import { getTimePerDate } from "@/helpers/hours";
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+import utc from "dayjs/plugin/utc";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -12,9 +15,6 @@ import DateSelector from "./DataSelector";
 import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
-import utc from "dayjs/plugin/utc";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
 dayjs.extend(utc);
 interface BookingItemProps {
 	data: IEventType;
@@ -37,7 +37,12 @@ const BookingItem = ({ data }: BookingItemProps) => {
 		queryKey: ["availability", userId, selectedDateWithoutTime],
 		queryFn: async () => {
 			if (selectedDateWithoutTime) {
-				return await getTimePerDate(userId, selectedDateWithoutTime);
+				return await getTimePerDate({
+					userId,
+					date: selectedDateWithoutTime,
+					eventDuration: Number(data.duration),
+					intervalDuration: 15
+				});
 			}
 		},
 		enabled: !!selectedDateWithoutTime, // Só ativa a consulta quando selectedDateWithoutTime está definido

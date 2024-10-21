@@ -9,10 +9,17 @@ dayjs.extend(utc);
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 
+export interface GetAvailabilityPerDayParams {
+	userId: string;
+	date: string | string[];
+	eventDuration: number; // Duração do evento em minutos, valor opcional
+	intervalDuration: number; // Duração dos intervalos em minutos, valor opcional
+}
+
 export const getAvailabilitysPerDay = async (
-	userId: string,
-	date: string | string[]
+	params: GetAvailabilityPerDayParams
 ) => {
+	const { date, userId, eventDuration, intervalDuration } = params;
 	if (!date) {
 		return { possibleTimes: [], availableTimes: [] };
 	}
@@ -54,18 +61,18 @@ export const getAvailabilitysPerDay = async (
 		return { possibleTimes: [], availableTimes: [] };
 	}
 
-	// Intervalo mínimo de tempo para exibir (30 minutos, por exemplo)
-	const minSlotDuration = 60; // em minutos
+	// Intervalo mínimo baseado na duração do evento (exemplo: 15 minutos)
+	const minSlotDuration = Math.min(eventDuration, intervalDuration); // Pode ser ajustado dinamicamente
 
-	// Converta os intervalos disponíveis para intervalos menores com base na duração mínima
+	// Converte intervalos disponíveis para horários dinâmicos com base na duração do evento
 	const possibleTimes: Set<string> = new Set();
 
 	availableIntervals.forEach((interval) => {
 		let currentTime = interval.startTime;
 
-		while (currentTime + minSlotDuration <= interval.endTime) {
+		while (currentTime + eventDuration <= interval.endTime) {
 			possibleTimes.add(convertMinutesToTimeString(currentTime));
-			currentTime += minSlotDuration;
+			currentTime += minSlotDuration; // Avança dinamicamente com base na duração mínima
 		}
 	});
 
@@ -74,7 +81,7 @@ export const getAvailabilitysPerDay = async (
 			date: true,
 			eventType: {
 				select: {
-					duration: true, // Obtém a duração do evento
+					duration: true, // Obtém a duração de cada evento
 				},
 			},
 		},
@@ -87,7 +94,7 @@ export const getAvailabilitysPerDay = async (
 		},
 	});
 
-	// Filtrar horários disponíveis com base nos horários bloqueados
+	// Filtra horários disponíveis com base nos horários bloqueados
 	const availableTimes = [...possibleTimes].filter((time) => {
 		const [hour, minute] = time.split(":").map(Number);
 
