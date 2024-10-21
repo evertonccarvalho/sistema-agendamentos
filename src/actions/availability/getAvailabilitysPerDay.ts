@@ -3,8 +3,8 @@
 import { db } from "@/lib/prisma";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-import utc from "dayjs/plugin/utc";
 import isBetween from "dayjs/plugin/isBetween";
+import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 dayjs.extend(isBetween);
 dayjs.extend(utc);
@@ -54,26 +54,18 @@ export const getAvailabilitysPerDay = async (
 		return { possibleTimes: [], availableTimes: [] };
 	}
 
+	// Intervalo mínimo de tempo para exibir (30 minutos, por exemplo)
+	const minSlotDuration = 60; // em minutos
+
+	// Converta os intervalos disponíveis para intervalos menores com base na duração mínima
 	const possibleTimes: Set<string> = new Set();
 
 	availableIntervals.forEach((interval) => {
-		const startHour = Math.floor(interval.startTime / 60);
-		const startMinute = interval.startTime % 60;
-		const endHour = Math.floor(interval.endTime / 60);
-		const endMinute = interval.endTime % 60;
+		let currentTime = interval.startTime;
 
-		if (startMinute > 0) {
-			possibleTimes.add(convertMinutesToTimeString(interval.startTime));
-		}
-
-		for (let hour = startHour; hour < endHour; hour++) {
-			if (startMinute === 0 || hour > startHour) {
-				possibleTimes.add(convertMinutesToTimeString(hour * 60));
-			}
-		}
-
-		if (endMinute > 0) {
-			possibleTimes.add(convertMinutesToTimeString(interval.endTime));
+		while (currentTime + minSlotDuration <= interval.endTime) {
+			possibleTimes.add(convertMinutesToTimeString(currentTime));
+			currentTime += minSlotDuration;
 		}
 	});
 
@@ -95,9 +87,9 @@ export const getAvailabilitysPerDay = async (
 		},
 	});
 
+	// Filtrar horários disponíveis com base nos horários bloqueados
 	const availableTimes = [...possibleTimes].filter((time) => {
-		const hour = parseInt(time.split(":")[0]);
-		const minute = parseInt(time.split(":")[1]);
+		const [hour, minute] = time.split(":").map(Number);
 
 		const isTimeBlocked = blockedTimes.some((blockedTime) => {
 			const blockedStart = dayjs(blockedTime.date).utc();
@@ -111,7 +103,10 @@ export const getAvailabilitysPerDay = async (
 			return currentTime.isBetween(blockedStart, blockedEnd, null, "[)");
 		});
 
-		const isTimeInPast = referenceDate.set("hour", hour).isBefore(new Date());
+		const isTimeInPast = referenceDate
+			.set("hour", hour)
+			.set("minute", minute)
+			.isBefore(new Date());
 
 		return !isTimeBlocked && !isTimeInPast;
 	});
