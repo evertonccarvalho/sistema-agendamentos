@@ -4,7 +4,9 @@ import { db } from "@/lib/prisma";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import utc from "dayjs/plugin/utc";
-
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(utc);
+dayjs.extend(isBetween);
 dayjs.extend(utc);
 
 export const getAvailabilitysPerDay = async (
@@ -52,36 +54,37 @@ export const getAvailabilitysPerDay = async (
 		return { possibleTimes: [], availableTimes: [] };
 	}
 
-	const possibleTimes: Set<string> = new Set(); // Usar Set para evitar duplicatas
+	const possibleTimes: Set<string> = new Set();
 
 	availableIntervals.forEach((interval) => {
 		const startHour = Math.floor(interval.startTime / 60);
-		const startMinute = interval.startTime % 60; // Resto para os minutos
+		const startMinute = interval.startTime % 60;
 		const endHour = Math.floor(interval.endTime / 60);
-		const endMinute = interval.endTime % 60; // Resto para os minutos
+		const endMinute = interval.endTime % 60;
 
-		// Adiciona o horário de início se houver minutos (ex: 08:30)
 		if (startMinute > 0) {
-			possibleTimes.add(convertMinutesToTimeString(interval.startTime)); // Exemplo: 08:30
+			possibleTimes.add(convertMinutesToTimeString(interval.startTime));
 		}
 
-		// Adiciona os horários inteiros
 		for (let hour = startHour; hour < endHour; hour++) {
-			// Apenas adiciona horários inteiros, sem incluir o horário de início se houver minutos
 			if (startMinute === 0 || hour > startHour) {
-				possibleTimes.add(convertMinutesToTimeString(hour * 60)); // Exemplo: 09:00, 10:00
+				possibleTimes.add(convertMinutesToTimeString(hour * 60));
 			}
 		}
 
-		// Adiciona o horário final se não for uma hora cheia
 		if (endMinute > 0) {
-			possibleTimes.add(convertMinutesToTimeString(interval.endTime)); // Exemplo: 10:00
+			possibleTimes.add(convertMinutesToTimeString(interval.endTime));
 		}
 	});
 
 	const blockedTimes = await db.scheduling.findMany({
 		select: {
 			date: true,
+			eventType: {
+				select: {
+					duration: true, // Obtém a duração do evento
+				},
+			},
 		},
 		where: {
 			userId: user.id,
@@ -92,19 +95,20 @@ export const getAvailabilitysPerDay = async (
 		},
 	});
 
-	console.log("blockedTimes", blockedTimes);
-	// Aqui você pode definir a duração do agendamento
-	const appointmentDuration = 45; // em minutos
-
 	const availableTimes = [...possibleTimes].filter((time) => {
 		const hour = parseInt(time.split(":")[0]);
+		const minute = parseInt(time.split(":")[1]);
 
 		const isTimeBlocked = blockedTimes.some((blockedTime) => {
-			const blockedStartHour = dayjs(blockedTime.date).utc().hour();
-			return (
-				hour >= blockedStartHour &&
-				hour < blockedStartHour + appointmentDuration / 60
-			);
+			const blockedStart = dayjs(blockedTime.date).utc();
+			const blockedEnd = blockedStart.add(
+				blockedTime.eventType.duration,
+				"minute"
+			); // Bloquear o intervalo completo do evento
+
+			const currentTime = referenceDate.set("hour", hour).set("minute", minute);
+
+			return currentTime.isBetween(blockedStart, blockedEnd, null, "[)");
 		});
 
 		const isTimeInPast = referenceDate.set("hour", hour).isBefore(new Date());
