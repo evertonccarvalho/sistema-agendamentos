@@ -31,7 +31,7 @@ export const createAvailabilityInterval = async (
 			},
 		});
 
-		await revalidatePath("/availability");
+		revalidatePath("/availability");
 
 		return { success: true, message: "Disponibilidade criada com sucesso." };
 	} catch (error) {
