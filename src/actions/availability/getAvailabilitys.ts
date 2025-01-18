@@ -10,6 +10,9 @@ export const getAvailabilitys = async (userId: string) => {
 		include: {
 			intervals: true,
 		},
+		orderBy: {
+			weekDay: "asc", // Ordena os dias da semana de 0 (domingo) a 6 (sábado)
+		},
 	});
 
 	return availabilitys;
