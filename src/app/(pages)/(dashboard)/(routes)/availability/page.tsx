@@ -2,9 +2,12 @@ import { getAvailabilitys } from "@/actions/availability/getAvailabilitys";
 import BreadCrumb from "@/components/breadcrumb";
 import CustomTabs from "@/components/CustomTabs";
 import { Card } from "@/components/ui/card";
+import { convertMinutesToTimeString } from "@/utils/convertTimeStringToNumber";
+import { getWeekDays } from "@/utils/getWeekDay";
 import { redirect } from "next/navigation";
+import { useMemo } from "react";
 import { auth } from "../../../../../lib/auth";
-import AvailabilityForm from "./_components/AvailabilityForm";
+import DayForm from "./_components/day-form";
 
 const AvailabilityPage = async () => {
 	const breadcrumbItems = [{ title: "Disponibilidade", link: "/dashboard" }];
@@ -15,6 +18,18 @@ const AvailabilityPage = async () => {
 	}
 
 	const availability = await getAvailabilitys(session.user.id || "");
+	const weekDays = getWeekDays();
+
+	// const memoizedAvailability = useMemo(() => {
+	// 	return availability.map((day) => ({
+	// 		...day,
+	// 		intervals: day.intervals.map((interval) => ({
+	// 			...interval,
+	// 			startTime: convertMinutesToTimeString(interval.startTime),
+	// 			endTime: convertMinutesToTimeString(interval.endTime),
+	// 		})),
+	// 	}));
+	// }, [availability]);
 
 	return (
 		<>
@@ -26,7 +41,13 @@ const AvailabilityPage = async () => {
 							label: "Disponibilidade",
 							content: (
 								<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
-									<AvailabilityForm availability={availability} />
+									{availability.map((day) => (
+										<DayForm
+											key={day.weekDay}
+											day={day}
+											weekDayLabel={weekDays[day.weekDay]}
+										/>
+									))}
 								</Card>
 							),
 						},
