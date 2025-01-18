@@ -1,11 +1,11 @@
-"use server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+'use server';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 // Removed unused import
 
 export interface CreateAvailabilityIntervalParams {
-	availabilityId: string; // Added optional id property
+	weekDay: number; // Added optional id property
 	startTime: number;
 	endTime: number;
 }
@@ -17,7 +17,7 @@ export const createAvailabilityInterval = async (
 	if (!session?.user.id) {
 		return {
 			success: false,
-			message: "Usuário não autenticado.",
+			message: 'Usuário não autenticado.',
 		};
 	}
 
@@ -25,30 +25,31 @@ export const createAvailabilityInterval = async (
 		// Verifica se já existem intervalos repetidos
 		const existingInterval = await db.availabilityInterval.findFirst({
 			where: {
+				weekDay: params.weekDay,
 				startTime: params.startTime,
 				endTime: params.endTime,
-				availabilityId: params.availabilityId,
 			},
 		});
 
 		if (existingInterval) {
 			return {
 				success: false,
-				message: "Intervalo já existe.",
+				message: 'Intervalo já existe.',
 			};
 		}
 
 		// Verifica se já existem 3 intervalos criados
 		const intervalsCount = await db.availabilityInterval.count({
 			where: {
-				availabilityId: params.availabilityId,
+				userId: session.user.id,
+				weekDay: params.weekDay,
 			},
 		});
 
 		if (intervalsCount >= 3) {
 			return {
 				success: false,
-				message: "Você só pode adicionar até 3 intervalos.",
+				message: 'Você só pode adicionar até 3 intervalos.',
 			};
 		}
 
@@ -57,18 +58,22 @@ export const createAvailabilityInterval = async (
 			data: {
 				startTime: params.startTime,
 				endTime: params.endTime,
-				availabilityId: params.availabilityId,
+				userId: session.user.id,
+				weekDay: params.weekDay,
 			},
 		});
 
-		revalidatePath("/availability");
+		revalidatePath('/availability');
 
-		return { success: true, message: "Disponibilidade criada com sucesso." };
+		return {
+			success: true,
+			message: 'Disponibilidade criada com sucesso.',
+		};
 	} catch (error) {
-		console.error("Erro ao criar ou atualizar disponibilidade:", error);
+		console.error('Erro ao criar ou atualizar disponibilidade:', error);
 		return {
 			success: false,
-			message: "Erro ao criar ou atualizar disponibilidade.",
+			message: 'Erro ao criar ou atualizar disponibilidade.',
 		};
 	}
 };

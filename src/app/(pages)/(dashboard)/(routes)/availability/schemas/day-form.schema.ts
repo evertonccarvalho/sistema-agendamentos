@@ -2,19 +2,19 @@ import { z } from 'zod';
 import { timeIntervalEndTimeSchema } from './time-interval-end-time.schema';
 import { timeInterValStartTimeSchema } from './time-interval-start-time.schema';
 
-export const timeIntervalSchema = z.object({
-	id: z.string().optional(),
+export const intervalsSchema = z.object({
+	id: z.string().uuid(),
+	weekDay: z.number(),
 	startTime: timeInterValStartTimeSchema,
 	endTime: timeIntervalEndTimeSchema,
 });
 
-export type TimeIntervalDto = z.infer<typeof timeIntervalSchema>;
+export type IntervalsDto = z.infer<typeof intervalsSchema>;
 
-export const dayFormSchema = z.object({
-	id: z.string().uuid(),
+export const availabilityFormSchema = z.object({
 	weekDay: z.number(),
-	intervals: z.array(timeIntervalSchema),
 	enabled: z.boolean(),
+	intervals: z.array(intervalsSchema),
 });
 
-export type DayFormDto = z.infer<typeof dayFormSchema>;
+export type AvailabilityFormDto = z.infer<typeof availabilityFormSchema>;

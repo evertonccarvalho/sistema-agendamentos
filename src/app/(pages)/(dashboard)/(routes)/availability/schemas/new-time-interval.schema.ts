@@ -4,7 +4,7 @@ import { timeInterValStartTimeSchema } from './time-interval-start-time.schema';
 
 export const newTimeIntervalSchema = z
 	.object({
-		availabilityId: z.string(),
+		weekDay: z.number(),
 		startTime: timeInterValStartTimeSchema,
 		endTime: timeIntervalEndTimeSchema,
 	})

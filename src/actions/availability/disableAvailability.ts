@@ -2,14 +2,13 @@
 import { db } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
-export const toggleAvailabilityEnable = async (userId: string, id: string, setEnable: boolean) => {
+export const toggleAvailabilityEnable = async (userId: string, weekDay: number, setEnable: boolean) => {
   try {
-    // Desmarcar o ativo anterior (se houver) se setEnable for true
+    // Desmarcar todas as disponibilidades ativas do usuário, caso setEnable seja true
     if (setEnable) {
       await db.availability.updateMany({
         where: {
           userId: userId,
-          id: id,
           enabled: true,
         },
         data: {
@@ -18,10 +17,13 @@ export const toggleAvailabilityEnable = async (userId: string, id: string, setEn
       });
     }
 
-    // Definir ou remover a disponibilidade
+    // Atualizar a disponibilidade específica (ativar/desativar)
     await db.availability.update({
       where: {
-        id: id,
+        userId_weekDay: {
+          userId,
+          weekDay,
+        },
       },
       data: {
         enabled: setEnable,

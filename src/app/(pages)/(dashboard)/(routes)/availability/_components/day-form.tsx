@@ -1,7 +1,7 @@
 'use client';
 import { deleteAvailabilityInterval } from '@/actions/availability/availabilityInterval/delete';
-import { createAvailability } from '@/actions/availability/create';
-import { DayAvailabilityModel } from '@/actions/availability/getAvailabilitys';
+import { AvailabilityModel } from '@/actions/availability/getAvailabilitys';
+import { updateAvailability } from '@/actions/availability/update';
 import { GenericForm } from '@/components/form/form';
 import { InputForm } from '@/components/form/InputForm';
 import { SwitchForm } from '@/components/form/SwitchForm';
@@ -10,47 +10,49 @@ import {
 	convertMinutesToTimeString,
 	convertTimeStringToNumber,
 } from '@/utils/convertTimeStringToNumber';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Loader2, Trash } from 'lucide-react';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { DayFormDto, dayFormSchema } from '../schemas/day-form.schema';
+import {
+	AvailabilityFormDto,
+	availabilityFormSchema,
+} from '../schemas/day-form.schema';
 import AddNewIntervalForm from './add-new-interval.form';
-import TimeInterval from './time-interval';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface DayFormProps {
-	day: DayAvailabilityModel;
+	day: AvailabilityModel;
 	weekDayLabel: string;
 }
 
 const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 	const [isPending, startTransition] = useTransition();
-
-	const form = useForm<DayFormDto>({
-		resolver: zodResolver(dayFormSchema),
+	const form = useForm<AvailabilityFormDto>({
+		resolver: zodResolver(availabilityFormSchema),
 		defaultValues: {
-			id: day.id,
 			weekDay: day.weekDay,
+			enabled: day.enabled,
 			intervals: day.intervals.map((interval) => ({
 				id: interval.id,
+				weekDay: interval.weekDay,
 				startTime: convertMinutesToTimeString(interval.startTime),
 				endTime: convertMinutesToTimeString(interval.endTime),
 			})),
-			enabled: day.enabled,
 		},
 	});
 
-	const onSubmit = async (data: DayFormDto) => {
-		const parsedData = dayFormSchema.parse(data);
-		console.log('parsedData', parsedData);
+	const onSubmit = async (data: AvailabilityFormDto) => {
+		const parsedData = availabilityFormSchema.parse(data);
 		startTransition(async () => {
 			try {
 				for (const interval of parsedData.intervals) {
-					await createAvailability({
+					await updateAvailability({
 						weekDay: parsedData.weekDay,
-						availabilityInterval: {
+						enabled: parsedData.enabled,
+						intervals: {
 							id: interval.id,
+							weekDay: parsedData.weekDay,
 							startTime: convertTimeStringToNumber(
 								interval.startTime
 							),
@@ -58,7 +60,6 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 								interval.endTime
 							),
 						},
-						enabled: parsedData.enabled,
 					});
 				}
 				toast.success(
@@ -99,9 +100,9 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 							name={`enabled`}
 							label={weekDayLabel}
 						/>
-						<AddNewIntervalForm availabilityId={day.id} />
 					</div>
-					<TimeInterval day={day} form={form} isPending={isPending} />
+					{/* <TimeInterval day={day} form={form} isPending={isPending} /> */}
+					<AddNewIntervalForm day={day} />
 
 					<div className="flex flex-col  w-fit flex-wrap md:flex-row gap-1">
 						{day.intervals.map((interval, index) => (

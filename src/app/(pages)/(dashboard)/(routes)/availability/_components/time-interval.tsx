@@ -1,20 +1,19 @@
 // TimeIntervalComponent.tsx
 import { deleteAvailabilityInterval } from '@/actions/availability/availabilityInterval/delete';
-import { DayAvailabilityModel } from '@/actions/availability/getAvailabilitys';
+import { AvailabilityModel } from '@/actions/availability/getAvailabilitys';
 import { InputForm } from '@/components/form/InputForm';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
-import { useFormContext, UseFormReturn } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import { toast } from 'sonner';
 
 interface TimeIntervalProps {
-	day: DayAvailabilityModel;
+	day: AvailabilityModel;
 	form: UseFormReturn<any>;
 	isPending: boolean;
 }
 
 const TimeInterval = ({ day, form, isPending }: TimeIntervalProps) => {
-
 	const handleDeleteInterval = async (intervalId: string) => {
 		const response = await deleteAvailabilityInterval(intervalId);
 		if (response.success) {

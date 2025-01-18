@@ -1,9 +1,10 @@
-"use server";
+'use server';
 
-import { db } from "@/lib/prisma";
+import { db } from '@/lib/prisma';
 
 export const getAvailabilitys = async (userId: string) => {
-	const availabilitys = await db.availability.findMany({
+	// Busca as disponibilidades existentes
+	let availabilitys = await db.availability.findMany({
 		where: {
 			userId: userId,
 		},
@@ -11,22 +12,47 @@ export const getAvailabilitys = async (userId: string) => {
 			intervals: true,
 		},
 		orderBy: {
-			weekDay: "asc", // Ordena os dias da semana de 0 (domingo) a 6 (sábado)
+			weekDay: 'asc',
 		},
 	});
 
+	if (!availabilitys || availabilitys.length === 0) {
+		const weekDays = [0, 1, 2, 3, 4, 5, 6];
+
+		const availabilityData = weekDays.map((day) => ({
+			weekDay: day,
+			userId,
+		}));
+
+		await db.availability.createMany({
+			data: availabilityData,
+		});
+
+		availabilitys = await db.availability.findMany({
+			where: {
+				userId: userId,
+			},
+			include: {
+				intervals: true,
+			},
+			orderBy: {
+				weekDay: 'asc',
+			},
+		});
+	}
+
+	// Retorna as disponibilidades
 	return availabilitys;
 };
 
-export interface DayAvailabilityInterval {
+export interface AvailabilityInterval {
 	startTime: number;
 	endTime: number;
 	id: string;
-	availabilityId: string;
-}
-export interface DayAvailabilityModel {
-	id: string;
 	weekDay: number;
-	intervals: DayAvailabilityInterval[];
+}
+export interface AvailabilityModel {
+	weekDay: number;
+	intervals: AvailabilityInterval[];
 	enabled: boolean;
 }

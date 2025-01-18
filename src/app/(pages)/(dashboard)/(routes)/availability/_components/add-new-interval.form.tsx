@@ -1,4 +1,5 @@
 import { createAvailabilityInterval } from '@/actions/availability/availabilityInterval/create';
+import { AvailabilityModel } from '@/actions/availability/getAvailabilitys';
 import { GenericForm } from '@/components/form/form';
 import { InputForm } from '@/components/form/InputForm';
 import { Modal } from '@/components/modal';
@@ -15,14 +16,13 @@ import {
 } from '../schemas/new-time-interval.schema';
 
 interface AddNewIntervalFormProps {
-	availabilityId: string;
+	day: Pick<AvailabilityModel, 'weekDay'>;
 }
 
-const AddNewIntervalForm = ({ availabilityId }: AddNewIntervalFormProps) => {
+const AddNewIntervalForm = ({ day }: AddNewIntervalFormProps) => {
 	const [openModal, setOpenModal] = useState(false);
-
 	const defaultValues: NewTimeIntervalDto = {
-		availabilityId,
+		weekDay: day.weekDay,
 		startTime: '08:00',
 		endTime: '12:00',
 	};
@@ -37,7 +37,7 @@ const AddNewIntervalForm = ({ availabilityId }: AddNewIntervalFormProps) => {
 
 		try {
 			const res = await createAvailabilityInterval({
-				availabilityId: parsedData.availabilityId,
+				weekDay: parsedData.weekDay,
 				startTime: convertTimeStringToNumber(parsedData.startTime),
 				endTime: convertTimeStringToNumber(parsedData.endTime),
 			});

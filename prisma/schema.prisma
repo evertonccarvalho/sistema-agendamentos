@@ -67,20 +67,24 @@ model PasswordResetToken {
 }
 
 model Availability {
-  id        String                 @id @default(uuid())
   weekDay   Int
   intervals AvailabilityInterval[]
   userId    String
-  user      User                   @relation(fields: [userId], references: [id])
-  enabled   Boolean                @default(true) // Adicionando o novo campo 'enabled'
+  enabled   Boolean                @default(true)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([userId, weekDay])
 }
 
 model AvailabilityInterval {
-  id             String       @id @default(uuid())
-  availability   Availability @relation(fields: [availabilityId], references: [id], onDelete: Cascade)
-  availabilityId String
-  startTime      Int
-  endTime        Int
+  id           String       @id @default(uuid())
+  userId       String
+  weekDay      Int
+  availability Availability @relation(fields: [userId, weekDay], references: [userId, weekDay], onDelete: Cascade)
+
+  startTime Int
+  endTime   Int
 }
 
 model Scheduling {
