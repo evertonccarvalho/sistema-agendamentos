@@ -22,7 +22,6 @@ import { getWeekDays } from "@/utils/getWeekDay";
 import { Plus } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { defaultAvailability } from "../(routes)/availability/_components/const";
 import TimeIntervalComponent from "./TimeIntervals";
 
 interface FormSubmitData {
@@ -45,33 +44,16 @@ interface AvailabilityFormProps {
 const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 	const weekDays = getWeekDays();
 
-	const formattedAvailability = defaultAvailability.map((defaultDay) => {
-		const existingDay = availability.find(
-			(day) => day.weekDay === defaultDay.weekDay
-		);
-
-		if (existingDay) {
-			return {
-				id: existingDay.id,
-				weekDay: existingDay.weekDay,
-				intervals: existingDay.intervals.map((interval) => ({
-					id: interval.id,
+	const form = useForm({
+		defaultValues: {
+			availability: availability.map((day) => ({
+				...day,
+				intervals: day.intervals.map((interval) => ({
+					...interval,
 					startTime: convertMinutesToTimeString(interval.startTime),
 					endTime: convertMinutesToTimeString(interval.endTime),
 				})),
-				enabled: existingDay.enabled,
-			};
-		}
-
-		return {
-			...defaultDay,
-			intervals: defaultDay.intervals || [], // Garantir que sempre tenha 'intervals'
-		};
-	});
-
-	const form = useForm({
-		defaultValues: {
-			availability: formattedAvailability,
+			})),
 		},
 	});
 
@@ -93,7 +75,6 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 						},
 						enabled: day.enabled,
 					};
-					//
 					const res = await createAvailability(availabilityData);
 					if (res && !res.success) {
 						console.error(
@@ -131,6 +112,7 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 	};
 
 	return (
+		
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
