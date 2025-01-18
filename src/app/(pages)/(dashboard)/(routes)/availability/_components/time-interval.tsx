@@ -1,21 +1,19 @@
 // TimeIntervalComponent.tsx
-import { deleteAvailabilityInterval } from "@/actions/availability/availabilityInterval/delete";
-import { DayAvailabilityInterval } from "@/actions/availability/getAvailabilitys";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { convertMinutesToTimeString } from "@/utils/convertTimeStringToNumber";
-import { Trash } from "lucide-react";
-import { useFormContext } from "react-hook-form";
-import { toast } from "sonner";
+import { deleteAvailabilityInterval } from '@/actions/availability/availabilityInterval/delete';
+import { DayAvailabilityModel } from '@/actions/availability/getAvailabilitys';
+import { InputForm } from '@/components/form/InputForm';
+import { Button } from '@/components/ui/button';
+import { Trash } from 'lucide-react';
+import { useFormContext, UseFormReturn } from 'react-hook-form';
+import { toast } from 'sonner';
 
 interface TimeIntervalProps {
-	intervals: DayAvailabilityInterval[];
-	dayIndex: number;
-	disabled: boolean;
+	day: DayAvailabilityModel;
+	form: UseFormReturn<any>;
+	isPending: boolean;
 }
 
-const TimeInterval = ({ intervals, dayIndex, disabled }: TimeIntervalProps) => {
-	const { register } = useFormContext(); // Usando o contexto do formulário
+const TimeInterval = ({ day, form, isPending }: TimeIntervalProps) => {
 
 	const handleDeleteInterval = async (intervalId: string) => {
 		const response = await deleteAvailabilityInterval(intervalId);
@@ -28,37 +26,33 @@ const TimeInterval = ({ intervals, dayIndex, disabled }: TimeIntervalProps) => {
 
 	return (
 		<div className="flex flex-col  w-fit flex-wrap md:flex-row gap-1">
-			{intervals.map((interval, intervalIndex) => (
+			{day.intervals.map((interval, index) => (
 				<div
-					key={intervalIndex}
+					key={interval.id}
 					className="flex p-1 bg-accent rounded-sm gap-1 items-center"
 				>
-					<Input
-						disabled={disabled}
-						{...register(
-							`availability.${dayIndex}.intervals.${intervalIndex}.startTime`
-						)}
+					<InputForm
+						form={form}
+						name={`intervals.${index}.startTime`}
+						disabled={isPending}
 						type="time"
 						className="h-8 w-fit"
-						defaultValue={convertMinutesToTimeString(interval.startTime)}
 					/>
 					<span>-</span>
-					<Input
-						disabled={disabled}
-						{...register(
-							`availability.${dayIndex}.intervals.${intervalIndex}.endTime`
-						)}
+					<InputForm
+						form={form}
+						name={`intervals.${index}.endTime`}
+						disabled={isPending}
 						type="time"
 						className="h-8 w-fit"
-						defaultValue={convertMinutesToTimeString(interval.endTime)}
 					/>
 					<Button
 						size="icon"
-						variant={"ghost"}
+						variant={'ghost'}
 						type="button"
 						className="w-fit h-fit"
 						disabled={!interval.id}
-						onClick={() => handleDeleteInterval(interval.id!)} // Passando o ID para o manipulador de remoção
+						onClick={() => handleDeleteInterval(interval.id!)}
 					>
 						<Trash size={18} color="red" />
 					</Button>
