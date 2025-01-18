@@ -33,11 +33,11 @@ const TimeIntervalComponent = ({
 	};
 
 	return (
-		<div className="flex flex-col flex-wrap md:flex-row gap-1">
+		<div className="flex flex-col  w-fit flex-wrap md:flex-row gap-1">
 			{intervals.map((interval, intervalIndex) => (
 				<div
 					key={intervalIndex}
-					className="flex bg-accent p-1 rounded-sm  gap-1 items-center"
+					className="flex p-1 bg-accent rounded-sm gap-1 items-center"
 				>
 					<Input
 						disabled={disabled}
@@ -45,6 +45,7 @@ const TimeIntervalComponent = ({
 							`availability.${dayIndex}.intervals.${intervalIndex}.startTime`
 						)}
 						type="time"
+						className="h-8 w-fit"
 						defaultValue={interval.startTime}
 					/>
 					<span>-</span>
@@ -54,12 +55,14 @@ const TimeIntervalComponent = ({
 							`availability.${dayIndex}.intervals.${intervalIndex}.endTime`
 						)}
 						type="time"
+						className="h-8 w-fit"
 						defaultValue={interval.endTime}
 					/>
 					<Button
 						size="icon"
 						variant={"ghost"}
 						type="button"
+						className="w-fit h-fit"
 						disabled={!interval.id}
 						onClick={() => handleDeleteInterval(interval.id!)} // Passando o ID para o manipulador de remoção
 					>

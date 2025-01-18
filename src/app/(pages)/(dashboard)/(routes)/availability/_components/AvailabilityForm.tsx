@@ -1,15 +1,8 @@
 "use client";
 import { createAvailability } from "@/actions/availability/create";
 import { AvailabilityModel } from "@/actions/availability/getAvailabilitys";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-} from "@/components/ui/form";
+import { GenericForm } from "@/components/form/form";
+import { SwitchForm } from "@/components/form/SwitchForm";
 import {
 	convertMinutesToTimeString,
 	convertTimeStringToNumber,
@@ -18,8 +11,8 @@ import { getWeekDays } from "@/utils/getWeekDay";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import TimeIntervalComponent from "./TimeIntervals";
 import AddNewIntervalForm from "./add-new-interval.form";
+import TimeIntervalComponent from "./TimeIntervals";
 
 interface FormSubmitData {
 	availability: {
@@ -79,47 +72,42 @@ const AvailabilityForm = ({ availability }: AvailabilityFormProps) => {
 	};
 
 	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-col gap-2 items-center"
+		<>
+			<GenericForm
+				form={form}
+				action={"Salvar"}
+				onSubmit={onSubmit}
+				loading={false}
 			>
 				{initialAvailability.map((day) => (
 					<div
 						key={day.weekDay}
-						className="flex flex-col md:flex-row justify-between md:items-center w-full gap-2"
+						className="grid grid-cols-1 sm:grid-cols-4  px-2 items-center justify-between rounded-lg border bg-card"
 					>
-						<div className="flex items-center justify-between">
-							<FormField
-								control={form.control}
+						{/* Switch e Nome do Dia */}
+						<div className="col-span-1 flex items-center w-full">
+							<SwitchForm
+								form={form}
 								name={`availability.${day.weekDay}.enabled`}
-								render={({ field }) => (
-									<FormItem className="flex flex-row w-28 items-start space-x-1">
-										<FormControl>
-											<Checkbox
-												checked={field.value}
-												onCheckedChange={field.onChange}
-											/>
-										</FormControl>
-										<FormLabel className="text-xs font-light">
-											{weekDays[day.weekDay]}
-										</FormLabel>
-									</FormItem>
-								)}
+								label={weekDays[day.weekDay]}
 							/>
 							<AddNewIntervalForm availabilityId={day.id} />
 						</div>
-						<TimeIntervalComponent
-							intervals={day.intervals}
-							dayIndex={day.weekDay}
-							disabled={!form.getValues(`availability.${day.weekDay}.enabled`)}
-						/>
+
+						{/* Intervalos de Tempo */}
+						<div className="col-span-1 sm:col-span-3">
+							<TimeIntervalComponent
+								intervals={day.intervals}
+								dayIndex={day.weekDay}
+								disabled={
+									!form.getValues(`availability.${day.weekDay}.enabled`)
+								}
+							/>
+						</div>
 					</div>
 				))}
-				<Button type="submit">Salvar</Button>
-			</form>
-		</Form>
+			</GenericForm>
+		</>
 	);
 };
-
 export default AvailabilityForm;

@@ -68,9 +68,9 @@ const AddNewIntervalForm = ({ availabilityId }: AddNewIntervalFormProps) => {
 			<div className="flex justify-end gap-2">
 				<Button
 					className="text-xs md:text-base"
-					size="sm"
+					size="icon"
 					type="button"
-					variant="default"
+					variant="ghost"
 					onClick={() => setOpenModal(true)}
 				>
 					<Plus size={18} />
