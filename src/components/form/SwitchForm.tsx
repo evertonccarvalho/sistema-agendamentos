@@ -41,7 +41,9 @@ export const SwitchForm = <T extends FieldValues>({
 								aria-readonly
 							/>
 						</FormControl>
-						{props.label && <FormLabel>{props.label}</FormLabel>}
+						{props.label && (
+							<FormLabel className="truncate text-xs">{props.label}</FormLabel>
+						)}
 						{description && <FormDescription>{description}</FormDescription>}
 					</div>
 					<FormMessage />

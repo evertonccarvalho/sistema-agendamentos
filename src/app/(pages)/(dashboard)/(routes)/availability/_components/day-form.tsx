@@ -76,23 +76,21 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 			hasCustomButton
 			className="mb-1"
 		>
-			<div className="flex gap-1 w-full">
-				<div className="grid w-full grid-cols-1 sm:grid-cols-4 px-2 items-center justify-between rounded-lg border bg-card">
-					<div className="col-span-1 flex items-center w-full">
+			<div className="flex gap-1 items-center w-full">
+				<div className="w-full px-1 flex flex-wrap  items-center justify-between rounded-lg border bg-card">
+					<div className="flex w-full min-w-48 max-w-48 items-center ">
 						<SwitchForm form={form} name={`enabled`} label={weekDayLabel} />
 						<AddNewIntervalForm availabilityId={day.id} />
 					</div>
 
-					<div className="col-span-1 sm:col-span-3">
-						<TimeIntervalComponent
-							intervals={form.getValues("intervals")}
-							dayIndex={day.weekDay}
-							disabled={!form.getValues("enabled")}
-						/>
-					</div>
+					<TimeIntervalComponent
+						intervals={form.getValues("intervals")}
+						dayIndex={day.weekDay}
+						disabled={!form.getValues("enabled")}
+					/>
 				</div>
 				<Button
-					className="text-xs md:text-base"
+					className="h-9 w-9"
 					size="icon"
 					type="submit"
 					disabled={isPending || !form.formState.isDirty}
