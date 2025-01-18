@@ -1,26 +1,20 @@
 // TimeIntervalComponent.tsx
 import { deleteAvailabilityInterval } from "@/actions/availability/availabilityInterval/delete";
+import { DayAvailabilityInterval } from "@/actions/availability/getAvailabilitys";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { convertMinutesToTimeString } from "@/utils/convertTimeStringToNumber";
 import { Trash } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
-interface TimeIntervalComponentProps {
-	intervals: {
-		id?: string;
-		startTime: string;
-		endTime: string;
-	}[];
+interface TimeIntervalProps {
+	intervals: DayAvailabilityInterval[];
 	dayIndex: number;
 	disabled: boolean;
 }
 
-const TimeIntervalComponent = ({
-	intervals,
-	dayIndex,
-	disabled,
-}: TimeIntervalComponentProps) => {
+const TimeInterval = ({ intervals, dayIndex, disabled }: TimeIntervalProps) => {
 	const { register } = useFormContext(); // Usando o contexto do formulário
 
 	const handleDeleteInterval = async (intervalId: string) => {
@@ -46,7 +40,7 @@ const TimeIntervalComponent = ({
 						)}
 						type="time"
 						className="h-8 w-fit"
-						defaultValue={interval.startTime}
+						defaultValue={convertMinutesToTimeString(interval.startTime)}
 					/>
 					<span>-</span>
 					<Input
@@ -56,7 +50,7 @@ const TimeIntervalComponent = ({
 						)}
 						type="time"
 						className="h-8 w-fit"
-						defaultValue={interval.endTime}
+						defaultValue={convertMinutesToTimeString(interval.endTime)}
 					/>
 					<Button
 						size="icon"
@@ -74,4 +68,4 @@ const TimeIntervalComponent = ({
 	);
 };
 
-export default TimeIntervalComponent;
+export default TimeInterval;

@@ -18,17 +18,6 @@ const AvailabilityPage = async () => {
 	const availability = await getAvailabilitys(session.user.id || "");
 	const weekDays = getWeekDays();
 
-	// const memoizedAvailability = useMemo(() => {
-	// 	return availability.map((day) => ({
-	// 		...day,
-	// 		intervals: day.intervals.map((interval) => ({
-	// 			...interval,
-	// 			startTime: convertMinutesToTimeString(interval.startTime),
-	// 			endTime: convertMinutesToTimeString(interval.endTime),
-	// 		})),
-	// 	}));
-	// }, [availability]);
-
 	return (
 		<>
 			<BreadCrumb items={breadcrumbItems} />

@@ -18,15 +18,15 @@ export const getAvailabilitys = async (userId: string) => {
 	return availabilitys;
 };
 
-interface AvailabilityInterval {
+export interface DayAvailabilityInterval {
 	startTime: number;
 	endTime: number;
 	id: string;
 	availabilityId: string;
 }
-export interface AvailabilityModel {
+export interface DayAvailabilityModel {
 	id: string;
 	weekDay: number;
-	intervals: AvailabilityInterval[];
+	intervals: DayAvailabilityInterval[];
 	enabled: boolean;
 }

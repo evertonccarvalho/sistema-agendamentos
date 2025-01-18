@@ -1,6 +1,6 @@
 "use client";
-
 import { createAvailability } from "@/actions/availability/create";
+import { DayAvailabilityModel } from "@/actions/availability/getAvailabilitys";
 import { GenericForm } from "@/components/form/form";
 import { SwitchForm } from "@/components/form/SwitchForm";
 import { Button } from "@/components/ui/button";
@@ -13,19 +13,10 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import AddNewIntervalForm from "./add-new-interval.form";
-import TimeIntervalComponent from "./TimeIntervals";
+import TimeInterval from "./time-interval";
 
 interface DayFormProps {
-	day: {
-		id: string;
-		weekDay: number;
-		intervals: {
-			id?: string;
-			startTime: number;
-			endTime: number;
-		}[];
-		enabled: boolean;
-	};
+	day: DayAvailabilityModel;
 	weekDayLabel: string;
 }
 
@@ -83,8 +74,8 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 						<AddNewIntervalForm availabilityId={day.id} />
 					</div>
 
-					<TimeIntervalComponent
-						intervals={form.getValues("intervals")}
+					<TimeInterval
+						intervals={day.intervals}
 						dayIndex={day.weekDay}
 						disabled={!form.getValues("enabled")}
 					/>
