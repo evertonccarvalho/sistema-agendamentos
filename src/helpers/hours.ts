@@ -18,7 +18,6 @@ export async function getTimePerDate(params: GetAvailabilityPerDayParams) {
 export async function getAllAvailabilitys(userId: string) {
 	try {
 		const res = await getALLAvailabilitysPerDay(userId);
-		console.log("RESSSSS", res);
 		return res;
 	} catch (error) {
 		console.error("Error:", error);

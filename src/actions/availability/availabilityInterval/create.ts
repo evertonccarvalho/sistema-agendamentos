@@ -14,7 +14,6 @@ export const createAvailabilityInterval = async (
 	params: CreateAvailabilityIntervalParams
 ) => {
 	const session = await auth();
-	console.log("params", params);
 	if (!session?.user.id) {
 		return {
 			success: false,
