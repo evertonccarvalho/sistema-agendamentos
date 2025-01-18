@@ -2,10 +2,8 @@ import { getAvailabilitys } from "@/actions/availability/getAvailabilitys";
 import BreadCrumb from "@/components/breadcrumb";
 import CustomTabs from "@/components/CustomTabs";
 import { Card } from "@/components/ui/card";
-import { convertMinutesToTimeString } from "@/utils/convertTimeStringToNumber";
 import { getWeekDays } from "@/utils/getWeekDay";
 import { redirect } from "next/navigation";
-import { useMemo } from "react";
 import { auth } from "../../../../../lib/auth";
 import DayForm from "./_components/day-form";
 
@@ -43,7 +41,7 @@ const AvailabilityPage = async () => {
 								<Card className="drop-shadow-lg bg-muted/50 border md:p-6 rou p-2">
 									{availability.map((day) => (
 										<DayForm
-											key={day.weekDay}
+											key={day.id}
 											day={day}
 											weekDayLabel={weekDays[day.weekDay]}
 										/>
