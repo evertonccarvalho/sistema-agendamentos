@@ -5,14 +5,14 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import * as React from "react";
-import { FieldValues, Path, UseFormReturn } from "react-hook-form";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import * as React from 'react';
+import { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 
 interface InputFormProps<T extends FieldValues>
-	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "form"> {
+	extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'form'> {
 	name: Path<T>;
 	form: UseFormReturn<T>;
 	label?: string;
@@ -31,22 +31,28 @@ export const InputForm = <T extends FieldValues>({
 			name={props.name}
 			render={({ field }) => (
 				<FormItem
-					className={cn("flex-1 space-y-1 col-span-full w-full", className)}
+					className={cn(
+						'flex-1 space-y-1 col-span-full w-full',
+						className
+					)}
 				>
 					{props.label && <FormLabel>{props.label}</FormLabel>}
 					<FormControl>
 						<Input
+							className="h-8"
 							type={props.type}
 							placeholder={props.placeholder}
 							{...field}
 							{...props}
 						/>
 					</FormControl>
-					{description && <FormDescription>{description}</FormDescription>}
+					{description && (
+						<FormDescription>{description}</FormDescription>
+					)}
 					<FormMessage />
 				</FormItem>
 			)}
 		/>
 	);
 };
-InputForm.displayName = "InputForm";
+InputForm.displayName = 'InputForm';

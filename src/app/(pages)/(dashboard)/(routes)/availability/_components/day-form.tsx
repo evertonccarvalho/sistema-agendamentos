@@ -1,7 +1,9 @@
 'use client';
+import { deleteAvailabilityInterval } from '@/actions/availability/availabilityInterval/delete';
 import { createAvailability } from '@/actions/availability/create';
 import { DayAvailabilityModel } from '@/actions/availability/getAvailabilitys';
 import { GenericForm } from '@/components/form/form';
+import { InputForm } from '@/components/form/InputForm';
 import { SwitchForm } from '@/components/form/SwitchForm';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +11,7 @@ import {
 	convertTimeStringToNumber,
 } from '@/utils/convertTimeStringToNumber';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, Loader2 } from 'lucide-react';
+import { Check, Loader2, Trash } from 'lucide-react';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -31,7 +33,7 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 			id: day.id,
 			weekDay: day.weekDay,
 			intervals: day.intervals.map((interval) => ({
-				...interval,
+				id: interval.id,
 				startTime: convertMinutesToTimeString(interval.startTime),
 				endTime: convertMinutesToTimeString(interval.endTime),
 			})),
@@ -41,7 +43,7 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 
 	const onSubmit = async (data: DayFormDto) => {
 		const parsedData = dayFormSchema.parse(data);
-
+		console.log('parsedData', parsedData);
 		startTransition(async () => {
 			try {
 				for (const interval of parsedData.intervals) {
@@ -71,6 +73,15 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 		});
 	};
 
+	const handleDeleteInterval = async (intervalId: string) => {
+		const response = await deleteAvailabilityInterval(intervalId);
+		if (response.success) {
+			toast.success(response.message);
+		} else {
+			toast.error(response.message);
+		}
+	};
+
 	return (
 		<GenericForm
 			form={form}
@@ -90,12 +101,44 @@ const DayForm = ({ day, weekDayLabel }: DayFormProps) => {
 						/>
 						<AddNewIntervalForm availabilityId={day.id} />
 					</div>
+					<TimeInterval day={day} form={form} isPending={isPending} />
 
-					<TimeInterval
-						intervals={day.intervals}
-						dayIndex={day.weekDay}
-						disabled={!form.getValues('enabled')}
-					/>
+					<div className="flex flex-col  w-fit flex-wrap md:flex-row gap-1">
+						{day.intervals.map((interval, index) => (
+							<div
+								key={interval.id}
+								className="flex p-1 bg-accent rounded-sm gap-1 items-center"
+							>
+								<InputForm
+									form={form}
+									name={`intervals.${index}.startTime`}
+									disabled={isPending}
+									type="time"
+									className="h-8 w-fit"
+								/>
+								<span>-</span>
+								<InputForm
+									form={form}
+									name={`intervals.${index}.endTime`}
+									disabled={isPending}
+									type="time"
+									className="h-8 w-fit"
+								/>
+								<Button
+									size="icon"
+									variant={'ghost'}
+									type="button"
+									className="w-fit h-fit"
+									disabled={!interval.id}
+									onClick={() =>
+										handleDeleteInterval(interval.id!)
+									}
+								>
+									<Trash size={18} color="red" />
+								</Button>
+							</div>
+						))}
+					</div>
 				</div>
 				<Button
 					className="h-9 w-9"
