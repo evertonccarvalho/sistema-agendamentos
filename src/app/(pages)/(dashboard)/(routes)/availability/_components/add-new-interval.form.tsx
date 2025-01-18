@@ -53,12 +53,17 @@ const AddNewIntervalForm = ({ availabilityId }: AddNewIntervalFormProps) => {
 				endTime: convertTimeStringToNumber(parsedData.endTime),
 			});
 
-			if (res && res.success) {
+			// Verifica o sucesso da resposta
+			if (res?.success) {
 				toast.success("Intervalo adicionado com sucesso!");
 			} else {
-				console.error(`Erro ao criar novo intervalo: ${res.message}`);
+				// Exibe mensagem de erro para o usuário
+				toast.error(res?.message || "Erro ao criar novo intervalo.");
+				console.error(`Erro ao criar novo intervalo: ${res?.message}`);
 			}
 		} catch (error) {
+			// Trata erros não previstos
+			toast.error("Erro inesperado ao adicionar novo intervalo.");
 			console.error("Erro ao adicionar novo intervalo:", error);
 		}
 	};

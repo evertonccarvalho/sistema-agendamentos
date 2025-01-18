@@ -22,6 +22,37 @@ export const createAvailabilityInterval = async (
 	}
 
 	try {
+		// Verifica se já existem intervalos repetidos
+		const existingInterval = await db.availabilityInterval.findFirst({
+			where: {
+				startTime: params.startTime,
+				endTime: params.endTime,
+				availabilityId: params.availabilityId,
+			},
+		});
+
+		if (existingInterval) {
+			return {
+				success: false,
+				message: "Intervalo já existe.",
+			};
+		}
+
+		// Verifica se já existem 3 intervalos criados
+		const intervalsCount = await db.availabilityInterval.count({
+			where: {
+				availabilityId: params.availabilityId,
+			},
+		});
+
+		if (intervalsCount >= 3) {
+			return {
+				success: false,
+				message: "Você só pode adicionar até 3 intervalos.",
+			};
+		}
+
+		// Cria o intervalo
 		await db.availabilityInterval.create({
 			data: {
 				startTime: params.startTime,
