@@ -27,7 +27,7 @@ export const getAvailabilitys = async (userId: string) => {
     },
   });
 
-  if (availabilitys.length === 0) {
+  if (availabilitys.length <= 6) {
     await createManyAvailabilitys(userId);
     availabilitys = await db.availability.findMany({
       where: {
@@ -68,5 +68,6 @@ export const createManyAvailabilitys = async (userId: string) => {
 
   await db.availability.createMany({
     data: availabilityData,
+    skipDuplicates: true,
   });
 };
