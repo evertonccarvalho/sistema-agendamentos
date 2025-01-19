@@ -5,7 +5,7 @@ export interface IScheduling {
   name: string;
   email: string;
   phone: string;
-  message: string;
+  message: string | null;
   eventType: EventType;
   status: SchedulingStatus;
   userId: string;
@@ -13,8 +13,8 @@ export interface IScheduling {
   date: Date;
   created_at: Date | null;
   user: {
-    name: string | null,
-    image: string | null,
-    email: string | null,
-  }
+    name: string | null;
+    image: string | null;
+    email: string | null;
+  };
 }
