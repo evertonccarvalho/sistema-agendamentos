@@ -7,7 +7,7 @@ interface CreateBookingParams {
 	name: string;
 	email: string;
 	phone: string;
-	message: string;
+	message?: string;
 	status?: SchedulingStatus;
 	userId: string;
 	eventId: string;

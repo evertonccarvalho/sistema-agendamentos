@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import utc from "dayjs/plugin/utc";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import AvailabilityList from "../../(dashboard)/(routes)/dashboard/_components/AvailabilityList ";
@@ -19,6 +19,7 @@ import DateSelector from "./DataSelector";
 import EventInfor from "./EventInfor";
 import { FormModal } from "./formModal";
 import { GuestForm, type GuestFormValues } from "./guestForm";
+
 dayjs.extend(utc);
 interface BookingItemProps {
   data: IEventType;
@@ -28,7 +29,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
   const userId = data.creatorId;
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<number | undefined>();
   const [selectedDateTime, setSelectedDateTime] = useState<Date | null>();
@@ -36,6 +36,10 @@ const BookingItem = ({ data }: BookingItemProps) => {
   const selectedDateWithoutTime = selectedDate
     ? dayjs(selectedDate).format("YYYY-MM-DD")
     : null;
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
 
   const { data: availability } = useQuery({
     queryKey: ["availability", userId, selectedDateWithoutTime],
@@ -121,20 +125,20 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
       setHour(undefined);
       setSelectedDate(undefined);
-
-      const queryParams = new URLSearchParams({
-        name: formData.name,
-        email: formData.email,
+      const searchParams = new URLSearchParams({
+        name: formData.name || "",
+        email: formData.email || "",
         creatorName: data.creator.name || "",
-        eventType: data.name,
-        date: newDate.toISOString(),
+        eventType: data.name || "",
+        date: dayjs(newDate).utc().format("YYYY-MM-DD HH:mm"),
       });
 
       const username = data.creator.email?.substring(
         0,
-        data.creator.email.indexOf("@")
+        data.creator.email.indexOf("@"),
       );
-      router.push(`${`/${username}/success`}?${queryParams}`);
+
+      router.push(`/${username}/success?${searchParams.toString()}`);
     } catch (error) {
       console.error("Error during booking submission:", error);
       toast.error("Ocorreu um erro ao enviar o formulário.");

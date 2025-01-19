@@ -37,7 +37,9 @@ const guestStoreSchema = z.object({
     }),
   message: z
     .string()
-    .min(10, { message: "A mensagem deve ter no mínimo 10 caracteres" }),
+    .min(10, { message: "A mensagem deve ter no mínimo 10 caracteres" })
+    .max(500, { message: "A mensagem deve ter no máximo 500 caracteres" })
+    .optional(), // Torna o campo opcional
 });
 
 export type GuestFormValues = z.infer<typeof guestStoreSchema>;
@@ -53,9 +55,10 @@ export const GuestForm: React.FC<GuestFormProps> = ({ onClose, onSubmit }) => {
   const defaultValues: GuestFormValues = {
     email: "",
     phone: "",
-    message: "",
     name: "",
+    message: undefined,
   };
+
   const form = useForm<GuestFormValues>({
     resolver: zodResolver(guestStoreSchema),
     defaultValues,

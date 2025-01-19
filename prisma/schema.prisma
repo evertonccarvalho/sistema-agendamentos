@@ -92,7 +92,7 @@ model Scheduling {
   name       String
   email      String
   phone      String
-  message    String           @db.Text
+  message    String?           @db.Text
   status     SchedulingStatus @default(PENDING)
   userId     String
   user       User             @relation(fields: [userId], references: [id])
