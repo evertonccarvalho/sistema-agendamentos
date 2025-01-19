@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import utc from "dayjs/plugin/utc";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import AvailabilityList from "../../(dashboard)/(routes)/dashboard/_components/AvailabilityList ";
@@ -38,8 +38,6 @@ const BookingItem = ({ data }: BookingItemProps) => {
     : null;
 
   const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
 
   const { data: availability } = useQuery({
     queryKey: ["availability", userId, selectedDateWithoutTime],
@@ -82,7 +80,7 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
       const newDate = selectedDateTime;
 
-      await createBooking({
+      const scheduling = await createBooking({
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
@@ -125,20 +123,13 @@ const BookingItem = ({ data }: BookingItemProps) => {
 
       setHour(undefined);
       setSelectedDate(undefined);
-      const searchParams = new URLSearchParams({
-        name: formData.name || "",
-        email: formData.email || "",
-        creatorName: data.creator.name || "",
-        eventType: data.name || "",
-        date: dayjs(newDate).utc().format("YYYY-MM-DD HH:mm"),
-      });
 
       const username = data.creator.email?.substring(
         0,
         data.creator.email.indexOf("@"),
       );
 
-      router.push(`/${username}/success?${searchParams.toString()}`);
+      router.push(`/${username}/success?${scheduling.id}`);
     } catch (error) {
       console.error("Error during booking submission:", error);
       toast.error("Ocorreu um erro ao enviar o formulário.");
