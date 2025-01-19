@@ -1,6 +1,6 @@
-"use server"
+"use server";
 
-import { db } from '@/lib/prisma';
+import { db } from "@/lib/prisma";
 
 export const getEventActiveById = async (eventId: string) => {
   try {
@@ -14,8 +14,8 @@ export const getEventActiveById = async (eventId: string) => {
             name: true,
             email: true,
             image: true,
-          }
-        }
+          },
+        },
       },
     });
 

@@ -1,21 +1,18 @@
+import { getEventActiveById } from "@/actions/eventType/getEventActiveById";
 import ContainerWrapper from "@/components/containerWrapper";
 import BookingItem from "../../_components/Booking";
-import { getEventActiveById } from "@/actions/eventType/getEventActiveById";
 
 interface BookingPageProps {
-	params: {
-		id: string;
-	};
+  params: Promise<{ id: string }>;
 }
+
 const BookingPage = async ({ params }: BookingPageProps) => {
-	const event = await getEventActiveById(params.id);
-	return (
-		<>
-			<ContainerWrapper>
-				{event && <BookingItem data={event} />}
-			</ContainerWrapper>
-		</>
-	);
+  const { id } = await params;
+  const event = await getEventActiveById(id);
+
+  return (
+    <ContainerWrapper>{event && <BookingItem data={event} />}</ContainerWrapper>
+  );
 };
 
 export default BookingPage;

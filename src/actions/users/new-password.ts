@@ -1,16 +1,15 @@
 "use server";
 
 import type * as z from "zod";
-import bcrypt from "bcryptjs";
 
-import { getUserByEmail } from "./user";
 import { db } from "@/lib/prisma";
 import { NewPasswordSchema } from "@/lib/schemas";
+import bcrypt from "bcrypt";
 import { getPasswordResetTokenByToken } from "./password-reset-token";
-
+import { getUserByEmail } from "./user";
 export const newPassword = async (
   values: z.infer<typeof NewPasswordSchema>,
-  token?: string | null,
+  token?: string | null
 ) => {
   if (!token) {
     return { error: "Missing token!" };

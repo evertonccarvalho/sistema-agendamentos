@@ -58,9 +58,9 @@ export const EmailToClient = ({
                 className="my-0 mx-auto"
               />
             </Section>
-            <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
+            <p className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
               {name} Agendamento Realizado!
-            </Heading>
+            </p>
             <Text className="text-black text-[14px] leading-[24px]">
               Olá, {creatorName},
             </Text>

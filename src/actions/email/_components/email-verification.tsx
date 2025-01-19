@@ -3,7 +3,6 @@ import {
   Button,
   Container,
   Head,
-  Heading,
   Html,
   Img,
   Link,
@@ -17,7 +16,7 @@ interface EmailVerificationProps {
   confirmLink: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
 const EmailVerification = ({ confirmLink, name }: EmailVerificationProps) => {
   return (
@@ -35,11 +34,12 @@ const EmailVerification = ({ confirmLink, name }: EmailVerificationProps) => {
                 className="my-0 mx-auto"
               />
             </Section>
-            <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
+            <p className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
               Verificar Email
-            </Heading>
+            </p>
             <Text className="text-black text-center text-[14px] leading-[24px]">
-              Para verificar <strong>seu e-mail,</strong> clique no <strong>botão</strong>  abaixo:
+              Para verificar <strong>seu e-mail,</strong> clique no{" "}
+              <strong>botão</strong> abaixo:
             </Text>
 
             <Section className="text-center mt-[32px] mb-[32px]">

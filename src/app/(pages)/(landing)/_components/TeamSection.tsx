@@ -12,7 +12,7 @@ export const TeamSection = () => {
   return (
     <section id="team" className="container py-12 sm:py-20">
       <h2 className="text-3xl md:text-4xl font-bold">
-        <span className="text-primary">Nossa{" "}</span>
+        <span className="text-primary">Nossa </span>
         equipe.
       </h2>
 
@@ -33,9 +33,12 @@ export const TeamSection = () => {
         >
           <CarouselContent>
             {teamList?.map((team) => (
-              <CarouselItem className="basis-72 md:basis-96  pt-4 ">
+              <CarouselItem
+                key={team.name}
+                className="basis-72 md:basis-96  pt-4 "
+              >
                 <div className="flex h-full flex-col ">
-                  <TeamCard key={team.name} team={team} />
+                  <TeamCard team={team} />
                 </div>
               </CarouselItem>
             ))}

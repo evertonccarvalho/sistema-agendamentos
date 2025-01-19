@@ -3,19 +3,16 @@ import BreadCrumb from "@/components/breadcrumb";
 import { NewEventForm } from "../../_components/NewEventForm";
 import SchedulingItem from "@/app/(pages)/(dashboard)/(routes)/dashboard/_components/schedulingItem";
 import { getEventsById } from "@/actions/eventType/getEventById";
-import { redirect } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import type { EventType } from "@prisma/client";
 import { Card } from "@/components/ui/card";
 
-interface EventDetailsProps {
-	params: {
-		id?: string;
-	};
-}
 
-const UpdateEvent = ({ params }: EventDetailsProps) => {
+
+const UpdateEvent = () => {
+  const params = useParams<{ id: string }>();
 	const { data } = useSession();
 	const [eventName, setEventName] = useState<string | undefined>(undefined);
 	const [eventDuration, setEventDuration] = useState<string | undefined>("30");

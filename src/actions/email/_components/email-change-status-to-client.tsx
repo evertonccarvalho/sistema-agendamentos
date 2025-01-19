@@ -3,16 +3,15 @@ import {
   Body,
   Container,
   Head,
-  Heading,
   Html,
   Img,
   Section,
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import utc from "dayjs/plugin/utc";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
 interface StatusUpdateEmailProps {
@@ -48,8 +47,10 @@ const StatusUpdateEmail = ({
       statusMessage = "Seu agendamento foi atualizado.";
       break;
   }
-  const DATE_EVENT = dayjs(date).utc().locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
-
+  const DATE_EVENT = dayjs(date)
+    .utc()
+    .locale("pt-br")
+    .format("dddd, D [de] MMMM - HH:mm");
 
   return (
     <Html>
@@ -66,9 +67,9 @@ const StatusUpdateEmail = ({
                 className="my-0 mx-auto"
               />
             </Section>
-            <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
+            <p className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
               Atualização de Status do Agendamento
-            </Heading>
+            </p>
             <Text className="text-black text-center text-[14px] leading-[24px]">
               Olá, {name},
             </Text>

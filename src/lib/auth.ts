@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { db } from "@/lib/prisma";
-import { getUserById } from "@/actions/users/user";
 import { getAccountByUserId } from "@/actions/users/account";
-import type { Adapter } from "next-auth/adapters";
+import { getUserById } from "@/actions/users/user";
 import authConfig from "@/lib/auth.config";
+import { db } from "@/lib/prisma";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import NextAuth from "next-auth";
+import type { Adapter } from "next-auth/adapters";
 
 export const {
   handlers: { GET, POST },
@@ -31,25 +31,21 @@ export const {
 
       if (account?.provider !== "credentials") return true;
 
-      if (typeof user.id !== 'string') {
-        throw new Error('User ID is not defined or not a string');
+      if (typeof user.id !== "string") {
+        throw new Error("User ID is not defined or not a string");
       }
 
       const existingUser = await getUserById(user.id);
-
 
       // Prevent sign in without email verification
       if (!existingUser?.emailVerified) return false;
 
       return true;
     },
-    // biome-ignore lint/suspicious/useAwait: <explanation>
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
-
-
 
       if (session.user) {
         session.user.name = token.name ?? session.user.name;
