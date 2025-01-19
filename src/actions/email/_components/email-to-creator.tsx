@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   Head,
-  Heading,
   Hr,
   Html,
   Img,
@@ -13,9 +12,9 @@ import {
   Text,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
-import utc from "dayjs/plugin/utc";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import utc from "dayjs/plugin/utc";
 
 dayjs.extend(utc);
 
@@ -42,7 +41,10 @@ export const EmailToCreator = ({
 }: EmailToCreatorProps) => {
   const USER_URL_NAME = creatorEmail?.substring(0, creatorEmail.indexOf("@"));
   const CREATO_URL = absoluteUrl(`/${USER_URL_NAME}`);
-  const DATE_EVENT = dayjs(date).utc().locale("pt-br").format("dddd, D [de] MMMM - HH:mm");
+  const DATE_EVENT = dayjs(date)
+    .utc()
+    .locale("pt-br")
+    .format("dddd, D [de] MMMM - HH:mm");
   return (
     <Html>
       <Head />
