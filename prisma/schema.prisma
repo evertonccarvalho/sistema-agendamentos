@@ -1,10 +1,10 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model Account {
@@ -68,8 +68,8 @@ model PasswordResetToken {
 
 model Availability {
   weekDay   Int
-  intervals AvailabilityInterval[]
   userId    String
+  intervals AvailabilityInterval[]
   enabled   Boolean                @default(true)
 
   user User @relation(fields: [userId], references: [id])

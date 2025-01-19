@@ -31,7 +31,7 @@ export const toggleAvailabilityEnable = async (userId: string, weekDay: number, 
     });
 
     // Invalidar o cache da rota '/availability'
-    await revalidatePath('/availability');
+    revalidatePath('/availability');
 
     return { success: true };
   } catch (error) {
