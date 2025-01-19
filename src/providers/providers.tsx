@@ -1,8 +1,8 @@
 import type React from "react";
-import ThemeProvider from "./theme-provider";
 import { Toaster } from "sonner";
 import AuthProvider from "./auth";
 import QueryProvider from "./QueryProvide";
+import { ThemeProvider } from "./theme-provider";
 export default function Providers({
 	// session,
 	children,

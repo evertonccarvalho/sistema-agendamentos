@@ -1,3 +1,4 @@
+"use server";
 import type { SchedulingStatus } from "@prisma/client";
 import { Resend } from "resend";
 import StatusUpdateEmail from "./_components/email-change-status-to-client";
@@ -6,7 +7,6 @@ import EmailToCreator from "./_components/email-to-creator";
 import EmailVerification from "./_components/email-verification";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 
 export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
@@ -46,7 +46,7 @@ export const sendStatusUpdateEmail = async (
   newStatus: SchedulingStatus,
   name: string,
   date: string,
-  eventType: string
+  eventType: string,
 ) => {
   await resend.emails.send({
     from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_EMAIL}>`,
